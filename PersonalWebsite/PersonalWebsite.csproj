@@ -146,6 +146,13 @@
     <Content Include="Content\images\GitHub_Lockup_White.png" />
     <Content Include="Content\images\LI-In-Bug.png" />
     <Content Include="Content\images\pdf-download.jpg" />
+    <Content Include="Content\images\portfolio images\foundation-application-example-2.png" />
+    <Content Include="Content\images\portfolio images\foundation-application-example.png" />
+    <Content Include="Content\images\portfolio images\foundation-home-example.png" />
+    <Content Include="Content\images\portfolio images\lease-search-example.png" />
+    <Content Include="Content\images\portfolio images\leases-example.png" />
+    <Content Include="Content\images\portfolio images\sales-example-2.png" />
+    <Content Include="Content\images\portfolio images\sales-example.png" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
@@ -179,10 +186,9 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\About.cshtml" />
-    <Content Include="Views\Home\Contact.cshtml" />
-    <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Home\Portfolio.cshtml" />
     <Content Include="Views\Home\Resume.cshtml" />
+    <Content Include="Views\Home\Blog.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

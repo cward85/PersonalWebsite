@@ -1,5 +1,59 @@
 ﻿@{
     Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Portfolio";   
 }
+<main aria-labelledby="title">
+    <h2 id="title">@ViewBag.Title</h2>
+    <div>
+        <p>This is a site to help a small Real Estate Company keep track of their properties and have easily searchable data based on their specifications.  Built with C#, MVC, javascript, jQuery, and SQL running on a Windows Server in IIS</p>
+    </div>
+    <div id="realEstateCarousel" class="carousel slide" data-coreui-ride="carousel">
+        <div class="carousel-inner" style="height:700px">
+            <div class="carousel-item active">
+                <img src="~/Content/images/portfolio images/leases-example.png" class="d-block w-100" alt="Leases Data Entry">
 
-
+            </div>
+            <div class="carousel-item">
+                <img src="~/Content/images/portfolio images/lease-search-example.png" class="d-block w-100" alt="Leases Search">
+            </div>
+            <div class="carousel-item">
+                <img src="~/Content/images/portfolio images/sales-example.png" class="d-block w-100" alt="Leases Search">
+            </div>
+            <div class="carousel-item">
+                <img src="~/Content/images/portfolio images/sales-example-2.png" class="d-block w-100" alt="Leases Search">
+            </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-coreui-target="#carouselExampleControls" data-coreui-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-coreui-target="#carouselExampleControls" data-coreui-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+    <div>
+        <p>This is a site to help a Foundation Charity take in applications and allows them to manage the applications that come in.  Built with C#, MVC, javascript, jQuery, and SQL running on a Windows Server in IIS</p>
+    </div>
+    <div id="landerFoundationCarousel" class="carousel slide" data-coreui-ride="carousel">
+        <div class="carousel-inner" style="height:700px">
+            <div class="carousel-item active">
+                <img src="~/Content/images/portfolio images/foundation-home-example.png" class="d-block w-100" alt="Leases Data Entry">
+            </div>
+            <div class="carousel-item">
+                <img src="~/Content/images/portfolio images/foundation-application-example.png" class="d-block w-100" alt="Leases Search">
+            </div>
+            <div class="carousel-item">
+                <img src="~/Content/images/portfolio images/foundation-application-example-2.png" class="d-block w-100" alt="Leases Search">
+            </div>            
+        </div>
+        <button class="carousel-control-prev" type="button" data-coreui-target="#carouselExampleControls" data-coreui-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-coreui-target="#carouselExampleControls" data-coreui-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+</main>

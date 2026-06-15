@@ -11,7 +11,7 @@
     @RenderSection("scripts", required: false)
 </head>
 <body>
-    
+
     <div class="container">
         <div class="row">
             <h1>Camilo Ward</h1>
@@ -19,11 +19,10 @@
         </div>
         <div class="row" style="padding-bottom:.8em">
             <ul class="nav border justify-content-end">
-                <li class="nav-item">@Html.ActionLink("Home", "Index", "Home", new { area = "" }, new { @class = "nav-link" })</li>
                 <li class="nav-item">@Html.ActionLink("About", "About", "Home", new { area = "" }, new { @class = "nav-link" })</li>
-                <li class="nav-item">@Html.ActionLink("Contact", "Contact", "Home", new { area = "" }, new { @class = "nav-link" })</li>
                 <li class="nav-item">@Html.ActionLink("Portfolio", "Portfolio", "Home", new { area = "" }, new { @class = "nav-link" })</li>
                 <li class="nav-item">@Html.ActionLink("Resume", "Resume", "Home", new { area = "" }, new { @class = "nav-link" })</li>
+                <li class="nav-item">@Html.ActionLink("Blog (WIP)", "Blog", "Home", new { area = "" }, new { @class = "nav-link disabled" })</li>
             </ul>
         </div>
         <div class="row">
@@ -32,24 +31,94 @@
                     <li class="nav-title">Links</li>
                     <li class="nav-item">
                         <a class="nav-link" href="https://www.linkedin.com/in/camiloward/" target="_blank">
-                            <img src="~/Content/images/LI-In-Bug.png" height="40" />
+                            <img src="~/Content/images/LI-In-Bug.png" height="40" alt="Linked In - Camilo Ward" />
                         </a>
-                    </li>
-                    <li class="nav-item">
                         <a class="nav-link" href="https://github.com/cward85" target="_blank">
-                            <img src="~/Content/images/GitHub_Lockup_White.png" height="30" />
+                            <img src="~/Content/images/GitHub_Lockup_White.png" height="30" alt="GitHub - Camilo Ward" />
                         </a>
-                    </li>
-                    <li class="nav-item">
                         <a class="nav-link" href="@Url.Action("ResumeDownload", "Home")" download>
-                            <img src="~/Content/images/pdf-download.jpg" height="40" /><span class="accent" style="padding-left:1em">Current Resume</span>
+                            <img src="~/Content/images/pdf-download.jpg" height="40" alt="Download Current Resume - Camilo Ward" /><span class="accent" style="padding-left:1em">Current Resume</span>
                         </a>
-                    </li>
+                    </li>                                    
                     <li class="nav-title">Contact</li>
                     <li class="nav-item">
                         <a class="nav-link" href="mailto:camiloward@gmail.com">
                             <span class="accent">Camilo.Ward@gmail.com</span>
                         </a>
+                    </li>
+                    <li class="nav-title">Location</li>
+                    <li class="nav-item">
+                        <span class="accent" style="padding-left:1em">Washington, DC</span>
+                    </li>
+                    <li class="nav-title">Status</li>
+                    <li class="nav-item">
+                        <span class="accent" style="padding-left:1em">Open to Freelance</span>
+                        <span class="accent" style="padding-left:1em">Opportunities</span>
+                    </li>
+                    <li class="nav-title">Technologies</li>
+                    <li class="nav-item">
+                        <span>Back End</span>
+                        <div class="d-flex flex-wrap gap-1">
+                            <span class="chip">C#</span>
+                            <span class="chip">SQL</span>
+                            <span class="chip">Visual Basic</span>
+                            <span class="chip">Java</span>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <span>Front End</span>
+                        <div class="d-flex flex-wrap gap-1">
+                            <span class="chip">javascript</span>
+                            <span class="chip">jQuery</span>
+                            <span class="chip">AJAX</span>
+                            <span class="chip">CSS</span>
+                            <span class="chip">Bootstrap</span>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <span>Source Control</span>
+                        <div class="d-flex flex-wrap gap-1">
+                            <span class="chip">TFS</span>
+                            <span class="chip">Azure Devops</span>
+                            <span class="chip">GitHub</span>
+                            <span class="chip">TortoiseSVN</span>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <span>.NET Frameworks</span>
+                        <div class="d-flex flex-wrap gap-1">
+                            <span class="chip">Webforms (Framework 3.5-4.8)</span>
+                            <span class="chip">MVC 5</span>
+                            <span class="chip">.NET Core (5+)</span>
+                            <span class="chip">Windows Forms</span>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <span>Data Formats</span>
+                        <div class="d-flex flex-wrap gap-1">
+                            <span class="chip">JSON</span>
+                            <span class="chip">XML</span>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <span>Software</span>
+                        <div class="d-flex flex-wrap gap-1">
+                            <span class="chip">SQL Server Management Studio</span>
+                            <span class="chip">IIS</span>
+                            <span class="chip">Visual Studio 2008-2026</span>
+                            <span class="chip">MS Project</span>
+                            <span class="chip">TFS</span>
+                            <span class="chip">GitHub Desktop</span>
+                            <span class="chip">Unity</span>
+                            <span class="chip">VSCode</span>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <span>Methodologies</span>
+                        <div class="d-flex flex-wrap gap-1">
+                            <span class="chip">Agile</span>
+                            <span class="chip">Scrum</span>
+                        </div>
                     </li>
                 </ul>
             </div>

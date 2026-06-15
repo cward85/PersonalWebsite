@@ -28,13 +28,13 @@ main, .container-lg, .sidebar, .sidebar-nav, .nav, ul {
     background-color: var(--secondary-color);
 }
 
-    .h1, .h2, .h3, h1, h2, h3,{
-        color:var(--secondary-color);
-    }
+.h1, .h2, .h3, h1, h2, h3{
+    color: var(--secondary-color);
+}
 
-    label, title, td, p, th, .nav-underline-border, .nav-link, .sidebar-nav .nav-link, .sidebar-nav .nav-title {
-        color: var(--primary-accent-color);
-    }
+label, title, td, p, th, .nav-underline-border, .nav-link, .sidebar-nav .nav-link, .sidebar-nav .nav-title {
+    color: var(--primary-accent-color);
+}
 
 .nav-link:focus, .nav-link:hover, .nav-item .active{
     color: var(--secondary-accent-color);
@@ -75,4 +75,13 @@ main, .container-lg, .sidebar, .sidebar-nav, .nav, ul {
 
 a, .accent{
     color: var(--tertiary-accent-color);
+}
+
+.chip
+{
+    background-color: var(--tertiary-accent-color);
+}
+
+.nav-link.disabled{
+    color: var(--primary-color);
 }
