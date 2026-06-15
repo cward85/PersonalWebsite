@@ -1,0 +1,69 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - Camilo Ward</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</head>
+<body>
+    
+    <div class="container">
+        <div class="row">
+            <h1>Camilo Ward</h1>
+            <h3>Freelance - Web Development - Website Management</h3>
+        </div>
+        <div class="row" style="padding-bottom:.8em">
+            <ul class="nav border justify-content-end">
+                <li class="nav-item">@Html.ActionLink("Home", "Index", "Home", new { area = "" }, new { @class = "nav-link" })</li>
+                <li class="nav-item">@Html.ActionLink("About", "About", "Home", new { area = "" }, new { @class = "nav-link" })</li>
+                <li class="nav-item">@Html.ActionLink("Contact", "Contact", "Home", new { area = "" }, new { @class = "nav-link" })</li>
+                <li class="nav-item">@Html.ActionLink("Portfolio", "Portfolio", "Home", new { area = "" }, new { @class = "nav-link" })</li>
+                <li class="nav-item">@Html.ActionLink("Resume", "Resume", "Home", new { area = "" }, new { @class = "nav-link" })</li>
+            </ul>
+        </div>
+        <div class="row">
+            <div class="sidebar border col">
+                <ul class="sidebar-nav compact">
+                    <li class="nav-title">Links</li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="https://www.linkedin.com/in/camiloward/" target="_blank">
+                            <img src="~/Content/images/LI-In-Bug.png" height="40" />
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="https://github.com/cward85" target="_blank">
+                            <img src="~/Content/images/GitHub_Lockup_White.png" height="30" />
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="@Url.Action("ResumeDownload", "Home")" download>
+                            <img src="~/Content/images/pdf-download.jpg" height="40" /><span class="accent" style="padding-left:1em">Current Resume</span>
+                        </a>
+                    </li>
+                    <li class="nav-title">Contact</li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="mailto:camiloward@gmail.com">
+                            <span class="accent">Camilo.Ward@gmail.com</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="col" style="padding-right:0em">
+                <div class="container-lg border">
+                    @RenderBody()
+
+                    <footer style="margin-top:auto">
+                        <hr />
+                        <p>&copy; @DateTime.Now.Year - Camilo Ward</p>
+                    </footer>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

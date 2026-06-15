@@ -1,0 +1,78 @@
+﻿:root {
+    --primary-color: #6A7B76;
+    --secondary-color: #3A4E48;
+    --primary-accent-color: #8B9D83;
+    --secondary-accent-color: #BEB0A7;
+    --tertiary-accent-color: #C2948A;
+}
+
+/* Set padding to keep content from hitting the edges */
+.body-content {
+    margin-top: 15px;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Override the default bootstrap behavior where horizontal description lists 
+   will truncate terms that are too long to fit in the left column 
+*/
+.dl-horizontal dt {
+    white-space: normal;
+}
+
+body{
+    background-color: var(--primary-color);
+}
+
+main, .container-lg, .sidebar, .sidebar-nav, .nav, ul {
+    background-color: var(--secondary-color);
+}
+
+    .h1, .h2, .h3, h1, h2, h3,{
+        color:var(--secondary-color);
+    }
+
+    label, title, td, p, th, .nav-underline-border, .nav-link, .sidebar-nav .nav-link, .sidebar-nav .nav-title {
+        color: var(--primary-accent-color);
+    }
+
+.nav-link:focus, .nav-link:hover, .nav-item .active{
+    color: var(--secondary-accent-color);
+}
+
+.btn-primary {
+    --cui-btn-color: var(--secondary-color);
+    --cui-btn-bg: var(--secondary-accent-color);
+    --cui-btn-border-color: var(--secondary-accent-color);
+    --cui-btn-hover-color: var(--secondary-color);
+    --cui-btn-hover-bg: var(--tertiary-accent-color);
+    --cui-btn-hover-border-color: var(--tertiary-accent-color);
+    --cui-btn-focus-shadow-rgb: 49, 132, 253;
+    --cui-btn-active-color: var(--secondary-color);
+    --cui-btn-active-bg: var(--tertiary-accent-color);
+    --cui-btn-active-border-color: var(--tertiary-accent-color);
+    --cui-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+    --cui-btn-disabled-color: var(--secondary-color);
+    --cui-btn-disabled-bg: var(--secondary-accent-color);
+    --cui-btn-disabled-border-color: var(--secondary-accent-color);
+}
+
+.container-lg{
+    min-height:87vh;
+    display:flex;
+    flex-direction:column;
+    height:100%;
+}
+
+.border, hr
+{
+    color: var(--primary-accent-color);
+}
+
+.accent, .nav-link:focus .accent, .nav-link:hover .accent, .nav-item active .accent {
+    color: var(--primary-color);
+}
+
+a, .accent{
+    color: var(--tertiary-accent-color);
+}
