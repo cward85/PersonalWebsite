@@ -29,10 +29,15 @@ main, .container-lg, .sidebar, .sidebar-nav, .nav, ul {
 }
 
 .h1, .h2, .h3, h1, h2, h3{
-    color: var(--secondary-color);
+    color: var(--primary-accent-color);
 }
 
-label, title, td, p, th, .nav-underline-border, .nav-link, .sidebar-nav .nav-link, .sidebar-nav .nav-title {
+.title
+{
+    color: var(--tertiary-accent-color);
+}
+
+label, title, td, p, th,  .sidebar-nav .nav-title {
     color: var(--primary-accent-color);
 }
 
@@ -42,19 +47,19 @@ label, title, td, p, th, .nav-underline-border, .nav-link, .sidebar-nav .nav-lin
 
 .btn-primary {
     --cui-btn-color: var(--secondary-color);
-    --cui-btn-bg: var(--secondary-accent-color);
-    --cui-btn-border-color: var(--secondary-accent-color);
+    --cui-btn-bg: var(--tertiary-accent-color);
+    --cui-btn-border-color: var(--tertiary-accent-color);
     --cui-btn-hover-color: var(--secondary-color);
-    --cui-btn-hover-bg: var(--tertiary-accent-color);
-    --cui-btn-hover-border-color: var(--tertiary-accent-color);
+    --cui-btn-hover-bg: var(--secondary-accent-color);
+    --cui-btn-hover-border-color: var(--secondary-accent-color);
     --cui-btn-focus-shadow-rgb: 49, 132, 253;
     --cui-btn-active-color: var(--secondary-color);
-    --cui-btn-active-bg: var(--tertiary-accent-color);
-    --cui-btn-active-border-color: var(--tertiary-accent-color);
+    --cui-btn-active-bg: var(--secondary-accent-color);
+    --cui-btn-active-border-color: var(--secondary-accent-color);
     --cui-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
     --cui-btn-disabled-color: var(--secondary-color);
-    --cui-btn-disabled-bg: var(--secondary-accent-color);
-    --cui-btn-disabled-border-color: var(--secondary-accent-color);
+    --cui-btn-disabled-bg: var(--tertiary-accent-color);
+    --cui-btn-disabled-border-color: var(--tertiary-accent-color);
 }
 
 .container-lg{
@@ -73,9 +78,9 @@ label, title, td, p, th, .nav-underline-border, .nav-link, .sidebar-nav .nav-lin
     color: var(--primary-color);
 }
 
-a, .accent{
-    color: var(--tertiary-accent-color);
-}
+    a, .accent, .nav-underline-border, .nav-link, .sidebar-nav .nav-link {
+        color: var(--tertiary-accent-color);
+    }
 
 .chip
 {
@@ -84,4 +89,10 @@ a, .accent{
 
 .nav-link.disabled{
     color: var(--primary-color);
+}
+
+.carousel-control-next, .carouse-control-prev
+{
+    color:black;
+    opacity:1;
 }

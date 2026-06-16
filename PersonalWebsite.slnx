@@ -1,4 +1,4 @@
 <Solution>
-  <Project Path="PersonalWebsite.Tests/PersonalWebsite.Tests.csproj" />
-  <Project Path="PersonalWebsite/PersonalWebsite.csproj" />
+  <Project Path="PersonalWebsite.Tests/PersonalWebsite.Tests.csproj" Id="4708f300-fbc1-4012-8e7e-8024a1f2c1cd" />
+  <Project Path="PersonalWebsite/PersonalWebsite.csproj" Id="87f386e3-a9f4-47d2-b4d7-0eea544c76ea" />
 </Solution>

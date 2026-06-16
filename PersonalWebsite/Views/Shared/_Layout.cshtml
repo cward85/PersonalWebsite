@@ -10,126 +10,218 @@
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
 </head>
-<body>
 
+
+<body>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            if (localStorage.getItem("colorId") !== null) {
+                changeColor(localStorage.getItem("colorId"));
+            }
+            else {
+                localStorage.setItem("colorId", "1");
+            }
+        });
+
+        function changeColor(id) {
+            if (id == 1) {
+                $(':root').get(0).style.setProperty('--primary-color', "#6A7B76");
+                $(':root').get(0).style.setProperty('--secondary-color', "#3A4E48");
+                $(':root').get(0).style.setProperty('--primary-accent-color', "#8B9D83");
+                $(':root').get(0).style.setProperty('--secondary-accent-color', "#BEB0A7");
+                $(':root').get(0).style.setProperty('--tertiary-accent-color', "#C2948A");
+            }
+            else if (id == 2) {
+                $(':root').get(0).style.setProperty('--primary-color', "#7EA2AA");
+                $(':root').get(0).style.setProperty('--secondary-color', "#7F2CCB");
+                $(':root').get(0).style.setProperty('--primary-accent-color', "#DB2B39");
+                $(':root').get(0).style.setProperty('--secondary-accent-color', "#303633");
+                $(':root').get(0).style.setProperty('--tertiary-accent-color', "#8BE8CB");
+            }
+            else if (id == 3) {
+                $(':root').get(0).style.setProperty('--primary-color', "#7BDFF2");
+                $(':root').get(0).style.setProperty('--secondary-color', "#B2F7EF");
+                $(':root').get(0).style.setProperty('--primary-accent-color', "#6B5CA5");
+                $(':root').get(0).style.setProperty('--secondary-accent-color', "#F7D6E0");
+                $(':root').get(0).style.setProperty('--tertiary-accent-color', "#F2B5D4");
+            }
+            else if (id == 4) {
+                $(':root').get(0).style.setProperty('--primary-color',          "#86E7B8");
+                $(':root').get(0).style.setProperty('--secondary-color',        "#93FF96");
+                $(':root').get(0).style.setProperty('--primary-accent-color',   "#FF850A");
+                $(':root').get(0).style.setProperty('--secondary-accent-color', "#6D6A75");
+                $(':root').get(0).style.setProperty('--tertiary-accent-color',  "#B8B8D1");
+            }
+            else if (id == 5) {
+                $(':root').get(0).style.setProperty('--primary-color',          "#03256C");
+                $(':root').get(0).style.setProperty('--secondary-color',        "#2541B2");
+                $(':root').get(0).style.setProperty('--primary-accent-color',   "#FFFFFF"); 
+                $(':root').get(0).style.setProperty('--secondary-accent-color', "#1768AC");
+                $(':root').get(0).style.setProperty('--tertiary-accent-color',  "#06BEE1");
+            }
+
+            localStorage.setItem("colorId", String(id));
+        }
+    </script>
     <div class="container">
         <div class="row">
-            <h1>Camilo Ward</h1>
-            <h3>Freelance - Web Development - Website Management</h3>
-        </div>
-        <div class="row" style="padding-bottom:.8em">
-            <ul class="nav border justify-content-end">
-                <li class="nav-item">@Html.ActionLink("About", "About", "Home", new { area = "" }, new { @class = "nav-link" })</li>
-                <li class="nav-item">@Html.ActionLink("Portfolio", "Portfolio", "Home", new { area = "" }, new { @class = "nav-link" })</li>
-                <li class="nav-item">@Html.ActionLink("Resume", "Resume", "Home", new { area = "" }, new { @class = "nav-link" })</li>
-                <li class="nav-item">@Html.ActionLink("Blog (WIP)", "Blog", "Home", new { area = "" }, new { @class = "nav-link disabled" })</li>
-            </ul>
-        </div>
-        <div class="row">
-            <div class="sidebar border col">
-                <ul class="sidebar-nav compact">
-                    <li class="nav-title">Links</li>
+            <div class="col-md-7">
+                <h1 class="title">Camilo Ward</h1>
+                <h3 class="title">Freelance - Web Development - Website Management</h3>
+            </div>
+            <div class="row" style="padding-bottom:.8em">
+                <ul class="nav border justify-content-end">
+                    <li class="nav-item">@Html.ActionLink("About", "About", "Home", new { area = "" }, new { @class = "nav-link" })</li>
+                    <li class="nav-item">@Html.ActionLink("Portfolio", "Portfolio", "Home", new { area = "" }, new { @class = "nav-link" })</li>
+                    <li class="nav-item">@Html.ActionLink("Resume", "Resume", "Home", new { area = "" }, new { @class = "nav-link" })</li>
+                    <li class="nav-item">@Html.ActionLink("Blog (WIP)", "Blog", "Home", new { area = "" }, new { @class = "nav-link disabled" })</li>
                     <li class="nav-item">
-                        <a class="nav-link" href="https://www.linkedin.com/in/camiloward/" target="_blank">
-                            <img src="~/Content/images/LI-In-Bug.png" height="40" alt="Linked In - Camilo Ward" />
-                        </a>
-                        <a class="nav-link" href="https://github.com/cward85" target="_blank">
-                            <img src="~/Content/images/GitHub_Lockup_White.png" height="30" alt="GitHub - Camilo Ward" />
-                        </a>
-                        <a class="nav-link" href="@Url.Action("ResumeDownload", "Home")" download>
-                            <img src="~/Content/images/pdf-download.jpg" height="40" alt="Download Current Resume - Camilo Ward" /><span class="accent" style="padding-left:1em">Current Resume</span>
-                        </a>
-                    </li>                                    
-                    <li class="nav-title">Contact</li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="mailto:camiloward@gmail.com">
-                            <span class="accent">Camilo.Ward@gmail.com</span>
-                        </a>
-                    </li>
-                    <li class="nav-title">Location</li>
-                    <li class="nav-item">
-                        <span class="accent" style="padding-left:1em">Washington, DC</span>
-                    </li>
-                    <li class="nav-title">Status</li>
-                    <li class="nav-item">
-                        <span class="accent" style="padding-left:1em">Open to Freelance</span>
-                        <span class="accent" style="padding-left:1em">Opportunities</span>
-                    </li>
-                    <li class="nav-title">Technologies</li>
-                    <li class="nav-item">
-                        <span>Back End</span>
-                        <div class="d-flex flex-wrap gap-1">
-                            <span class="chip">C#</span>
-                            <span class="chip">SQL</span>
-                            <span class="chip">Visual Basic</span>
-                            <span class="chip">Java</span>
-                        </div>
-                    </li>
-                    <li class="nav-item">
-                        <span>Front End</span>
-                        <div class="d-flex flex-wrap gap-1">
-                            <span class="chip">javascript</span>
-                            <span class="chip">jQuery</span>
-                            <span class="chip">AJAX</span>
-                            <span class="chip">CSS</span>
-                            <span class="chip">Bootstrap</span>
-                        </div>
-                    </li>
-                    <li class="nav-item">
-                        <span>Source Control</span>
-                        <div class="d-flex flex-wrap gap-1">
-                            <span class="chip">TFS</span>
-                            <span class="chip">Azure Devops</span>
-                            <span class="chip">GitHub</span>
-                            <span class="chip">TortoiseSVN</span>
-                        </div>
-                    </li>
-                    <li class="nav-item">
-                        <span>.NET Frameworks</span>
-                        <div class="d-flex flex-wrap gap-1">
-                            <span class="chip">Webforms (Framework 3.5-4.8)</span>
-                            <span class="chip">MVC 5</span>
-                            <span class="chip">.NET Core (5+)</span>
-                            <span class="chip">Windows Forms</span>
-                        </div>
-                    </li>
-                    <li class="nav-item">
-                        <span>Data Formats</span>
-                        <div class="d-flex flex-wrap gap-1">
-                            <span class="chip">JSON</span>
-                            <span class="chip">XML</span>
-                        </div>
-                    </li>
-                    <li class="nav-item">
-                        <span>Software</span>
-                        <div class="d-flex flex-wrap gap-1">
-                            <span class="chip">SQL Server Management Studio</span>
-                            <span class="chip">IIS</span>
-                            <span class="chip">Visual Studio 2008-2026</span>
-                            <span class="chip">MS Project</span>
-                            <span class="chip">TFS</span>
-                            <span class="chip">GitHub Desktop</span>
-                            <span class="chip">Unity</span>
-                            <span class="chip">VSCode</span>
-                        </div>
-                    </li>
-                    <li class="nav-item">
-                        <span>Methodologies</span>
-                        <div class="d-flex flex-wrap gap-1">
-                            <span class="chip">Agile</span>
-                            <span class="chip">Scrum</span>
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-primary dropdown-toggle" data-coreui-toggle="dropdown" aria-expanded="false">
+                                Site Color Theme Picker
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><hr class="dropdown-divider">Dark Greenish</li>
+                                <li><a class="dropdown-item" style="background-color: #6A7B76" onclick="changeColor(1);" href="#">Primary Color</a></li>
+                                <li><a class="dropdown-item" style="background-color: #3A4E48" onclick="changeColor(1);" href="#">Secondary Color</a></li>
+                                <li><a class="dropdown-item" style="background-color: #8B9D83" onclick="changeColor(1);" href="#">Primary Accent Color</a></li>
+                                <li><a class="dropdown-item" style="background-color: #BEB0A7" onclick="changeColor(1);" href="#">Secondary Accent Color</a></li>
+                                <li><a class="dropdown-item" style="background-color: #C2948A" onclick="changeColor(1);" href="#">Tertiary Accent Color</a></li>
+                                <li><hr class="dropdown-divider">Teal/Purple</li>
+                                <li><a class="dropdown-item" style="background-color: #7EA2AA" onclick="changeColor(2);" href="#">Primary Color</a></li>
+                                <li><a class="dropdown-item" style="background-color: #7F2CCB" onclick="changeColor(2);" href="#">Secondary Color</a></li>
+                                <li><a class="dropdown-item" style="background-color: #DB2B39" onclick="changeColor(2);" href="#">Primary Accent Color</a></li>
+                                <li><a class="dropdown-item" style="background-color: #303633" onclick="changeColor(2);" href="#">Secondary Accent Color</a></li>
+                                <li><a class="dropdown-item" style="background-color: #8BE8CB" onclick="changeColor(2);" href="#">Tertiary Accent Color</a></li>
+                                <li><hr class="dropdown-divider">Aqua/Pink</li>
+                                <li><a class="dropdown-item" style="background-color: #7BDFF2" onclick="changeColor(3);" href="#">Primary Color</a></li>
+                                <li><a class="dropdown-item" style="background-color: #B2F7EF" onclick="changeColor(3);" href="#">Secondary Color</a></li>
+                                <li><a class="dropdown-item" style="background-color: #6B5CA5" onclick="changeColor(3);" href="#">Primary Accent Color</a></li>
+                                <li><a class="dropdown-item" style="background-color: #F7D6E0" onclick="changeColor(3);" href="#">Secondary Accent Color</a></li>
+                                <li><a class="dropdown-item" style="background-color: #F2B5D4" onclick="changeColor(3);" href="#">Tertiary Accent Color</a></li>
+                                <li><hr class="dropdown-divider">Green/Orange</li>
+                                <li><a class="dropdown-item" style="background-color: #86E7B8" onclick="changeColor(4);" href="#">Primary Color</a></li>
+                                <li><a class="dropdown-item" style="background-color: #93FF96" onclick="changeColor(4);" href="#">Secondary Color</a></li>
+                                <li><a class="dropdown-item" style="background-color: #FFB86F" onclick="changeColor(4);" href="#">Primary Accent Color</a></li>
+                                <li><a class="dropdown-item" style="background-color: #6D6A75" onclick="changeColor(4);" href="#">Secondary Accent Color</a></li>
+                                <li><a class="dropdown-item" style="background-color: #B8B8D1" onclick="changeColor(4);" href="#">Tertiary Accent Color</a></li>
+                                <li><hr class="dropdown-divider">Blue</li>
+                                <li><a class="dropdown-item" style="background-color: #03256C" onclick="changeColor(5);" href="#">Primary Color</a></li>
+                                <li><a class="dropdown-item" style="background-color: #2541B2" onclick="changeColor(5);" href="#">Secondary Color</a></li>
+                                <li><a class="dropdown-item" style="background-color: #FFFFFF" onclick="changeColor(5);" href="#">Primary Accent Color</a></li>
+                                <li><a class="dropdown-item" style="background-color: #1768AC" onclick="changeColor(5);" href="#">Secondary Accent Color</a></li>
+                                <li><a class="dropdown-item" style="background-color: #06BEE1" onclick="changeColor(5);" href="#">Tertiary Accent Color</a></li>
+                            </ul>
                         </div>
                     </li>
                 </ul>
             </div>
-            <div class="col" style="padding-right:0em">
-                <div class="container-lg border">
-                    @RenderBody()
+            <div class="row">
+                <div class="sidebar border col">
+                    <ul class="sidebar-nav compact">
 
-                    <footer style="margin-top:auto">
-                        <hr />
-                        <p>&copy; @DateTime.Now.Year - Camilo Ward</p>
-                    </footer>
+                        <li class="nav-title">Links</li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="https://www.linkedin.com/in/camiloward/" target="_blank">
+                                <img src="~/Content/images/LI-In-Bug.png" height="40" alt="Linked In - Camilo Ward" />
+                            </a>
+                            <a class="nav-link" href="https://github.com/cward85" target="_blank">
+                                <img src="~/Content/images/GitHub_Lockup_White.png" height="30" alt="GitHub - Camilo Ward" />
+                            </a>
+                            <a class="nav-link" href="@Url.Action("ResumeDownload", "Home")" download>
+                                <img src="~/Content/images/pdf-download.jpg" height="40" alt="Download Current Resume - Camilo Ward" /><span class="accent" style="padding-left:1em">Current Resume</span>
+                            </a>
+                        </li>
+                        <li class="nav-title">Contact</li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="mailto:camiloward@gmail.com">
+                                <span class="accent">Camilo.Ward@gmail.com</span>
+                            </a>
+                        </li>
+                        <li class="nav-title">Location</li>
+                        <li class="nav-item">
+                            <span class="accent" style="padding-left:1em">Washington, DC</span>
+                        </li>
+                        <li class="nav-title">Status</li>
+                        <li class="nav-item">
+                            <span class="accent" style="padding-left:1em">Open to Freelance</span>
+                            <span class="accent" style="padding-left:1em">Opportunities</span>
+                        </li>
+                        <li class="nav-title">Technologies</li>
+                        <li class="nav-item">
+                            <span>Back End</span>
+                            <div class="d-flex flex-wrap gap-1">
+                                <span class="chip">C#</span>
+                                <span class="chip">SQL</span>
+                                <span class="chip">Visual Basic</span>
+                                <span class="chip">Java</span>
+                            </div>
+                        </li>
+                        <li class="nav-item">
+                            <span>Front End</span>
+                            <div class="d-flex flex-wrap gap-1">
+                                <span class="chip">javascript</span>
+                                <span class="chip">jQuery</span>
+                                <span class="chip">AJAX</span>
+                                <span class="chip">CSS</span>
+                                <span class="chip">Bootstrap</span>
+                            </div>
+                        </li>
+                        <li class="nav-item">
+                            <span>Source Control</span>
+                            <div class="d-flex flex-wrap gap-1">
+                                <span class="chip">TFS</span>
+                                <span class="chip">Azure Devops</span>
+                                <span class="chip">GitHub</span>
+                                <span class="chip">TortoiseSVN</span>
+                            </div>
+                        </li>
+                        <li class="nav-item">
+                            <span>.NET Frameworks</span>
+                            <div class="d-flex flex-wrap gap-1">
+                                <span class="chip">Webforms (Framework 3.5-4.8)</span>
+                                <span class="chip">MVC 5</span>
+                                <span class="chip">.NET Core (5+)</span>
+                                <span class="chip">Windows Forms</span>
+                            </div>
+                        </li>
+                        <li class="nav-item">
+                            <span>Data Formats</span>
+                            <div class="d-flex flex-wrap gap-1">
+                                <span class="chip">JSON</span>
+                                <span class="chip">XML</span>
+                            </div>
+                        </li>
+                        <li class="nav-item">
+                            <span>Software</span>
+                            <div class="d-flex flex-wrap gap-1">
+                                <span class="chip">SQL Server Management Studio</span>
+                                <span class="chip">IIS</span>
+                                <span class="chip">Visual Studio 2008-2026</span>
+                                <span class="chip">MS Project</span>
+                                <span class="chip">GitHub Desktop</span>
+                                <span class="chip">Unity</span>
+                                <span class="chip">VSCode</span>
+                            </div>
+                        </li>
+                        <li class="nav-item">
+                            <span>Methodologies</span>
+                            <div class="d-flex flex-wrap gap-1">
+                                <span class="chip">Agile</span>
+                                <span class="chip">Scrum</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col" style="padding-right:0em">
+                    <div class="container-lg border">
+                        @RenderBody()
+
+                        <footer style="margin-top:auto">
+                            <hr />
+                            <p>&copy; @DateTime.Now.Year - Camilo Ward</p>
+                        </footer>
+                    </div>
                 </div>
             </div>
         </div>

@@ -143,8 +143,12 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\bootstrap.rtl.css" />
     <Content Include="Content\bootstrap.rtl.min.css" />
+    <Content Include="Content\images\cats\brie-1.jpeg" />
+    <Content Include="Content\images\cats\saperavi-1.jpeg" />
     <Content Include="Content\images\GitHub_Lockup_White.png" />
+    <Content Include="Content\images\green.png" />
     <Content Include="Content\images\LI-In-Bug.png" />
+    <Content Include="Content\images\orange.png" />
     <Content Include="Content\images\pdf-download.jpg" />
     <Content Include="Content\images\portfolio images\foundation-application-example-2.png" />
     <Content Include="Content\images\portfolio images\foundation-application-example.png" />
