@@ -43,14 +43,14 @@
                 $(':root').get(0).style.setProperty('--secondary-color', "#B2F7EF");
                 $(':root').get(0).style.setProperty('--primary-accent-color', "#6B5CA5");
                 $(':root').get(0).style.setProperty('--secondary-accent-color', "#F7D6E0");
-                $(':root').get(0).style.setProperty('--tertiary-accent-color', "#F2B5D4");
+                $(':root').get(0).style.setProperty('--tertiary-accent-color', "#F0A6CA");
             }
             else if (id == 4) {
-                $(':root').get(0).style.setProperty('--primary-color',          "#86E7B8");
-                $(':root').get(0).style.setProperty('--secondary-color',        "#93FF96");
-                $(':root').get(0).style.setProperty('--primary-accent-color',   "#FF850A");
-                $(':root').get(0).style.setProperty('--secondary-accent-color', "#6D6A75");
-                $(':root').get(0).style.setProperty('--tertiary-accent-color',  "#B8B8D1");
+                $(':root').get(0).style.setProperty('--primary-color',          "#404040");
+                $(':root').get(0).style.setProperty('--secondary-color',        "#585858");
+                $(':root').get(0).style.setProperty('--primary-accent-color',   "#FFFFFF");
+                $(':root').get(0).style.setProperty('--secondary-accent-color', "#9B9B9B");
+                $(':root').get(0).style.setProperty('--tertiary-accent-color',  "#D3D3D3");
             }
             else if (id == 5) {
                 $(':root').get(0).style.setProperty('--primary-color',          "#03256C");
@@ -58,6 +58,13 @@
                 $(':root').get(0).style.setProperty('--primary-accent-color',   "#FFFFFF"); 
                 $(':root').get(0).style.setProperty('--secondary-accent-color', "#1768AC");
                 $(':root').get(0).style.setProperty('--tertiary-accent-color',  "#06BEE1");
+            }
+            else if (id == 6) {
+                $(':root').get(0).style.setProperty('--primary-color', "#1B1B3A");
+                $(':root').get(0).style.setProperty('--secondary-color', "#9197AE");
+                $(':root').get(0).style.setProperty('--primary-accent-color', "#EFF6E0");
+                $(':root').get(0).style.setProperty('--secondary-accent-color', "#4A442D");
+                $(':root').get(0).style.setProperty('--tertiary-accent-color', "#386150");
             }
 
             localStorage.setItem("colorId", String(id));
@@ -98,19 +105,25 @@
                                 <li><a class="dropdown-item" style="background-color: #B2F7EF" onclick="changeColor(3);" href="#">Secondary Color</a></li>
                                 <li><a class="dropdown-item" style="background-color: #6B5CA5" onclick="changeColor(3);" href="#">Primary Accent Color</a></li>
                                 <li><a class="dropdown-item" style="background-color: #F7D6E0" onclick="changeColor(3);" href="#">Secondary Accent Color</a></li>
-                                <li><a class="dropdown-item" style="background-color: #F2B5D4" onclick="changeColor(3);" href="#">Tertiary Accent Color</a></li>
-                                <li><hr class="dropdown-divider">Green/Orange</li>
-                                <li><a class="dropdown-item" style="background-color: #86E7B8" onclick="changeColor(4);" href="#">Primary Color</a></li>
-                                <li><a class="dropdown-item" style="background-color: #93FF96" onclick="changeColor(4);" href="#">Secondary Color</a></li>
-                                <li><a class="dropdown-item" style="background-color: #FFB86F" onclick="changeColor(4);" href="#">Primary Accent Color</a></li>
-                                <li><a class="dropdown-item" style="background-color: #6D6A75" onclick="changeColor(4);" href="#">Secondary Accent Color</a></li>
-                                <li><a class="dropdown-item" style="background-color: #B8B8D1" onclick="changeColor(4);" href="#">Tertiary Accent Color</a></li>
+                                <li><a class="dropdown-item" style="background-color: #F0A6CA" onclick="changeColor(3);" href="#">Tertiary Accent Color</a></li>
+                                <li><hr class="dropdown-divider">Various Greys</li>
+                                <li><a class="dropdown-item" style="background-color: #404040" onclick="changeColor(4);" href="#">Primary Color</a></li>
+                                <li><a class="dropdown-item" style="background-color: #585858" onclick="changeColor(4);" href="#">Secondary Color</a></li>
+                                <li><a class="dropdown-item" style="background-color: #FFFFFF" onclick="changeColor(4);" href="#">Primary Accent Color</a></li>
+                                <li><a class="dropdown-item" style="background-color: #9B9B9B" onclick="changeColor(4);" href="#">Secondary Accent Color</a></li>
+                                <li><a class="dropdown-item" style="background-color: #D3D3D3" onclick="changeColor(4);" href="#">Tertiary Accent Color</a></li>
                                 <li><hr class="dropdown-divider">Blue</li>
                                 <li><a class="dropdown-item" style="background-color: #03256C" onclick="changeColor(5);" href="#">Primary Color</a></li>
                                 <li><a class="dropdown-item" style="background-color: #2541B2" onclick="changeColor(5);" href="#">Secondary Color</a></li>
                                 <li><a class="dropdown-item" style="background-color: #FFFFFF" onclick="changeColor(5);" href="#">Primary Accent Color</a></li>
                                 <li><a class="dropdown-item" style="background-color: #1768AC" onclick="changeColor(5);" href="#">Secondary Accent Color</a></li>
                                 <li><a class="dropdown-item" style="background-color: #06BEE1" onclick="changeColor(5);" href="#">Tertiary Accent Color</a></li>
+                                <li><hr class="dropdown-divider">Grey/green</li>
+                                <li><a class="dropdown-item" style="background-color: #1B1B3A" onclick="changeColor(6);" href="#">Primary Color</a></li>
+                                <li><a class="dropdown-item" style="background-color: #9197AE" onclick="changeColor(6);" href="#">Secondary Color</a></li>
+                                <li><a class="dropdown-item" style="background-color: #EFF6E0" onclick="changeColor(6);" href="#">Primary Accent Color</a></li>
+                                <li><a class="dropdown-item" style="background-color: #4A442D" onclick="changeColor(6);" href="#">Secondary Accent Color</a></li>
+                                <li><a class="dropdown-item" style="background-color: #386150" onclick="changeColor(6);" href="#">Tertiary Accent Color</a></li>
                             </ul>
                         </div>
                     </li>
@@ -217,7 +230,7 @@
                     <div class="container-lg border">
                         @RenderBody()
 
-                        <footer style="margin-top:auto">
+                        <footer class="mt-auto">
                             <hr />
                             <p>&copy; @DateTime.Now.Year - Camilo Ward</p>
                         </footer>

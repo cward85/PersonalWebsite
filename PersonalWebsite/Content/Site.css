@@ -28,6 +28,10 @@ main, .container-lg, .sidebar, .sidebar-nav, .nav, ul {
     background-color: var(--secondary-color);
 }
 
+.chip {
+    color: var(--secondary-color)
+}
+
 .h1, .h2, .h3, h1, h2, h3{
     color: var(--primary-accent-color);
 }
@@ -37,7 +41,7 @@ main, .container-lg, .sidebar, .sidebar-nav, .nav, ul {
     color: var(--tertiary-accent-color);
 }
 
-label, title, td, p, th,  .sidebar-nav .nav-title {
+label, title, td, p, th, .sidebar-nav .nav-title {
     color: var(--primary-accent-color);
 }
 
