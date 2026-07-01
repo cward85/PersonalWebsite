@@ -3,6 +3,9 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="@ViewBag.MetaDescription" />
+    <meta name="keywords" content="@ViewBag.MetaKeywords" />
+    <meta http-equiv='content-language' content='en-us'>
     <title>@ViewBag.Title - Camilo Ward</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
@@ -30,21 +33,7 @@
                 $(':root').get(0).style.setProperty('--primary-accent-color', "#8B9D83");
                 $(':root').get(0).style.setProperty('--secondary-accent-color', "#BEB0A7");
                 $(':root').get(0).style.setProperty('--tertiary-accent-color', "#C2948A");
-            }
-            else if (id == 2) {
-                $(':root').get(0).style.setProperty('--primary-color', "#7EA2AA");
-                $(':root').get(0).style.setProperty('--secondary-color', "#7F2CCB");
-                $(':root').get(0).style.setProperty('--primary-accent-color', "#DB2B39");
-                $(':root').get(0).style.setProperty('--secondary-accent-color', "#303633");
-                $(':root').get(0).style.setProperty('--tertiary-accent-color', "#8BE8CB");
-            }
-            else if (id == 3) {
-                $(':root').get(0).style.setProperty('--primary-color', "#7BDFF2");
-                $(':root').get(0).style.setProperty('--secondary-color', "#B2F7EF");
-                $(':root').get(0).style.setProperty('--primary-accent-color', "#6B5CA5");
-                $(':root').get(0).style.setProperty('--secondary-accent-color', "#F7D6E0");
-                $(':root').get(0).style.setProperty('--tertiary-accent-color', "#F0A6CA");
-            }
+            }                      
             else if (id == 4) {
                 $(':root').get(0).style.setProperty('--primary-color',          "#404040");
                 $(':root').get(0).style.setProperty('--secondary-color',        "#585858");
@@ -79,8 +68,9 @@
             <div class="row" style="padding-bottom:.8em">
                 <ul class="nav border justify-content-end">
                     <li class="nav-item">@Html.ActionLink("About", "About", "Home", new { area = "" }, new { @class = "nav-link" })</li>
+                    <li class="nav-item">@Html.ActionLink("Freelance Opportunities", "Freelance", "Home", new { area = "" }, new { @class = "nav-link" })</li>
                     <li class="nav-item">@Html.ActionLink("Portfolio", "Portfolio", "Home", new { area = "" }, new { @class = "nav-link" })</li>
-                    <li class="nav-item">@Html.ActionLink("Resume", "Resume", "Home", new { area = "" }, new { @class = "nav-link" })</li>
+                    <li class="nav-item">@Html.ActionLink("Resume (WIP)", "Resume", "Home", new { area = "" }, new { @class = "nav-link disabled" })</li>
                     <li class="nav-item">@Html.ActionLink("Blog (WIP)", "Blog", "Home", new { area = "" }, new { @class = "nav-link disabled" })</li>
                     <li class="nav-item">
                         <div class="btn-group">
@@ -94,18 +84,6 @@
                                 <li><a class="dropdown-item" style="background-color: #8B9D83" onclick="changeColor(1);" href="#">Primary Accent Color</a></li>
                                 <li><a class="dropdown-item" style="background-color: #BEB0A7" onclick="changeColor(1);" href="#">Secondary Accent Color</a></li>
                                 <li><a class="dropdown-item" style="background-color: #C2948A" onclick="changeColor(1);" href="#">Tertiary Accent Color</a></li>
-                                <li><hr class="dropdown-divider">Teal/Purple</li>
-                                <li><a class="dropdown-item" style="background-color: #7EA2AA" onclick="changeColor(2);" href="#">Primary Color</a></li>
-                                <li><a class="dropdown-item" style="background-color: #7F2CCB" onclick="changeColor(2);" href="#">Secondary Color</a></li>
-                                <li><a class="dropdown-item" style="background-color: #DB2B39" onclick="changeColor(2);" href="#">Primary Accent Color</a></li>
-                                <li><a class="dropdown-item" style="background-color: #303633" onclick="changeColor(2);" href="#">Secondary Accent Color</a></li>
-                                <li><a class="dropdown-item" style="background-color: #8BE8CB" onclick="changeColor(2);" href="#">Tertiary Accent Color</a></li>
-                                <li><hr class="dropdown-divider">Aqua/Pink</li>
-                                <li><a class="dropdown-item" style="background-color: #7BDFF2" onclick="changeColor(3);" href="#">Primary Color</a></li>
-                                <li><a class="dropdown-item" style="background-color: #B2F7EF" onclick="changeColor(3);" href="#">Secondary Color</a></li>
-                                <li><a class="dropdown-item" style="background-color: #6B5CA5" onclick="changeColor(3);" href="#">Primary Accent Color</a></li>
-                                <li><a class="dropdown-item" style="background-color: #F7D6E0" onclick="changeColor(3);" href="#">Secondary Accent Color</a></li>
-                                <li><a class="dropdown-item" style="background-color: #F0A6CA" onclick="changeColor(3);" href="#">Tertiary Accent Color</a></li>
                                 <li><hr class="dropdown-divider">Various Greys</li>
                                 <li><a class="dropdown-item" style="background-color: #404040" onclick="changeColor(4);" href="#">Primary Color</a></li>
                                 <li><a class="dropdown-item" style="background-color: #585858" onclick="changeColor(4);" href="#">Secondary Color</a></li>
@@ -147,18 +125,19 @@
                         </li>
                         <li class="nav-title">Contact</li>
                         <li class="nav-item">
-                            <a class="nav-link" href="mailto:camiloward@gmail.com">
-                                <span class="accent">Camilo.Ward@gmail.com</span>
+                            <a class="nav-link" href="mailto:me@camiloward.com">
+                                <span id="emailContactSidebar" class="accent">me@camiloward.com</span>
                             </a>
                         </li>
                         <li class="nav-title">Location</li>
                         <li class="nav-item">
                             <span class="accent" style="padding-left:1em">Washington, DC</span>
                         </li>
-                        <li class="nav-title">Status</li>
+                        <li class="nav-title">Freelance Status</li>
                         <li class="nav-item">
-                            <span class="accent" style="padding-left:1em">Open to Freelance</span>
-                            <span class="accent" style="padding-left:1em">Opportunities</span>
+                            <a class="nav-link" href="@Url.Action("Freelance", "Home")">
+                                <span id="freelanceStatusSidebar" class="accent">Open for Work</span>
+                            </a>
                         </li>
                         <li class="nav-title">Technologies</li>
                         <li class="nav-item">
@@ -214,6 +193,7 @@
                                 <span class="chip">MS Project</span>
                                 <span class="chip">GitHub Desktop</span>
                                 <span class="chip">Unity</span>
+                                <span class="chip">articy draft x</span>
                                 <span class="chip">VSCode</span>
                             </div>
                         </li>

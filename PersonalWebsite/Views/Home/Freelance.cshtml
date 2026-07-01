@@ -1,0 +1,75 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Freelance Opportunities";
+}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#freelanceStatus').text($('#freelanceStatusSidebar').text());
+        $('#emailContact').text($('#emailContactSidebar').text());
+    });
+</script>
+
+<main aria-labelledby="title">
+    <h2 id="title">@ViewBag.Title</h2>
+    <h4>
+        Freelance Status
+    </h4>
+    <p><span class="status" id="freelanceStatus"></span></p>
+
+    <p>
+        I offer full website management services:
+        <ul>
+            <li>
+                Website and Email Domain procurement
+                <ul>
+                    <li>HTTPS Certificate Management</li>
+                    <li>SEO</li>
+                    <li>Google Page Indexing</li>
+                    <li>Sitemap updates</li>
+                </ul>
+            </li>            
+            <li>
+                Web server hosting on Windows Server using IIS
+                <ul>
+                    <li>Ensure site uptime</li>
+                    <li>Resource monitoring</li>
+                    <li>Performance tailored to your needs</li>                    
+                </ul>
+            </li>
+            <li>
+                SQL Server Database backend
+                <ul>
+                    <li>Options for data backup frequency based on your needs</li>
+                    <li>Custom query report data options</li>
+                </ul>
+            </li>
+            <li>
+                ASP .NET Web Development
+                <ul>
+                    <li>Simple pages that just serve content</li>
+                    <li>Complex business logic serving a data driven workflow</li>
+                </ul>
+            </li>
+            <li>
+                Bootstrap and CoreUI front end with Javascript and jQuery
+                <ul>
+                    <li>Styled to your needs</li>
+                    <li>Modern, responsive design</li>
+                    <li>Options for mobile friendly development</li>
+                </ul>
+            </li>
+        </ul>
+    </p>
+    <p>
+        I specialize in providing functional, data driven solutions tailored to your needs.  I am used to working in an Agile environment, so I am comfortable with constant communication to ensure that your website is developed to your specifications.
+    </p>
+    <p>
+        You can also view my <a href="@Url.Action("Portfolio", "Home")">portfolio</a> for examples of previous work.
+    </p>
+    <p>
+        <h4>Contact me with any inquiries</h4>
+        <span id="emailContact" class="status"></span>
+    </p>
+
+</main>

@@ -1,9 +1,9 @@
 ﻿:root {
-    --primary-color: #6A7B76;
-    --secondary-color: #3A4E48;
-    --primary-accent-color: #8B9D83;
-    --secondary-accent-color: #BEB0A7;
-    --tertiary-accent-color: #C2948A;
+    --primary-color: #404040;
+    --secondary-color: #585858;
+    --primary-accent-color: #FFFFFF;
+    --secondary-accent-color: #9B9B9B;
+    --tertiary-accent-color: #D3D3D3;
 }
 
 /* Set padding to keep content from hitting the edges */
@@ -82,9 +82,9 @@ label, title, td, p, th, .sidebar-nav .nav-title {
     color: var(--primary-color);
 }
 
-    a, .accent, .nav-underline-border, .nav-link, .sidebar-nav .nav-link {
-        color: var(--tertiary-accent-color);
-    }
+a, .accent, .nav-underline-border, .nav-link, .sidebar-nav .nav-link, .status {
+    color: var(--tertiary-accent-color);
+}
 
 .chip
 {
