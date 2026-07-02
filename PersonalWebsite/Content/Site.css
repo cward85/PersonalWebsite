@@ -100,3 +100,7 @@ a, .accent, .nav-underline-border, .nav-link, .sidebar-nav .nav-link, .status {
     color:black;
     opacity:1;
 }
+
+.carousel-item-wrapper {
+    height: 700px;
+}
