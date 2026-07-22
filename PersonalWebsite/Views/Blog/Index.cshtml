@@ -1,0 +1,126 @@
+﻿@model PersonalWebsite.Models.blogVM
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Journey into Game Development and Freelance Web Development";
+}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        const mySearchChip = document.getElementById('searchByTag')
+
+        if (mySearchChip != null) {
+            mySearchChip.addEventListener('removed.coreui.chip', event => {
+                location.href = '@Url.Action("Index", "Blog")';
+            })
+        }
+
+        const mySearchAuthorChip = document.getElementById('searchByAuthor')
+
+        if (mySearchAuthorChip != null) {
+            mySearchAuthorChip.addEventListener('removed.coreui.chip', event => {
+                location.href = '@Url.Action("Index", "Blog")';
+            })
+        }
+
+        const tagContainer = document.querySelectorAll('.chipTagContainer');
+        for (var j = 0; j < tagContainer.length; j++) {
+            var chips = tagContainer[j].querySelectorAll('.chip');
+
+            for (var i = 0; i < chips.length; i++) {
+                var innerText = chips[i].innerText;
+                chips[i].myParam = innerText;
+                chips[i].addEventListener('selected.coreui.chip', function (e) {
+                    setTag(e.currentTarget.myParam);
+                });
+            }
+        }
+    });
+
+    function setTag(innerText) {
+        location.href = ('@Url.Action("SearchByTag", "Blog")?tags=' + innerText);
+    }
+
+    function changePages(pageNumber) {
+        var authorExists = '@Html.Raw(Json.Encode(Model.searchByAuthor != null))';
+        var tagExists = '@Html.Raw(Json.Encode(Model.searchByTag != null))';
+
+        if (authorExists === 'true') {
+            var authorId = '@Html.Raw(Json.Encode(Model.searchByAuthorId))';
+            location.href = ('@Url.Action("SearchByAuthor", "Blog")?authorId=' + authorId + "&pageNumber=" + pageNumber);
+        }
+        else if (tagExists === 'true') {
+            var innerText = document.getElementById('searchByTag').innerText;
+            location.href = ('@Url.Action("SearchByTag", "Blog")?tags=' + innerText + "&pageNumber=" + pageNumber);
+        }
+        else {
+            location.href = ('@Url.Action("Index", "Blog")?pageNumber=' + pageNumber);
+        }
+    }
+</script>
+
+<main aria-labelledby="title">
+    <div class="row">
+        <div class="col text-center">
+            <h2 id="title">@ViewBag.Title</h2>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col text-end p-1">
+            @if (Model.searchByTag != null)
+            {
+                <span>Search Tags: </span>
+                <span id="searchByTag" class="chip" data-coreui-chip data-coreui-removable="true">@Model.searchByTag</span>
+            }
+            else if (Model.searchByAuthor != null)
+            {
+                <span>Search Tags: </span>
+                <span id="searchByAuthor" class="chip" data-coreui-chip data-coreui-removable="true">@Model.searchByAuthor</span>
+            }
+        </div>
+    </div>
+    <hr />
+    @foreach (PersonalWebsite.Models.blogEntryVM blogEntry in Model.blogEntries)
+    {
+        <div class="row">
+            <div class="col">
+                <h4>
+                    @Html.Label(blogEntry.blogEntryTitle, new { @class = "form-label" })
+                </h4>
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <div class="col">
+                <p style="white-space: pre-line">@blogEntry.blogEntryContent</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col chipTagContainer">
+
+                <span>Tags: </span>
+                @foreach (PersonalWebsite.Models.tagsVM tags in blogEntry.tags)
+                {
+                    <span class="chip" data-coreui-chip data-coreui-selectable="true">@tags.tag</span>
+                }
+            </div>
+            <div class="col text-end">
+                <a href="@Url.Action("SearchByAuthor", "Blog", new { authorId = blogEntry.authorId })">@blogEntry.author</a><span> - @blogEntry.creationDate</span>
+            </div>
+        </div>
+        <hr />
+    }
+    <div class="text-end">
+        @for (int i = 1; i <= Model.numPages; i++)
+        {
+            if (i == Model.pageNumber)
+            {
+                <button type="button" class="btn btn-secondary disabled" onclick="changePages(@i)">@i</button>
+            }
+            else
+            {
+                <button type="button" class="btn btn-primary" onclick="changePages(@i)">@i</button>
+            }
+        }
+    </div>
+</main>

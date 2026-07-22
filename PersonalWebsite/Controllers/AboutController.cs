@@ -11,36 +11,13 @@ using System.Web.Mvc;
 
 namespace PersonalWebsite.Controllers
 {
-    public class HomeController : Controller
+    public class AboutController : Controller
     {
-        public ActionResult About()
+        [HttpGet]
+        public ActionResult Index()
         {
             ViewBag.MetaDescription = "About Camilo Ward and a summary of his career and his plans for Freelance work and hobbies.";
             ViewBag.MetaKeywords = "Camilo, Ward, freelance, unity, articy";
-            return View();
-        }
-
-        public ActionResult Portfolio()
-        {
-            ViewBag.MetaDescription = "Camilo Ward's current freelance portfolio from websites built with C#, MVC, SQL Server, javascript, jquery, and bootstrap.";
-            ViewBag.MetaKeywords = "Camilo, Ward, freelance, C#, mvc, SQL, javascript, jquery, bootstrap, portfolio";
-            return View();
-        }
-
-        public ActionResult Resume()
-        {
-            return View();
-        }
-
-        public ActionResult Blog()
-        {         
-            return View();
-        }
-
-        public ActionResult Freelance()
-        {
-            ViewBag.MetaDescription = "What Camilo Ward offers potential clients that want to use his freelance services.";
-            ViewBag.MetaKeywords = "Camilo, Ward, freelance, services";
             return View();
         }
 

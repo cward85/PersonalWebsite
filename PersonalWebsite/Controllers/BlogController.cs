@@ -1,0 +1,67 @@
+﻿using PersonalWebsite.DAL;
+using PersonalWebsite.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+
+namespace PersonalWebsite.Controllers
+{
+    public class BlogController : Controller
+    {
+        [HttpGet]
+        public ActionResult Index(int pageNumber = 1)
+        {
+            ViewBag.MetaDescription = "Personal Blog of Camilo Ward where he posts about various web dev and game dev topics.";
+            ViewBag.MetaKeywords = "Camilo Ward, Blog, Web Dev, Game Dev";
+
+            DALBlog blog = new DALBlog();
+
+            blogVM model = new blogVM(); 
+            model.pageNumber = pageNumber;
+            model.blogEntries = blog.ListBlogEntries(pageNumber);
+            model.searchByTag = null;
+            model.searchByAuthor = null;
+            model.searchByAuthorId = 0;
+            model.numPages = (blog.CountBlogEntries() / 6) + 1;
+            return View(model);
+        }
+
+        [HttpGet]
+        public ActionResult SearchByTag(string tags, int pageNumber = 1)
+        {
+            ViewBag.MetaDescription = "Personal Blog of Camilo Ward where he posts about various web dev and game dev topics.";
+            ViewBag.MetaKeywords = "Camilo Ward, Blog, Web Dev, Game Dev";
+            DALBlog blog = new DALBlog();
+
+            blogVM model = new blogVM();
+            model.pageNumber = pageNumber;
+            model.blogEntries = blog.ListBlogEntriesByTag(tags, pageNumber);
+            model.searchByTag = tags;
+            model.searchByAuthor = null;
+            model.searchByAuthorId = 0;
+            model.numPages = (blog.CountBlogEntriesByTag(tags) / 6) + 1;
+
+            return View("Index", model);
+        }
+
+        [HttpGet]
+        public ActionResult SearchByAuthor(int authorId, int pageNumber = 1)
+        {
+            ViewBag.MetaDescription = "Personal Blog of Camilo Ward where he posts about various web dev and game dev topics.";
+            ViewBag.MetaKeywords = "Camilo Ward, Blog, Web Dev, Game Dev";
+            DALBlog blog = new DALBlog();
+
+            blogVM model = new blogVM();
+            model.pageNumber = pageNumber;
+            model.blogEntries = blog.ListBlogEntriesByAuthor(authorId, pageNumber);
+            model.searchByAuthor = blog.GetAuthorById(authorId);
+            model.searchByAuthorId = authorId;
+            model.searchByTag = null;
+            model.numPages = (blog.CountBlogEntriesByAuthor(authorId) / 6) + 1;
+
+            return View("Index", model);
+        }
+    }
+}

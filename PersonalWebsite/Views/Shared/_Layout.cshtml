@@ -13,17 +13,14 @@
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
-</head>
 
-
-<body>
     <script type="text/javascript">
         $(document).ready(function () {
             if (localStorage.getItem("colorId") !== null) {
                 changeColor(localStorage.getItem("colorId"));
             }
             else {
-                localStorage.setItem("colorId", "1");
+                localStorage.setItem("colorId", "4");
             }
         });
 
@@ -34,20 +31,20 @@
                 $(':root').get(0).style.setProperty('--primary-accent-color', "#8B9D83");
                 $(':root').get(0).style.setProperty('--secondary-accent-color', "#BEB0A7");
                 $(':root').get(0).style.setProperty('--tertiary-accent-color', "#C2948A");
-            }                      
+            }
             else if (id == 4) {
-                $(':root').get(0).style.setProperty('--primary-color',          "#404040");
-                $(':root').get(0).style.setProperty('--secondary-color',        "#585858");
-                $(':root').get(0).style.setProperty('--primary-accent-color',   "#FFFFFF");
+                $(':root').get(0).style.setProperty('--primary-color', "#404040");
+                $(':root').get(0).style.setProperty('--secondary-color', "#585858");
+                $(':root').get(0).style.setProperty('--primary-accent-color', "#FFFFFF");
                 $(':root').get(0).style.setProperty('--secondary-accent-color', "#9B9B9B");
-                $(':root').get(0).style.setProperty('--tertiary-accent-color',  "#D3D3D3");
+                $(':root').get(0).style.setProperty('--tertiary-accent-color', "#D3D3D3");
             }
             else if (id == 5) {
-                $(':root').get(0).style.setProperty('--primary-color',          "#03256C");
-                $(':root').get(0).style.setProperty('--secondary-color',        "#2541B2");
-                $(':root').get(0).style.setProperty('--primary-accent-color',   "#FFFFFF"); 
+                $(':root').get(0).style.setProperty('--primary-color', "#03256C");
+                $(':root').get(0).style.setProperty('--secondary-color', "#2541B2");
+                $(':root').get(0).style.setProperty('--primary-accent-color', "#FFFFFF");
                 $(':root').get(0).style.setProperty('--secondary-accent-color', "#1768AC");
-                $(':root').get(0).style.setProperty('--tertiary-accent-color',  "#06BEE1");
+                $(':root').get(0).style.setProperty('--tertiary-accent-color', "#06BEE1");
             }
             else if (id == 6) {
                 $(':root').get(0).style.setProperty('--primary-color', "#1B1B3A");
@@ -60,6 +57,11 @@
             localStorage.setItem("colorId", String(id));
         }
     </script>
+</head>
+
+
+<body>
+    
     <div class="container">
         <div class="row">
             <div class="col-md-7">
@@ -68,11 +70,11 @@
             </div>
             <div class="row" style="padding-bottom:.8em">
                 <ul class="nav border justify-content-end">
-                    <li class="nav-item">@Html.ActionLink("About", "About", "Home", new { area = "" }, new { @class = "nav-link" })</li>
-                    <li class="nav-item">@Html.ActionLink("Freelance Opportunities", "Freelance", "Home", new { area = "" }, new { @class = "nav-link" })</li>
-                    <li class="nav-item">@Html.ActionLink("Portfolio", "Portfolio", "Home", new { area = "" }, new { @class = "nav-link" })</li>
-                    <li class="nav-item">@Html.ActionLink("Resume (WIP)", "Resume", "Home", new { area = "" }, new { @class = "nav-link disabled" })</li>
-                    <li class="nav-item">@Html.ActionLink("Blog (WIP)", "Blog", "Home", new { area = "" }, new { @class = "nav-link disabled" })</li>
+                    <li class="nav-item">@Html.ActionLink("About", "", "About", new { area = "" }, new { @class = "nav-link" })</li>
+                    <li class="nav-item">@Html.ActionLink("Freelance Opportunities", "", "Freelance", new { area = "" }, new { @class = "nav-link" })</li>
+                    <li class="nav-item">@Html.ActionLink("Portfolio", "", "Portfolio", new { area = "" }, new { @class = "nav-link" })</li>
+                    <li class="nav-item">@Html.ActionLink("Resume (WIP)", "", "Resume", new { area = "" }, new { @class = "nav-link disabled" })</li>
+                    <li class="nav-item">@Html.ActionLink("Blog (WIP)", "", "Blog", new { area = "" }, new { @class = "nav-link" })</li>
                     <li class="nav-item">
                         <div class="btn-group">
                             <button type="button" class="btn btn-primary dropdown-toggle" data-coreui-toggle="dropdown" aria-expanded="false">
@@ -120,7 +122,7 @@
                             <a class="nav-link" href="https://github.com/cward85" target="_blank">
                                 <img src="~/Content/images/GitHub_Lockup_White.png" height="30" alt="GitHub - Camilo Ward" />
                             </a>
-                            <a class="nav-link" href="@Url.Action("ResumeDownload", "Home")" download>
+                            <a class="nav-link" href="@Url.Action("ResumeDownload", "About")" download>
                                 <img src="~/Content/images/pdf-download.jpg" height="40" alt="Download Current Resume - Camilo Ward" /><span class="accent" style="padding-left:1em">Current Resume</span>
                             </a>
                         </li>
@@ -136,7 +138,7 @@
                         </li>
                         <li class="nav-title">Freelance Status</li>
                         <li class="nav-item">
-                            <a class="nav-link" href="@Url.Action("Freelance", "Home")">
+                            <a class="nav-link" href="@Url.Action("", "Freelance")">
                                 <span id="freelanceStatusSidebar" class="accent">Open for Work</span>
                             </a>
                         </li>

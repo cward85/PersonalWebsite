@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\EntityFramework.6.5.2\build\EntityFramework.props" Condition="Exists('..\packages\EntityFramework.6.5.2\build\EntityFramework.props')" />
   <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -45,10 +46,18 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.5.2\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.5.2\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -120,13 +129,55 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
-    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="author.cs">
+      <DependentUpon>Blog.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Blog.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Blog.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Blog.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Blog.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Blog.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Blog.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="blogEntry.cs">
+      <DependentUpon>Blog.tt</DependentUpon>
+    </Compile>
+    <Compile Include="blogTag.cs">
+      <DependentUpon>Blog.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Controllers\BlogController.cs" />
+    <Compile Include="Controllers\FreelanceController.cs" />
+    <Compile Include="Controllers\AboutController.cs" />
+    <Compile Include="Controllers\PortfolioController.cs" />
+    <Compile Include="Controllers\ResumeController.cs" />
+    <Compile Include="DAL\DALBlog.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\blogEntryVM.cs" />
+    <Compile Include="Models\blogVM.cs" />
+    <Compile Include="Models\tagsVM.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Blog.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>Blog.edmx</DependentUpon>
+      <LastGenOutput>Blog.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="Blog.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>Blog.edmx</DependentUpon>
+      <LastGenOutput>Blog.cs</LastGenOutput>
+    </Content>
     <Content Include="Content\bootstrap-grid.css" />
     <Content Include="Content\bootstrap-grid.min.css" />
     <Content Include="Content\bootstrap-grid.rtl.css" />
@@ -169,7 +220,78 @@
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Content\Resume\Camilo Ward - Resume 5_2026.pdf" />
+    <EntityDeploy Include="Blog.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>Blog.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="Blog.edmx.diagram">
+      <DependentUpon>Blog.edmx</DependentUpon>
+    </Content>
+    <Content Include="Scripts\dist\css\coreui-grid.css.map" />
+    <Content Include="Scripts\dist\css\coreui-grid.min.css.map" />
+    <Content Include="Scripts\dist\css\coreui-grid.rtl.css.map" />
+    <Content Include="Scripts\dist\css\coreui-grid.rtl.min.css.map" />
+    <Content Include="Scripts\dist\css\coreui-reboot.css.map" />
+    <Content Include="Scripts\dist\css\coreui-reboot.min.css.map" />
+    <Content Include="Scripts\dist\css\coreui-reboot.rtl.css.map" />
+    <Content Include="Scripts\dist\css\coreui-reboot.rtl.min.css.map" />
+    <Content Include="Scripts\dist\css\coreui-utilities.css.map" />
+    <Content Include="Scripts\dist\css\coreui-utilities.min.css.map" />
+    <Content Include="Scripts\dist\css\coreui-utilities.rtl.css.map" />
+    <Content Include="Scripts\dist\css\coreui-utilities.rtl.min.css.map" />
+    <Content Include="Scripts\dist\css\coreui.css.map" />
+    <Content Include="Scripts\dist\css\coreui.min.css.map" />
+    <Content Include="Scripts\dist\css\coreui.rtl.css.map" />
+    <Content Include="Scripts\dist\css\coreui.rtl.min.css.map" />
+    <Content Include="Scripts\dist\css\themes\bootstrap\bootstrap.css.map" />
+    <Content Include="Scripts\dist\css\themes\bootstrap\bootstrap.min.css.map" />
+    <Content Include="Scripts\dist\css\themes\bootstrap\bootstrap.rtl.css.map" />
+    <Content Include="Scripts\dist\css\themes\bootstrap\bootstrap.rtl.min.css.map" />
+    <Content Include="Scripts\dist\js\bootstrap.bundle.js.map" />
+    <Content Include="Scripts\dist\js\bootstrap.bundle.min.js.map" />
+    <Content Include="Scripts\dist\js\bootstrap.esm.js.map" />
+    <Content Include="Scripts\dist\js\bootstrap.esm.min.js.map" />
+    <Content Include="Scripts\dist\js\bootstrap.js.map" />
+    <Content Include="Scripts\dist\js\bootstrap.min.js.map" />
+    <Content Include="Scripts\dist\js\coreui.bundle.js.map" />
+    <Content Include="Scripts\dist\js\coreui.bundle.min.js.map" />
+    <Content Include="Scripts\dist\js\coreui.esm.js.map" />
+    <Content Include="Scripts\dist\js\coreui.esm.min.js.map" />
+    <Content Include="Scripts\dist\js\coreui.js.map" />
+    <Content Include="Scripts\dist\js\coreui.min.js.map" />
     <None Include="Scripts\jquery-3.7.0.intellisense.js" />
+    <Content Include="Scripts\dist\css\coreui-grid.css" />
+    <Content Include="Scripts\dist\css\coreui-grid.min.css" />
+    <Content Include="Scripts\dist\css\coreui-grid.rtl.css" />
+    <Content Include="Scripts\dist\css\coreui-grid.rtl.min.css" />
+    <Content Include="Scripts\dist\css\coreui-reboot.css" />
+    <Content Include="Scripts\dist\css\coreui-reboot.min.css" />
+    <Content Include="Scripts\dist\css\coreui-reboot.rtl.css" />
+    <Content Include="Scripts\dist\css\coreui-reboot.rtl.min.css" />
+    <Content Include="Scripts\dist\css\coreui-utilities.css" />
+    <Content Include="Scripts\dist\css\coreui-utilities.min.css" />
+    <Content Include="Scripts\dist\css\coreui-utilities.rtl.css" />
+    <Content Include="Scripts\dist\css\coreui-utilities.rtl.min.css" />
+    <Content Include="Scripts\dist\css\coreui.css" />
+    <Content Include="Scripts\dist\css\coreui.min.css" />
+    <Content Include="Scripts\dist\css\coreui.rtl.css" />
+    <Content Include="Scripts\dist\css\coreui.rtl.min.css" />
+    <Content Include="Scripts\dist\css\themes\bootstrap\bootstrap.css" />
+    <Content Include="Scripts\dist\css\themes\bootstrap\bootstrap.min.css" />
+    <Content Include="Scripts\dist\css\themes\bootstrap\bootstrap.rtl.css" />
+    <Content Include="Scripts\dist\css\themes\bootstrap\bootstrap.rtl.min.css" />
+    <Content Include="Scripts\dist\js\bootstrap.bundle.js" />
+    <Content Include="Scripts\dist\js\bootstrap.bundle.min.js" />
+    <Content Include="Scripts\dist\js\bootstrap.esm.js" />
+    <Content Include="Scripts\dist\js\bootstrap.esm.min.js" />
+    <Content Include="Scripts\dist\js\bootstrap.js" />
+    <Content Include="Scripts\dist\js\bootstrap.min.js" />
+    <Content Include="Scripts\dist\js\coreui.bundle.js" />
+    <Content Include="Scripts\dist\js\coreui.bundle.min.js" />
+    <Content Include="Scripts\dist\js\coreui.esm.js" />
+    <Content Include="Scripts\dist\js\coreui.esm.min.js" />
+    <Content Include="Scripts\dist\js\coreui.js" />
+    <Content Include="Scripts\dist\js\coreui.min.js" />
     <Content Include="Scripts\jquery-3.7.0.js" />
     <Content Include="Scripts\jquery-3.7.0.min.js" />
     <Content Include="Scripts\jquery-3.7.0.slim.js" />
@@ -192,15 +314,14 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Home\About.cshtml" />
-    <Content Include="Views\Home\Portfolio.cshtml" />
-    <Content Include="Views\Home\Resume.cshtml" />
-    <Content Include="Views\Home\Blog.cshtml" />
-    <Content Include="Views\Home\Freelance.cshtml" />
+    <Content Include="Views\About\Index.cshtml" />
+    <Content Include="Views\Portfolio\Index.cshtml" />
+    <Content Include="Views\Resume\Index.cshtml" />
+    <Content Include="Views\Blog\Index.cshtml" />
+    <Content Include="Views\Freelance\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.rtl.min.css.map" />
@@ -228,6 +349,9 @@
     <Content Include="Scripts\bootstrap.bundle.js.map" />
     <Content Include="Scripts\jquery-3.7.0.slim.min.map" />
     <Content Include="Scripts\jquery-3.7.0.min.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -268,5 +392,8 @@
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
+    <Error Condition="!Exists('..\packages\EntityFramework.6.5.2\build\EntityFramework.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.5.2\build\EntityFramework.props'))" />
+    <Error Condition="!Exists('..\packages\EntityFramework.6.5.2\build\EntityFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.5.2\build\EntityFramework.targets'))" />
   </Target>
+  <Import Project="..\packages\EntityFramework.6.5.2\build\EntityFramework.targets" Condition="Exists('..\packages\EntityFramework.6.5.2\build\EntityFramework.targets')" />
 </Project>

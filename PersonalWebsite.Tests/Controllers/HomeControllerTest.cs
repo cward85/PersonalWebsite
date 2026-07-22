@@ -16,7 +16,7 @@ namespace PersonalWebsite.Tests.Controllers
         public void About()
         {
             // Arrange
-            HomeController controller = new HomeController();
+            AboutController controller = new AboutController();
 
             // Act
             ViewResult result = controller.About() as ViewResult;

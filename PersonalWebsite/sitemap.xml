@@ -13,18 +13,28 @@
   <priority>1.00</priority>
 </url>
 <url>
-  <loc>https://camiloward.com/Home/Portfolio</loc>
+  <loc>https://camiloward.com/Portfolio</loc>
   <lastmod>2026-06-15</lastmod>
   <priority>0.90</priority>
 </url>
 <url>
-  <loc>https://camiloward.com/Home/Resume</loc>
+  <loc>https://camiloward.com/Resume</loc>
   <lastmod>2026-06-15</lastmod>
   <priority>0.80</priority>
 </url>
   <url>
-    <loc>https://camiloward.com/Home/Freelance</loc>
+    <loc>https://camiloward.com/Freelance</loc>
     <lastmod>2026-06-25</lastmod>
+    <priority>1.00</priority>
+  </url>
+  <url>
+    <loc>https://camiloward.com/About</loc>
+    <lastmod>2026-06-25</lastmod>
+    <priority>1.00</priority>
+  </url>
+  <url>
+    <loc>https://camiloward.com/Blog</loc>
+    <lastmod>2026-07-21</lastmod>
     <priority>1.00</priority>
   </url>
 </urlset>
