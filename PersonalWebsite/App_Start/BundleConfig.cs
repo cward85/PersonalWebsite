@@ -25,7 +25,7 @@ namespace PersonalWebsite
                      ));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
-                "~/Scripts/dist/css/themes/bootstrap/bootstrap.min.css",
+                //"~/Scripts/dist/css/themes/bootstrap/bootstrap.min.css",
 
                 "~/Content/bootstrap-icons-1.13.1/bootstrap-icons.css",
                 "~/Scripts/dist/css/coreui.min.css",
