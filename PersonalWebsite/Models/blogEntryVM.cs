@@ -1,5 +1,8 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
@@ -16,7 +19,12 @@ namespace PersonalWebsite.Models
             this.blogEntryTitle = title;
             this.creationDate = creationDate;
 
-            tags = new List<tagsVM>();
+            tags = new List<tagsVM>();            
+        }
+
+        public blogEntryVM()
+        {
+
         }
 
         public void PopulateTags(List<blogTag> blogTags)
@@ -30,10 +38,17 @@ namespace PersonalWebsite.Models
         public int id { get; set; }
         public string author { get; set; }
         public int authorId { get; set; }
+        [DisplayName("Content")]
+        [Required]
         public string blogEntryContent { get; set; }
+        [DisplayName("Title")]
+        [Required]
         public string blogEntryTitle { get; set; }
         public System.DateTime creationDate { get; set; }
 
         public List<tagsVM> tags { get; set; }
+        [DisplayName("Tags")]
+        public string stringTags { get; set; }
+
     }
 }

@@ -25,6 +25,7 @@ namespace PersonalWebsite
         public string blogEntryContent { get; set; }
         public string blogEntryTitle { get; set; }
         public System.DateTime creationDate { get; set; }
+        public bool activeFlag { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<blogTag> blogTags { get; set; }

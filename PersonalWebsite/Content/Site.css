@@ -13,6 +13,13 @@
     padding-right: 15px;
 }
 
+.required::after {
+    content: "*";
+    font-weight: bold;
+    color: red;
+    margin-left: 4px;
+}
+
 /* Override the default bootstrap behavior where horizontal description lists 
    will truncate terms that are too long to fit in the left column 
 */
@@ -24,7 +31,7 @@ body{
     background-color: var(--primary-color);
 }
 
-main, .container-lg, .sidebar, .sidebar-nav, .nav, ul {
+main, .container-lg, .topNav, .sidebar, .sidebar-nav, .nav, ul {
     background-color: var(--secondary-color);
 }
 
@@ -32,13 +39,22 @@ main, .container-lg, .sidebar, .sidebar-nav, .nav, ul {
     color: var(--secondary-color)
 }
 
-.h1, .h2, .h3, h1, h2, h3{
+.h1, .h2, .h3, h1, h2, h3, h4, h5{
     color: var(--primary-accent-color);
 }
 
 .title
 {
     color: var(--tertiary-accent-color);
+}
+
+.dropdown-menu, .modal-body {
+    background-color: var(--tertiary-accent-color);
+}
+
+.dropdown-menu .form-label
+{
+    color: var(--primary-color);
 }
 
 label, title, td, p, th, .sidebar-nav .nav-title {
@@ -86,8 +102,12 @@ a, .accent, .nav-underline-border, .nav-link, .sidebar-nav .nav-link, .status {
     color: var(--tertiary-accent-color);
 }
 
-.chip
+.modal-header, .modal-footer
 {
+    background-color: var(--secondary-accent-color);
+}
+
+.chip {
     background-color: var(--tertiary-accent-color);
 }
 
@@ -95,7 +115,7 @@ a, .accent, .nav-underline-border, .nav-link, .sidebar-nav .nav-link, .status {
     color: var(--primary-color);
 }
 
-.carousel-control-next, .carouse-control-prev
+.carousel-control-next, .carouse-control-prev, .modal-text
 {
     color:black;
     opacity:1;
@@ -103,4 +123,17 @@ a, .accent, .nav-underline-border, .nav-link, .sidebar-nav .nav-link, .status {
 
 .carousel-item-wrapper {
     height: 700px;
+}
+
+.loginButton
+{
+    background-color: var(--secondary-color);
+    color: var(--tertiary-accent-color);
+    border-color: var(--secondary-color);
+}
+
+.login-button
+{
+    background-color: var(--secondary-color);
+    color: var(--tertiary-accent-color);
 }

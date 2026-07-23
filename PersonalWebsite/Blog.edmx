@@ -13,6 +13,7 @@
           <Property Name="userName" Type="varchar" MaxLength="100" Nullable="false" />
           <Property Name="name" Type="varchar" MaxLength="100" Nullable="false" />
           <Property Name="password" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="isAdmin" Type="bit" Nullable="false" />
           <Property Name="lastLoginDateTime" Type="datetime" />
         </EntityType>
         <EntityType Name="blogEntry">
@@ -24,6 +25,7 @@
           <Property Name="blogEntryContent" Type="varchar(max)" Nullable="false" />
           <Property Name="blogEntryTitle" Type="varchar" MaxLength="500" Nullable="false" />
           <Property Name="creationDate" Type="datetime" Nullable="false" />
+          <Property Name="activeFlag" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="blogTags">
           <Key>
@@ -32,6 +34,16 @@
           <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="blogEntryId" Type="int" Nullable="false" />
           <Property Name="tag" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="loginLog">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="userName" Type="varchar" MaxLength="50" />
+          <Property Name="ipAddress" Type="varchar" MaxLength="20" />
+          <Property Name="loginDate" Type="datetime" />
+          <Property Name="loginSuccess" Type="bit" />
         </EntityType>
         <Association Name="fk_author">
           <End Role="author" Type="Self.author" Multiplicity="1">
@@ -65,6 +77,7 @@
           <EntitySet Name="author" EntityType="Self.author" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="blogEntry" EntityType="Self.blogEntry" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="blogTags" EntityType="Self.blogTags" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="loginLog" EntityType="Self.loginLog" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="fk_author" Association="Self.fk_author">
             <End Role="author" EntitySet="author" />
             <End Role="blogEntry" EntitySet="blogEntry" />
@@ -94,6 +107,7 @@
             <End Role="blogEntry" EntitySet="blogEntries" />
             <End Role="blogTag" EntitySet="blogTags" />
           </AssociationSet>
+          <EntitySet Name="loginLogs" EntityType="CWARDModel.loginLog" />
           <EntitySet Name="authors" EntityType="CWARDModel.author" />
           <AssociationSet Name="fk_author" Association="CWARDModel.fk_author">
             <End Role="author" EntitySet="authors" />
@@ -110,6 +124,7 @@
           <Property Name="blogEntryTitle" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="false" />
           <Property Name="creationDate" Type="DateTime" Nullable="false" Precision="3" />
           <NavigationProperty Name="blogTags" Relationship="CWARDModel.fk_physicalState" FromRole="blogEntry" ToRole="blogTag" />
+          <Property Name="activeFlag" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="author" Relationship="CWARDModel.fk_author" FromRole="blogEntry" ToRole="author" />
         </EntityType>
         <Association Name="fk_physicalState">
@@ -126,6 +141,16 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="loginLog">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="userName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ipAddress" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="loginDate" Type="DateTime" Precision="3" />
+          <Property Name="loginSuccess" Type="Boolean" />
+        </EntityType>
         <EntityType Name="author">
           <Key>
             <PropertyRef Name="id" />
@@ -134,6 +159,7 @@
           <Property Name="userName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="name" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="password" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="isAdmin" Type="Boolean" Nullable="false" />
           <Property Name="lastLoginDateTime" Type="DateTime" Precision="3" />
           <NavigationProperty Name="blogEntries" Relationship="CWARDModel.fk_author" FromRole="author" ToRole="blogEntry" />
         </EntityType>
@@ -169,6 +195,7 @@
           <EntitySetMapping Name="blogEntries">
             <EntityTypeMapping TypeName="CWARDModel.blogEntry">
               <MappingFragment StoreEntitySet="blogEntry">
+                <ScalarProperty Name="activeFlag" ColumnName="activeFlag" />
                 <ScalarProperty Name="creationDate" ColumnName="creationDate" />
                 <ScalarProperty Name="blogEntryTitle" ColumnName="blogEntryTitle" />
                 <ScalarProperty Name="blogEntryContent" ColumnName="blogEntryContent" />
@@ -177,10 +204,22 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="loginLogs">
+            <EntityTypeMapping TypeName="CWARDModel.loginLog">
+              <MappingFragment StoreEntitySet="loginLog">
+                <ScalarProperty Name="loginSuccess" ColumnName="loginSuccess" />
+                <ScalarProperty Name="loginDate" ColumnName="loginDate" />
+                <ScalarProperty Name="ipAddress" ColumnName="ipAddress" />
+                <ScalarProperty Name="userName" ColumnName="userName" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="authors">
             <EntityTypeMapping TypeName="CWARDModel.author">
               <MappingFragment StoreEntitySet="author">
                 <ScalarProperty Name="lastLoginDateTime" ColumnName="lastLoginDateTime" />
+                <ScalarProperty Name="isAdmin" ColumnName="isAdmin" />
                 <ScalarProperty Name="password" ColumnName="password" />
                 <ScalarProperty Name="name" ColumnName="name" />
                 <ScalarProperty Name="userName" ColumnName="userName" />

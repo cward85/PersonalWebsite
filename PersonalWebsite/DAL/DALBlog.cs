@@ -1,8 +1,10 @@
-﻿using PersonalWebsite.Models;
+﻿using Newtonsoft.Json;
+using PersonalWebsite.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.Security;
 
 namespace PersonalWebsite.DAL
 {
@@ -15,23 +17,68 @@ namespace PersonalWebsite.DAL
             _dbContext = new CWARDEntities();
         }
 
+        public int CreateBlogEntry(blogEntryVM entryVM)
+        {
+            using (var transaction = _dbContext.Database.BeginTransaction())
+            {
+                blogEntry entry = new blogEntry()
+                {
+                    authorId = entryVM.authorId,
+                    blogEntryContent = entryVM.blogEntryContent,
+                    blogEntryTitle = entryVM.blogEntryTitle,
+                    creationDate = DateTime.Now,
+                    activeFlag = true
+                };
+
+                var id = _dbContext.blogEntries.Add(entry);
+                _dbContext.SaveChanges();
+
+                var tags = entryVM.stringTags.Split(',');
+
+                for (int i = 0; i < tags.Length; i++)
+                {
+                    _dbContext.blogTags.Add(new blogTag() { blogEntryId = id.id, tag = tags[i] });
+                    _dbContext.SaveChanges();
+                }
+
+                transaction.Commit();
+
+                return id.id;
+            }
+        }
+
+        public bool Delete(int id, int userId, bool isAdmin)
+        {
+            var entry = _dbContext.blogEntries.Find(id);
+
+            if (entry.authorId == userId || isAdmin)
+            {
+                entry.activeFlag = false;
+                _dbContext.SaveChanges();
+
+                return true;
+            }
+
+            return false;
+        }
+
         public List<blogEntryVM> ListBlogEntries(int pageNumber)
         {
-            var entries = _dbContext.blogEntries.OrderByDescending(x => x.creationDate).Skip(5 * (pageNumber - 1)).Take(5).ToList();
+            var entries = _dbContext.blogEntries.Where(x => x.activeFlag).OrderByDescending(x => x.creationDate).Skip(5 * (pageNumber - 1)).Take(5).ToList();
 
             return PopulateBlogEntries(entries);
         }
 
         public List<blogEntryVM> ListBlogEntriesByTag(string tag, int pageNumber)
         {
-            var entries = _dbContext.blogEntries.Where(x => x.blogTags.Where(y => y.tag == tag).Any()).OrderByDescending(x => x.creationDate).Skip(5 * (pageNumber - 1)).Take(5).ToList();
+            var entries = _dbContext.blogEntries.Where(x => x.blogTags.Where(y => y.tag == tag).Any() && x.activeFlag).OrderByDescending(x => x.creationDate).Skip(5 * (pageNumber - 1)).Take(5).ToList();
 
             return PopulateBlogEntries(entries);
         }
 
         public List<blogEntryVM> ListBlogEntriesByAuthor(int id, int pageNumber)
         {
-            var entries = _dbContext.blogEntries.Where(x => x.authorId == id).OrderByDescending(x => x.creationDate).Skip(5 * (pageNumber - 1)).Take(5).ToList();
+            var entries = _dbContext.blogEntries.Where(x => x.authorId == id && x.activeFlag).OrderByDescending(x => x.creationDate).Skip(5 * (pageNumber - 1)).Take(5).ToList();
 
             return PopulateBlogEntries(entries);
         }        

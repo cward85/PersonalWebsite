@@ -8,6 +8,7 @@
         <EntityTypeShape EntityType="CWARDModel.blogTag" Width="1.5" PointX="3" PointY="1.125" IsExpanded="true" />
         <EntityTypeShape EntityType="CWARDModel.blogEntry" Width="1.5" PointX="0.75" PointY="0.875" />
         <AssociationConnector Association="CWARDModel.fk_physicalState" />
+        <EntityTypeShape EntityType="CWARDModel.loginLog" Width="1.5" PointX="3.375" PointY="3.75" />
         <EntityTypeShape EntityType="CWARDModel.author" Width="1.5" PointX="0.75" PointY="5" />
         <AssociationConnector Association="CWARDModel.fk_author" />
       </Diagram>

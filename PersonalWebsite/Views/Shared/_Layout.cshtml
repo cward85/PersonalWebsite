@@ -14,7 +14,7 @@
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
 
-    <script type="text/javascript">
+<script type="text/javascript">
         $(document).ready(function () {
             if (localStorage.getItem("colorId") !== null) {
                 changeColor(localStorage.getItem("colorId"));
@@ -23,6 +23,48 @@
                 localStorage.setItem("colorId", "4");
             }
         });
+
+        function attemptLogin(userNameTB, passwordTB, loginError) {
+
+            const url = '@Url.Action("Login", "Login")';
+            var userName = $(userNameTB).val();
+            var password = $(passwordTB).val();
+
+            fetch(url, {
+                method: "POST",
+                headers: { 'Content-Type': 'application/json; charset=utf-8' },
+                body: JSON.stringify({ userName: userName, password: password })
+            })
+            .then(response => {
+                return response.json()
+                    .then(data => {
+                        if (data.message != "Success") {
+                            $(loginError).show();
+                            $(loginError).text(data.message);
+                        }
+                        else {
+                            location.reload();
+                        }
+                    });
+            });
+    }
+
+    function doLogout() {
+        const url = '@Url.Action("Logout", "Login")';
+
+        fetch(url, {
+            method: "POST",
+            headers: { 'Content-Type': 'application/json; charset=utf-8' }
+        })
+        .then(response => {
+            if (!response.ok) {
+                $('#loginError').text(response.message);
+            }
+            else {
+                location.reload();
+            }
+        })
+    }
 
         function changeColor(id) {
             if (id == 1) {
@@ -56,7 +98,7 @@
 
             localStorage.setItem("colorId", String(id));
         }
-    </script>
+</script>
 </head>
 
 
@@ -64,51 +106,96 @@
     
     <div class="container">
         <div class="row">
-            <div class="col-md-7">
+            <div class="row">
                 <h1 class="title">Camilo Ward</h1>
                 <h3 class="title">Freelance - Web Development - Website Management</h3>
             </div>
-            <div class="row" style="padding-bottom:.8em">
-                <ul class="nav border justify-content-end">
-                    <li class="nav-item">@Html.ActionLink("About", "", "About", new { area = "" }, new { @class = "nav-link" })</li>
-                    <li class="nav-item">@Html.ActionLink("Freelance Opportunities", "", "Freelance", new { area = "" }, new { @class = "nav-link" })</li>
-                    <li class="nav-item">@Html.ActionLink("Portfolio", "", "Portfolio", new { area = "" }, new { @class = "nav-link" })</li>
-                    <li class="nav-item">@Html.ActionLink("Resume (WIP)", "", "Resume", new { area = "" }, new { @class = "nav-link disabled" })</li>
-                    <li class="nav-item">@Html.ActionLink("Blog (WIP)", "", "Blog", new { area = "" }, new { @class = "nav-link" })</li>
-                    <li class="nav-item">
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-primary dropdown-toggle" data-coreui-toggle="dropdown" aria-expanded="false">
-                                Site Color Theme Picker
+            <div class="row" style="padding-bottom:.8em">                
+                <div class="topNav border p-1">
+                    <div class="dropdown dropup float-start">
+                        @if (Session["UserId"] == null || (int)Session["UserId"] == 0)
+                        {
+                            <button class="btn btn-primary bi bi-gear loginButton" id="loginDropdownButton" type="button" data-coreui-toggle="dropdown" data-coreui-auto-close="outside" aria-expanded="false">
+                                <i class="nav-icon cil-options ms-auto d-sidebar-narrow-none"></i>
                             </button>
-                            <ul class="dropdown-menu">
-                                <li><hr class="dropdown-divider">Dark Greenish</li>
-                                <li><a class="dropdown-item" style="background-color: #6A7B76" onclick="changeColor(1);" href="#">Primary Color</a></li>
-                                <li><a class="dropdown-item" style="background-color: #3A4E48" onclick="changeColor(1);" href="#">Secondary Color</a></li>
-                                <li><a class="dropdown-item" style="background-color: #8B9D83" onclick="changeColor(1);" href="#">Primary Accent Color</a></li>
-                                <li><a class="dropdown-item" style="background-color: #BEB0A7" onclick="changeColor(1);" href="#">Secondary Accent Color</a></li>
-                                <li><a class="dropdown-item" style="background-color: #C2948A" onclick="changeColor(1);" href="#">Tertiary Accent Color</a></li>
-                                <li><hr class="dropdown-divider">Various Greys</li>
-                                <li><a class="dropdown-item" style="background-color: #404040" onclick="changeColor(4);" href="#">Primary Color</a></li>
-                                <li><a class="dropdown-item" style="background-color: #585858" onclick="changeColor(4);" href="#">Secondary Color</a></li>
-                                <li><a class="dropdown-item" style="background-color: #FFFFFF" onclick="changeColor(4);" href="#">Primary Accent Color</a></li>
-                                <li><a class="dropdown-item" style="background-color: #9B9B9B" onclick="changeColor(4);" href="#">Secondary Accent Color</a></li>
-                                <li><a class="dropdown-item" style="background-color: #D3D3D3" onclick="changeColor(4);" href="#">Tertiary Accent Color</a></li>
-                                <li><hr class="dropdown-divider">Blue</li>
-                                <li><a class="dropdown-item" style="background-color: #03256C" onclick="changeColor(5);" href="#">Primary Color</a></li>
-                                <li><a class="dropdown-item" style="background-color: #2541B2" onclick="changeColor(5);" href="#">Secondary Color</a></li>
-                                <li><a class="dropdown-item" style="background-color: #FFFFFF" onclick="changeColor(5);" href="#">Primary Accent Color</a></li>
-                                <li><a class="dropdown-item" style="background-color: #1768AC" onclick="changeColor(5);" href="#">Secondary Accent Color</a></li>
-                                <li><a class="dropdown-item" style="background-color: #06BEE1" onclick="changeColor(5);" href="#">Tertiary Accent Color</a></li>
-                                <li><hr class="dropdown-divider">Grey/green</li>
-                                <li><a class="dropdown-item" style="background-color: #1B1B3A" onclick="changeColor(6);" href="#">Primary Color</a></li>
-                                <li><a class="dropdown-item" style="background-color: #9197AE" onclick="changeColor(6);" href="#">Secondary Color</a></li>
-                                <li><a class="dropdown-item" style="background-color: #EFF6E0" onclick="changeColor(6);" href="#">Primary Accent Color</a></li>
-                                <li><a class="dropdown-item" style="background-color: #4A442D" onclick="changeColor(6);" href="#">Secondary Accent Color</a></li>
-                                <li><a class="dropdown-item" style="background-color: #386150" onclick="changeColor(6);" href="#">Tertiary Accent Color</a></li>
-                            </ul>
+                            <div class="container">
+                                <div class="dropdown-menu p-2 w-100">
+                                    <div class="mb-3">
+                                        @Html.Label("User Name", new { @class = "form-label required" })
+                                        @Html.TextBox("userName", "", new { @class = "form-control" })
+                                    </div>
+                                    <div class="mb-3">
+                                        @Html.Label("Password", new { @class = "form-label required" })
+                                        @Html.Password("password", "", new { @class = "form-control" })
+                                        <span id="loginError" class="text-danger"></span>
+                                    </div>
+                                    <div style="padding-top:4px">
+                                        <button type="button" class="btn btn-primary float-end login-button" style="padding-top:4px" value="Login" onclick="attemptLogin('#userName', '#password', '#loginError');">                                           
+                                            <span id="loginButtonSidebar">Login</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <button class="btn btn-primary d-flex bi bi-gear loginButton" type="button" data-coreui-auto-close="outside" data-coreui-toggle="dropdown" aria-expanded="false">
+                                <div class="small">
+                                    <span class="fw-semibold p-2">@((string)Session["Name"])</span>
+                                </div>                                
+                            </button>
+                            <div class="dropdown-menu p-4 w-100">
+                                <div class="d-flex gap-2 px-0">
+                                    <div class="small text-start">
+                                        <div class="fw-semibold">@((string)Session["Name"])</div>                                        
+                                    </div>
+                                </div>                                
+                                <div><hr class="dropdown-divider"></div>
+                                <div><a class="dropdown-item d-flex align-items-center gap-2" href="#" onclick="doLogout();"><i class="cil-account-logout"></i>Logout</a></div>
+                            </div>
+                        }
+                    </div>
+                    <div class="nav float-end">
+                        <div class="nav-item">@Html.ActionLink("About", "", "About", new { area = "" }, new { @class = "nav-link" })</div>
+                        <div class="nav-item">@Html.ActionLink("Freelance Opportunities", "", "Freelance", new { area = "" }, new { @class = "nav-link" })</div>
+                        <div class="nav-item">@Html.ActionLink("Portfolio", "", "Portfolio", new { area = "" }, new { @class = "nav-link" })</div>
+                        <div class="nav-item">@Html.ActionLink("Resume (WIP)", "", "Resume", new { area = "" }, new { @class = "nav-link disabled" })</div>
+                        <div class="nav-item">@Html.ActionLink("Blog", "", "Blog", new { area = "" }, new { @class = "nav-link" })</div>
+                        <div class="nav-item">
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-primary dropdown-toggle" data-coreui-toggle="dropdown" aria-expanded="false">
+                                    Site Color Theme Picker
+                                </button>
+                                <div class="dropdown-menu">
+                                    <div><hr class="dropdown-divider">Dark Greenish</div>
+                                    <div><a class="dropdown-item" style="background-color: #6A7B76" onclick="changeColor(1);" href="#">Primary Color</a></div>
+                                    <div><a class="dropdown-item" style="background-color: #3A4E48" onclick="changeColor(1);" href="#">Secondary Color</a></div>
+                                    <div><a class="dropdown-item" style="background-color: #8B9D83" onclick="changeColor(1);" href="#">Primary Accent Color</a></div>
+                                    <div><a class="dropdown-item" style="background-color: #BEB0A7" onclick="changeColor(1);" href="#">Secondary Accent Color</a></div>
+                                    <div><a class="dropdown-item" style="background-color: #C2948A" onclick="changeColor(1);" href="#">Tertiary Accent Color</a></div>
+                                    <div><hr class="dropdown-divider">Various Greys</div>
+                                    <div><a class="dropdown-item" style="background-color: #404040" onclick="changeColor(4);" href="#">Primary Color</a></div>
+                                    <div><a class="dropdown-item" style="background-color: #585858" onclick="changeColor(4);" href="#">Secondary Color</a></div>
+                                    <div><a class="dropdown-item" style="background-color: #FFFFFF" onclick="changeColor(4);" href="#">Primary Accent Color</a></div>
+                                    <div><a class="dropdown-item" style="background-color: #9B9B9B" onclick="changeColor(4);" href="#">Secondary Accent Color</a></div>
+                                    <div><a class="dropdown-item" style="background-color: #D3D3D3" onclick="changeColor(4);" href="#">Tertiary Accent Color</a></div>
+                                    <div><hr class="dropdown-divider">Blue</div>
+                                    <div><a class="dropdown-item" style="background-color: #03256C" onclick="changeColor(5);" href="#">Primary Color</a></div>
+                                    <div><a class="dropdown-item" style="background-color: #2541B2" onclick="changeColor(5);" href="#">Secondary Color</a></div>
+                                    <div><a class="dropdown-item" style="background-color: #FFFFFF" onclick="changeColor(5);" href="#">Primary Accent Color</a></div>
+                                    <div><a class="dropdown-item" style="background-color: #1768AC" onclick="changeColor(5);" href="#">Secondary Accent Color</a></div>
+                                    <div><a class="dropdown-item" style="background-color: #06BEE1" onclick="changeColor(5);" href="#">Tertiary Accent Color</a></div>
+                                    <div><hr class="dropdown-divider">Grey/green</div>
+                                    <div><a class="dropdown-item" style="background-color: #1B1B3A" onclick="changeColor(6);" href="#">Primary Color</a></div>
+                                    <div><a class="dropdown-item" style="background-color: #9197AE" onclick="changeColor(6);" href="#">Secondary Color</a></div>
+                                    <div><a class="dropdown-item" style="background-color: #EFF6E0" onclick="changeColor(6);" href="#">Primary Accent Color</a></div>
+                                    <div><a class="dropdown-item" style="background-color: #4A442D" onclick="changeColor(6);" href="#">Secondary Accent Color</a></div>
+                                    <div><a class="dropdown-item" style="background-color: #386150" onclick="changeColor(6);" href="#">Tertiary Accent Color</a></div>
+                                </div>
+                            </div>
                         </div>
-                    </li>
-                </ul>
+                    </div>
+                </div>
             </div>
             <div class="row">
                 <div class="sidebar border col">

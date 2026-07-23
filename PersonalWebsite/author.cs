@@ -24,6 +24,7 @@ namespace PersonalWebsite
         public string userName { get; set; }
         public string name { get; set; }
         public string password { get; set; }
+        public bool isAdmin { get; set; }
         public Nullable<System.DateTime> lastLoginDateTime { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
