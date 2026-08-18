@@ -2,6 +2,7 @@
 using PersonalWebsite.Models;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.Core.Mapping;
 using System.Linq;
 using System.Web;
 using System.Web.Security;
@@ -25,8 +26,8 @@ namespace PersonalWebsite.DAL
                 {
                     authorId = entryVM.authorId,
                     blogEntryContent = entryVM.blogEntryContent,
-                    blogEntryTitle = entryVM.blogEntryTitle,
-                    creationDate = DateTime.Now,
+                    blogEntryTitle = entryVM.blogEntryTitle,  
+                    creationDate = entryVM.creationDate,
                     activeFlag = true
                 };
 
@@ -117,6 +118,50 @@ namespace PersonalWebsite.DAL
             }
 
             return entriesVM;
+        }
+
+        public bool Subscribe(string email, string passCode, string ipAddress)
+        {
+            subscriber model = new subscriber()
+            {
+                emailAddress = email,
+                ipAddress = ipAddress,
+                subscribeDate = DateTime.Now,
+                validated = false,
+                validationCode = passCode
+            };
+
+            if (_dbContext.subscribers.Where(x => x.emailAddress == email && x.validated == true).Any())
+            {
+                return false;
+            }
+
+            _dbContext.subscribers.Add(model);
+            _dbContext.SaveChanges();
+
+            return true;
+        }
+
+        public bool ValidateSubscriber(string email, string passCode)
+        {
+            var record = _dbContext.subscribers.Where(x => x.emailAddress == email && x.validationCode == passCode).FirstOrDefault();
+
+            if (record != null)
+            {
+                record.validated = true;
+                _dbContext.SaveChanges();
+
+                return true;
+            }
+
+            return false;
+        }
+
+        public EmailSubscribers GetSubscriberEmails(blogEntryVM model)
+        {
+            var emailAddresses = _dbContext.subscribers.Where(x => x.validated == true).Select(y => y.emailAddress).ToList();
+            model.author = _dbContext.authors.Find(model.authorId).name;
+            return (new EmailSubscribers(emailAddresses, model.blogEntryTitle, model.author, model.creationDate));
         }
     }
 }

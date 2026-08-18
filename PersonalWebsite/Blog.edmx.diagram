@@ -11,6 +11,7 @@
         <EntityTypeShape EntityType="CWARDModel.loginLog" Width="1.5" PointX="3.375" PointY="3.75" />
         <EntityTypeShape EntityType="CWARDModel.author" Width="1.5" PointX="0.75" PointY="5" />
         <AssociationConnector Association="CWARDModel.fk_author" />
+        <EntityTypeShape EntityType="CWARDModel.subscriber" Width="1.5" PointX="5.375" PointY="0.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

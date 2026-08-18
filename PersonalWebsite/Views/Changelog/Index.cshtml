@@ -1,0 +1,24 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Changelog";
+}
+
+
+
+<main aria-labelledby="title">
+    <h2 id="title">@ViewBag.Title</h2>
+    <div>
+
+    </div>
+    <div>
+        <br />        
+        <ul class="list-group">
+            Added 8/18/2026
+            <li class="list-group-item">Added email integration.  Website can now send emails as needed.</li>
+            <li class="list-group-item">Added various send email helper functions. Can send emails synchronously or asynchronously .  Validates email addresses.</li>
+            <li class="list-group-item">Added the functionality to subscribe to the Blog.</li>
+            <li class="list-group-item">When a new blog entry is created, an email will be sent out to all subscribers.</li>
+            <li class="list-group-item">Added the changelog page.  Changes to the website will appear here, if I remember to update it.</li>
+        </ul>
+    </div>
+</main>

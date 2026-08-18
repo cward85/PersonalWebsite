@@ -48,7 +48,7 @@ main, .container-lg, .topNav, .sidebar, .sidebar-nav, .nav, ul {
     color: var(--tertiary-accent-color);
 }
 
-.dropdown-menu, .modal-body {
+.dropdown-menu, .modal-body, .list-group-item {
     background-color: var(--tertiary-accent-color);
 }
 
@@ -136,4 +136,8 @@ a, .accent, .nav-underline-border, .nav-link, .sidebar-nav .nav-link, .status {
 {
     background-color: var(--secondary-color);
     color: var(--tertiary-accent-color);
+}
+
+.list-group-item{
+    background-color: 
 }

@@ -45,6 +45,17 @@
           <Property Name="loginDate" Type="datetime" />
           <Property Name="loginSuccess" Type="bit" />
         </EntityType>
+        <EntityType Name="subscribers">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="emailAddress" Type="varchar" MaxLength="100" />
+          <Property Name="validationCode" Type="varchar" MaxLength="20" />
+          <Property Name="ipAddress" Type="varchar" MaxLength="20" />
+          <Property Name="subscribeDate" Type="datetime" />
+          <Property Name="validated" Type="bit" />
+        </EntityType>
         <Association Name="fk_author">
           <End Role="author" Type="Self.author" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -78,6 +89,7 @@
           <EntitySet Name="blogEntry" EntityType="Self.blogEntry" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="blogTags" EntityType="Self.blogTags" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="loginLog" EntityType="Self.loginLog" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="subscribers" EntityType="Self.subscribers" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="fk_author" Association="Self.fk_author">
             <End Role="author" EntitySet="author" />
             <End Role="blogEntry" EntitySet="blogEntry" />
@@ -113,6 +125,7 @@
             <End Role="author" EntitySet="authors" />
             <End Role="blogEntry" EntitySet="blogEntries" />
           </AssociationSet>
+          <EntitySet Name="subscribers" EntityType="CWARDModel.subscriber" />
         </EntityContainer>
         <EntityType Name="blogEntry">
           <Key>
@@ -177,6 +190,17 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="subscriber">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="emailAddress" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="validationCode" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="ipAddress" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="subscribeDate" Type="DateTime" Precision="3" />
+          <Property Name="validated" Type="Boolean" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -223,6 +247,18 @@
                 <ScalarProperty Name="password" ColumnName="password" />
                 <ScalarProperty Name="name" ColumnName="name" />
                 <ScalarProperty Name="userName" ColumnName="userName" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="subscribers">
+            <EntityTypeMapping TypeName="CWARDModel.subscriber">
+              <MappingFragment StoreEntitySet="subscribers">
+                <ScalarProperty Name="validated" ColumnName="validated" />
+                <ScalarProperty Name="subscribeDate" ColumnName="subscribeDate" />
+                <ScalarProperty Name="ipAddress" ColumnName="ipAddress" />
+                <ScalarProperty Name="validationCode" ColumnName="validationCode" />
+                <ScalarProperty Name="emailAddress" ColumnName="emailAddress" />
                 <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>

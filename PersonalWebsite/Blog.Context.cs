@@ -29,5 +29,6 @@ namespace PersonalWebsite
         public virtual DbSet<blogEntry> blogEntries { get; set; }
         public virtual DbSet<loginLog> loginLogs { get; set; }
         public virtual DbSet<author> authors { get; set; }
+        public virtual DbSet<subscriber> subscribers { get; set; }
     }
 }

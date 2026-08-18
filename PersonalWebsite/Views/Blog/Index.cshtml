@@ -2,7 +2,7 @@
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
-    ViewBag.Title = "Journey into Game Development and Freelance Web Development";
+    ViewBag.Title = System.Configuration.ConfigurationManager.AppSettings["BlogName"].ToString();
 }
 
 <script type="text/javascript">
@@ -97,12 +97,85 @@
                 });
         }
     }
+
+    function subscribe() {
+        $('#subscribe').modal('hide');
+        const email = $('#emailAddress').val();
+        const url = '@Url.Action("Subscribe", "Blog")';
+        fetch(url, {
+            method: "POST",
+            headers: { 'Content-Type': 'application/json; charset=utf-8' },
+            body: JSON.stringify({ emailAddress: email })
+        })
+        .then(response => {
+            return response.json()
+                .then(data => {
+                    if (data.message != "Success") {                          
+                        const myModal = new coreui.Modal('#subscribe');
+                        myModal.show();
+                        //$('#subscribe').modal('show');                        
+                        $('#emailAddressError').text(data.message);
+                    }
+                    else {
+                        
+                        $('#subscribeModalTrigger').hide();
+                        $('#emailSuccess').removeClass("d-none");
+                    }
+            });
+        })
+        .catch(error => {
+            alert("error:" + error.message);
+        });
+    }
+
+    function clearFields() {
+        $('#emailAddress').val("");
+        $('#emailAddressError').text("");
+    }
 </script>
 
 <main aria-labelledby="title">
     <div class="row">
         <div class="col text-center">
             <h2 id="title">@ViewBag.Title</h2>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col text-center">            
+            <button type="button" class="btn btn-primary" data-coreui-toggle="modal" data-coreui-target="#subscribe" id="subscribeModalTrigger">
+                Subscribe
+            </button>
+            <span id="emailSuccess" class="text-danger d-none">A confirmation email has been sent.</span>
+            <!-- Modal -->
+            <div class="modal fade" id="subscribe" data-coreui-backdrop="static" data-coreui-keyboard="false" tabindex="-1" aria-labelledby="subscribeLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="subscribeLabel">Subscribe to Blog</h5>
+                            <button type="button" class="btn-close" data-coreui-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col text-start">
+                                    <span>You will be sent a confirmation email with a link to validate your email address.</span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    @Html.Label("Email Address", htmlAttributes: new { @class = "form-label modal-text required" })
+                                    @Html.TextBox("emailAddress", "", new { @class = "form-control" })
+                                    <span id="emailAddressError" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" onclick="clearFields();" class="btn btn-secondary" data-coreui-dismiss="modal">Close</button>
+                            <button type="button" onclick="subscribe();" class="btn btn-primary">Subscribe</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     <div class="row">
