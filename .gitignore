@@ -364,3 +364,5 @@ FodyWeavers.xsd
 /PersonalWebsite/Web.config
 /PersonalWebsite/Web.Debug.config
 /PersonalWebsite/Web.Release.config
+/PersonalWebsite/Scripts/SQL/CreationScript.sql
+/PersonalWebsite/Scripts/SQL/Patch1.sql
