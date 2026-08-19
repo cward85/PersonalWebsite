@@ -138,6 +138,18 @@ a, .accent, .nav-underline-border, .nav-link, .sidebar-nav .nav-link, .status {
     color: var(--tertiary-accent-color);
 }
 
-.list-group-item{
-    background-color: 
+
+
+@media (min-width: 768px) {
+    .row > * {
+        padding-left: calc(var(--cui-gutter-x) * .5);
+        
+    }
+}
+
+
+@media (max-width: 992px) {
+    .row > * {
+        padding-left: 0em;
+    }
 }

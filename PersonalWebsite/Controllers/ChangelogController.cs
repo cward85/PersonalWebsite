@@ -11,6 +11,9 @@ namespace PersonalWebsite.Controllers
         [HttpGet]
         public ActionResult Index()
         {
+            ViewBag.MetaDescription = "Website changelog that shows what updates have been added to the site.";
+            ViewBag.MetaKeywords = "Change Log, Web Dev, updates";
+
             return View();
         }
     }

@@ -34,7 +34,12 @@
   </url>
   <url>
     <loc>https://camiloward.com/Blog</loc>
-    <lastmod>2026-07-23</lastmod>
+    <lastmod>2026-08-18</lastmod>
     <priority>1.00</priority>
+  </url>
+  <url>
+    <loc>https://camiloward.com/Changelog</loc>
+    <lastmod>2026-08-18</lastmod>
+    <priority>0.70</priority>
   </url>
 </urlset>

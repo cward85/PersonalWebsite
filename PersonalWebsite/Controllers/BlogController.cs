@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data.Entity.Core.Mapping;
 using System.Linq;
+using System.Net.Mail;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -86,9 +87,13 @@ namespace PersonalWebsite.Controllers
                     if (id > 0)
                     {
                         model.newBlogEntry.id = id;
+                        var request = HttpContext.Request;
+                        var url = string.Format("{0}://{1}{2}", request.Url.Scheme, request.Url.Authority, "/Blog");
                         var subscription = blog.GetSubscriberEmails(model.newBlogEntry);
                         string blogName = ConfigurationManager.AppSettings["BlogName"].ToString();
-                        await EmailHandler.SendMultipleEmailsAsync(subscription.emailsToSend, blogName + " Blog - New Blog Entry", "New Blog Entry: " + subscription.blogTitle + " by " + subscription.blogAuthor + " - " + subscription.blogDate.ToString());
+                        await EmailHandler.SendMultipleEmailsAsync(subscription.emailsToSend, blogName + " Blog - New Blog Entry", "New Blog Entry: " + subscription.blogTitle + " by " + subscription.blogAuthor + " - " + subscription.blogDate.ToString()
+                            + "</br></br>" +
+                            "<a href='" + url + "'>" + url + "</a>");
                     }
 
                     return RedirectToAction("Index");
@@ -138,13 +143,15 @@ namespace PersonalWebsite.Controllers
                     string blogName = ConfigurationManager.AppSettings["BlogName"].ToString();
                     var request = HttpContext.Request;
                     var url = string.Format("{0}://{1}{2}", request.Url.Scheme, request.Url.Authority, "/Blog/ValidateEmail?code=" + passCode + "&email=" + emailAddress);
+
                     await EmailHandler.SendEmailAsync(emailAddress, blogName + " Blog - Subscription Validation Email", 
                         "You have subscribed to the " + blogName + " blog.  To complete the process, click the link below to validate your email." +
                         "</br></br>" +
-                        "<a href='" + url + "'>" + url + "</a>" +
-                        "</br></br>" +
-                        "If you did not initiate this subscription, you may ignore this email.  But if you're curious, you're certainly welcome to check out my website at <a href='www.camiloward.com'>www.camiloward.com</a>");
+                        "If you did not initiate this subscription, you may ignore this email.  But if you're curious, you're certainly welcome to check out my website at <a href='www.camiloward.com'>www.camiloward.com</a>" +
+                        "</br></br>" + 
+                        "<a href='" + url + "'>" + url + "</a>");
 
+                    await EmailHandler.SendEmailAsync(ConfigurationManager.AppSettings["FromEmail"].ToString(), blogName + " - New Subscriber!", emailAddress + " has subscribed!");
                     return this.Json(new { message = "Success" });
                 }
                 else

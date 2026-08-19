@@ -197,34 +197,32 @@
     @foreach (PersonalWebsite.Models.blogEntryVM blogEntry in Model.blogEntries)
     {
         <div class="row">
-            <div class="col">
-                <h4>
+            <div class="col p-3">
+                <h3>
                     @Html.Label(blogEntry.blogEntryTitle, new { @class = "form-label" })
                     @if ((Session["UserId"] != null && (int)Session["UserId"] == blogEntry.authorId) || (Session["IsAdmin"] != null && (bool)Session["IsAdmin"] == true))
                     {
                         <button type="button" class="btn btn-primary loginButton bi bi-pencil-fill" title="Edit Blog Entry" onclick="editEntry(@blogEntry.id)"></button>
                         <button type="button" class="btn btn-primary loginButton bi bi-trash" title="Delete Blog Entry" onclick="deleteEntry(@blogEntry.id)"></button>
                     }
-                </h4>
-                
+                </h3>                
             </div>
         </div>
         <br />
         <div class="row">
-            <div class="col">
+            <div class="col p-3">
                 <p style="white-space: pre-line">@blogEntry.blogEntryContent</p>
             </div>
         </div>
         <div class="row">
-            <div class="col chipTagContainer">
-
+            <div class="col-6 col-md-8 col-sm-6 chipTagContainer gap-1 d-flex flex-wrap p-3">
                 <span>Tags: </span>
                 @foreach (PersonalWebsite.Models.tagsVM tags in blogEntry.tags)
                 {
                     <span class="chip" data-coreui-chip data-coreui-selectable="true">@tags.tag</span>
                 }
             </div>
-            <div class="col text-end">
+            <div class="col-6 col-md-4 col-sm-6 text-end">
                 <a href="@Url.Action("SearchByAuthor", "Blog", new { authorId = blogEntry.authorId })">@blogEntry.author</a><span> - @blogEntry.creationDate</span>
             </div>
         </div>
