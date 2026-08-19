@@ -30,5 +30,7 @@ namespace PersonalWebsite
         public virtual DbSet<loginLog> loginLogs { get; set; }
         public virtual DbSet<author> authors { get; set; }
         public virtual DbSet<subscriber> subscribers { get; set; }
+        public virtual DbSet<resumeDownload> resumeDownloads { get; set; }
+        public virtual DbSet<blogEntryComment> blogEntryComments { get; set; }
     }
 }

@@ -166,6 +166,9 @@
     <Compile Include="blogEntry.cs">
       <DependentUpon>Blog.tt</DependentUpon>
     </Compile>
+    <Compile Include="blogEntryComment.cs">
+      <DependentUpon>Blog.tt</DependentUpon>
+    </Compile>
     <Compile Include="blogTag.cs">
       <DependentUpon>Blog.tt</DependentUpon>
     </Compile>
@@ -176,6 +179,7 @@
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\PortfolioController.cs" />
     <Compile Include="Controllers\ResumeController.cs" />
+    <Compile Include="DAL\DALAbout.cs" />
     <Compile Include="DAL\DALBlog.cs" />
     <Compile Include="DAL\DALLogin.cs" />
     <Compile Include="Global.asax.cs">
@@ -186,6 +190,8 @@
     <Compile Include="loginLog.cs">
       <DependentUpon>Blog.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\blogEntryCommentListVM.cs" />
+    <Compile Include="Models\blogEntryCommentsVM.cs" />
     <Compile Include="Models\blogEntryVM.cs" />
     <Compile Include="Models\blogVM.cs" />
     <Compile Include="Models\EmailSubscribers.cs" />
@@ -193,6 +199,9 @@
     <Compile Include="Models\SubscriptionMessage.cs" />
     <Compile Include="Models\tagsVM.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="resumeDownload.cs">
+      <DependentUpon>Blog.tt</DependentUpon>
+    </Compile>
     <Compile Include="subscriber.cs">
       <DependentUpon>Blog.tt</DependentUpon>
     </Compile>
@@ -2436,6 +2445,7 @@
     <Content Include="Views\Freelance\Index.cshtml" />
     <Content Include="Views\Blog\EmailValidated.cshtml" />
     <Content Include="Views\Changelog\Index.cshtml" />
+    <Content Include="Views\Blog\_BlogComments.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

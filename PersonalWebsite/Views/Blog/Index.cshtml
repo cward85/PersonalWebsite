@@ -110,14 +110,14 @@
         .then(response => {
             return response.json()
                 .then(data => {
-                    if (data.message != "Success") {                          
+                    if (data.message != "Success") {
                         const myModal = new coreui.Modal('#subscribe');
                         myModal.show();
-                        //$('#subscribe').modal('show');                        
+                        //$('#subscribe').modal('show');
                         $('#emailAddressError').text(data.message);
                     }
                     else {
-                        
+
                         $('#subscribeModalTrigger').hide();
                         $('#emailSuccess').removeClass("d-none");
                     }
@@ -132,6 +132,77 @@
         $('#emailAddress').val("");
         $('#emailAddressError').text("");
     }
+
+    function getComments(id) {
+        var url = '@Url.Action("GetComments", "Blog")' + "/" + id;
+        $.ajax({
+            type: "get",
+            url: url,
+            async: false,
+            success: function (data) {
+                var divId = '#ajaxComments_' + id;
+
+                $(divId).html(data);
+            },
+            failure: function () {
+                alert("fail");
+            }
+        });
+    }
+
+    function addComment(id) {
+        const url = '@Url.Action("AddComment", "Blog")';
+
+        var name = $('#ajaxComments_' + id).find('#displayName').val();
+        var comment = $('#ajaxComments_' + id).find('#comment').val();
+
+        fetch(url, {
+            method: "POST",
+            headers: { 'Content-Type': 'application/json; charset=utf-8' },
+            body: JSON.stringify({ id: id, displayName: name, comment: comment })
+        })
+        .then(response => {
+            return response.json()
+                .then(data => {
+                    if (data.displayNameMessage !== "") {
+                        var displayNameError = $('#ajaxComments_' + id).find('#displayNameError');
+                        displayNameError.text(data.displayNameMessage);
+                    }
+                    else if (data.commentMessage !== "")
+                    {
+                        var commentError = $('#ajaxComments_' + id).find('#commentError');
+                        commentError.text(data.commentMessage);
+                    }
+                    else {
+                        location.reload();
+                    }
+                });
+        });
+    }
+
+    function deleteComment(id) {
+        if (confirm("Are you sure you want to delete this blog entry comment?")) {
+            const url = '@Url.Action("DeleteComment", "Blog")';
+
+            fetch(url, {
+                method: "POST",
+                headers: { 'Content-Type': 'application/json; charset=utf-8' },
+                body: JSON.stringify({ id: id })
+            })
+                .then(response => {
+                    return response.json()
+                        .then(data => {
+                            if (data.message != "Success") {
+
+                            }
+                            else {
+                                location.reload();
+                            }
+                        });
+                });
+        }
+    }
+
 </script>
 
 <main aria-labelledby="title">
@@ -140,9 +211,9 @@
             <h2 id="title">@ViewBag.Title</h2>
         </div>
     </div>
-    
+
     <div class="row">
-        <div class="col text-center">            
+        <div class="col text-center">
             <button type="button" class="btn btn-primary" data-coreui-toggle="modal" data-coreui-target="#subscribe" id="subscribeModalTrigger">
                 Subscribe
             </button>
@@ -205,13 +276,37 @@
                         <button type="button" class="btn btn-primary loginButton bi bi-pencil-fill" title="Edit Blog Entry" onclick="editEntry(@blogEntry.id)"></button>
                         <button type="button" class="btn btn-primary loginButton bi bi-trash" title="Delete Blog Entry" onclick="deleteEntry(@blogEntry.id)"></button>
                     }
-                </h3>                
+                </h3>
             </div>
-        </div>
-        <br />
+        </div>       
         <div class="row">
             <div class="col p-3">
                 <p style="white-space: pre-line">@blogEntry.blogEntryContent</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col p-3">
+                <button type="button" class="btn btn-primary" onclick="getComments(@blogEntry.id);" data-coreui-toggle="modal" data-coreui-target="#comments_@blogEntry.id" id="commentsModalTrigger_@blogEntry.id">
+                    Comments (@blogEntry.commentCount)
+                </button>
+            </div>
+            <!-- Modal -->
+            <div class="modal fade" id="comments_@blogEntry.id" data-coreui-backdrop="static" data-coreui-keyboard="false" tabindex="-1" aria-labelledby="commentsLabel_@blogEntry.id" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="commentsLabel_@blogEntry.id">Comments for: @blogEntry.blogEntryTitle</h5>
+                            <button type="button" class="btn-close" data-coreui-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body" id="ajaxComments_@blogEntry.id">
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-coreui-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary" onclick="addComment(@blogEntry.id)">Add Comment</button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="row">
@@ -228,76 +323,76 @@
         </div>
         <hr />
     }
-<div class="row">
-    @if (Session["UserId"] != null && (int)Session["UserId"] > 0)
-    {
-    <div class="col text-start">
-        @using (Html.BeginForm("AddBlogEntry", "Blog", FormMethod.Post, new { enctype = "multipart/form-data", id = "blogEntryForm" }))
+    <div class="row">
+        @if (Session["UserId"] != null && (int)Session["UserId"] > 0)
         {
-            @Html.AntiForgeryToken()
-            <!-- Button trigger modal -->
-            <button type="button" class="btn btn-primary bi bi-plus-lg" data-coreui-toggle="modal" data-coreui-target="#blogEntry">
-                Create Blog Entry
-            </button>
+            <div class="col text-start">
+                @using (Html.BeginForm("AddBlogEntry", "Blog", FormMethod.Post, new { enctype = "multipart/form-data", id = "blogEntryForm" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <!-- Button trigger modal -->
+                    <button type="button" class="btn btn-primary bi bi-plus-lg" data-coreui-toggle="modal" data-coreui-target="#blogEntry">
+                        Create Blog Entry
+                    </button>
 
-            <!-- Modal -->
-            <div class="modal fade" id="blogEntry" data-coreui-backdrop="static" data-coreui-keyboard="false" tabindex="-1" aria-labelledby="blogEntryLabel" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered modal-xl">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="blogEntryLabel">Create New Blog Entry</h5>
-                            <button type="button" class="btn-close" data-coreui-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <div class="row">
-                                <div class="col">
-                                    @Html.LabelFor(model => model.newBlogEntry.blogEntryTitle, htmlAttributes: new { @class = "form-label modal-text required" })
-                                    @Html.EditorFor(model => model.newBlogEntry.blogEntryTitle, new { htmlAttributes = new { @class = "form-control" } })
-                                    @Html.ValidationMessageFor(model => model.newBlogEntry.blogEntryTitle, "", new { @class = "text-danger" })
+                    <!-- Modal -->
+                    <div class="modal fade" id="blogEntry" data-coreui-backdrop="static" data-coreui-keyboard="false" tabindex="-1" aria-labelledby="blogEntryLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-xl ">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="blogEntryLabel">Create New Blog Entry</h5>
+                                    <button type="button" class="btn-close" data-coreui-dismiss="modal" aria-label="Close"></button>
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="col">
-                                    @Html.LabelFor(model => model.newBlogEntry.blogEntryContent, htmlAttributes: new { @class = "form-label modal-text required" })
-                                    @Html.TextAreaFor(model => model.newBlogEntry.blogEntryContent, new { @class = "form-control", rows = 20 })
-                                    @Html.ValidationMessageFor(model => model.newBlogEntry.blogEntryContent, "", new { @class = "text-danger" })
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col">
-                                    @Html.LabelFor(model => model.newBlogEntry.stringTags, htmlAttributes: new { @class = "form-label modal-text required" })
-                                    <div class="mb-3">                                        
-                                        <div id="blogTags" class="chip-input" data-coreui-chip-input data-coreui-name="blogTags" data-coreui-placeholder="Add tag...">                                           
+                                <div class="modal-body">
+                                    <div class="row">
+                                        <div class="col">
+                                            @Html.LabelFor(model => model.newBlogEntry.blogEntryTitle, htmlAttributes: new { @class = "form-label modal-text required" })
+                                            @Html.EditorFor(model => model.newBlogEntry.blogEntryTitle, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.newBlogEntry.blogEntryTitle, "", new { @class = "text-danger" })
                                         </div>
-                                        <div class="form-text">Press Enter or comma to add a value.</div>
                                     </div>
-                                    @Html.HiddenFor(model => model.newBlogEntry.stringTags, new { @id = "stringTags" })
-                                    @Html.ValidationMessageFor(model => model.newBlogEntry.stringTags, "", new { @class = "text-danger" })
+                                    <div class="row">
+                                        <div class="col">
+                                            @Html.LabelFor(model => model.newBlogEntry.blogEntryContent, htmlAttributes: new { @class = "form-label modal-text required" })
+                                            @Html.TextAreaFor(model => model.newBlogEntry.blogEntryContent, new { @class = "form-control", rows = 20 })
+                                            @Html.ValidationMessageFor(model => model.newBlogEntry.blogEntryContent, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            @Html.LabelFor(model => model.newBlogEntry.stringTags, htmlAttributes: new { @class = "form-label modal-text required" })
+                                            <div class="mb-3">
+                                                <div id="blogTags" class="chip-input" data-coreui-chip-input data-coreui-name="blogTags" data-coreui-placeholder="Add tag...">
+                                                </div>
+                                                <div class="form-text">Press Enter or comma to add a value.</div>
+                                            </div>
+                                            @Html.HiddenFor(model => model.newBlogEntry.stringTags, new { @id = "stringTags" })
+                                            @Html.ValidationMessageFor(model => model.newBlogEntry.stringTags, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-coreui-dismiss="modal">Close</button>
+                                    <button type="submit" onclick="doPreprocessing();" class="btn btn-primary">Save</button>
                                 </div>
                             </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-coreui-dismiss="modal">Close</button>
-                            <button type="submit" onclick="doPreprocessing();" class="btn btn-primary">Save</button>
                         </div>
                     </div>
-                </div>
+                }
             </div>
         }
+        <div class="col text-end">
+            @for (int i = 1; i <= Model.numPages; i++)
+            {
+                if (i == Model.pageNumber)
+                {
+                    <button type="button" class="btn btn-secondary disabled" onclick="changePages(@i)">@i</button>
+                }
+                else
+                {
+                    <button type="button" class="btn btn-primary" onclick="changePages(@i)">@i</button>
+                }
+            }
         </div>
-    }
-    <div class="col text-end">
-        @for (int i = 1; i <= Model.numPages; i++)
-        {
-            if (i == Model.pageNumber)
-            {
-                <button type="button" class="btn btn-secondary disabled" onclick="changePages(@i)">@i</button>
-            }
-            else
-            {
-                <button type="button" class="btn btn-primary" onclick="changePages(@i)">@i</button>
-            }
-        }
     </div>
-</div>
 </main>

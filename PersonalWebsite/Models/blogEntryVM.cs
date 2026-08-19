@@ -10,7 +10,7 @@ namespace PersonalWebsite.Models
 {
     public class blogEntryVM
     {
-        public blogEntryVM(int id, string author, int authorId, string title, string content, DateTime creationDate)
+        public blogEntryVM(int id, string author, int authorId, string title, string content, DateTime creationDate, int numComments)
         {
             this.id = id;
             this.author = author;
@@ -18,7 +18,7 @@ namespace PersonalWebsite.Models
             this.blogEntryContent = content;
             this.blogEntryTitle = title;
             this.creationDate = creationDate;
-
+            this.commentCount = numComments;
             tags = new List<tagsVM>();            
         }
 
@@ -49,6 +49,7 @@ namespace PersonalWebsite.Models
         public List<tagsVM> tags { get; set; }
         [DisplayName("Tags")]
         public string stringTags { get; set; }
+        public int commentCount { get; set; }
 
     }
 }

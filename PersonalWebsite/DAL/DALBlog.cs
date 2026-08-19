@@ -3,6 +3,7 @@ using PersonalWebsite.Models;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity.Core.Mapping;
+using System.Data.SqlTypes;
 using System.Linq;
 using System.Web;
 using System.Web.Security;
@@ -91,17 +92,17 @@ namespace PersonalWebsite.DAL
 
         public int CountBlogEntries()
         {
-            return _dbContext.blogEntries.Count();
+            return _dbContext.blogEntries.Where(x => x.activeFlag == true).Count();
         }
 
         public int CountBlogEntriesByAuthor(int id)
         {
-            return _dbContext.blogEntries.Where(x => x.authorId == id).Count();
+            return _dbContext.blogEntries.Where(x => x.authorId == id && x.activeFlag == true).Count();
         }
 
         public int CountBlogEntriesByTag(string tag)
         {
-            return _dbContext.blogEntries.Where(x => x.blogTags.Where(y => y.tag == tag).Any()).Count();
+            return _dbContext.blogEntries.Where(x => x.activeFlag == true && x.blogTags.Where(y => y.tag == tag).Any()).Count();
         }
 
         private List<blogEntryVM> PopulateBlogEntries(List<blogEntry> entries)
@@ -111,7 +112,7 @@ namespace PersonalWebsite.DAL
             foreach (blogEntry entry in entries)
             {
                 var tags = _dbContext.blogTags.Where(x => x.blogEntryId == entry.id).ToList();
-                var newEntry = new blogEntryVM(entry.id, _dbContext.authors.Where(x => x.id == entry.authorId).FirstOrDefault().name, entry.authorId, entry.blogEntryTitle, entry.blogEntryContent.Replace("\\n", Environment.NewLine), entry.creationDate);
+                var newEntry = new blogEntryVM(entry.id, _dbContext.authors.Where(x => x.id == entry.authorId).FirstOrDefault().name, entry.authorId, entry.blogEntryTitle, entry.blogEntryContent.Replace("\\n", Environment.NewLine), entry.creationDate, _dbContext.blogEntryComments.Where(x => x.blogId == entry.id  && x.activeFlag == true).Count());
                 newEntry.PopulateTags(tags);
 
                 entriesVM.Add(newEntry);
@@ -162,6 +163,47 @@ namespace PersonalWebsite.DAL
             var emailAddresses = _dbContext.subscribers.Where(x => x.validated == true).Select(y => y.emailAddress).ToList();
             model.author = _dbContext.authors.Find(model.authorId).name;
             return (new EmailSubscribers(emailAddresses, model.blogEntryTitle, model.author, model.creationDate));
+        }
+
+        public blogEntryCommentListVM ListComments(int id)
+        {
+            blogEntryCommentListVM blogList = new blogEntryCommentListVM();
+
+            blogList.comments = _dbContext.blogEntryComments.Where(x => x.blogId == id && x.activeFlag == true).OrderBy(x => x.commentDate).Select(y => new blogEntryCommentVM() { comment = y.comment, displayName = y.displayName, blogId = id, commentDate = y.commentDate, emailAddress = y.emailAddress, id = y.id }).ToList();
+
+            return blogList;
+        }
+
+        public void AddComment(int blogId, string displayName, string comment, string ipAddress)
+        {
+            blogEntryComment commentEntry = new blogEntryComment()
+            {
+                blogId = blogId,
+                comment = comment,
+                commentDate = DateTime.Now,
+                displayName = displayName,
+                ipAddress = ipAddress,
+                emailAddress = "WIP",
+                activeFlag = true
+            };
+
+            _dbContext.blogEntryComments.Add(commentEntry);
+            _dbContext.SaveChanges();            
+        }
+
+        public bool DeleteComment(int id, int userId, bool isAdmin)
+        {
+            var entry = _dbContext.blogEntryComments.Find(id);
+
+            if (isAdmin)
+            {
+                entry.activeFlag = false;
+                _dbContext.SaveChanges();
+
+                return true;
+            }
+
+            return false;
         }
     }
 }

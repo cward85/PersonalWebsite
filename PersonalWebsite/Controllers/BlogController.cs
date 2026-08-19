@@ -2,13 +2,8 @@
 using PersonalWebsite.Helpers;
 using PersonalWebsite.Models;
 using System;
-using System.Collections.Generic;
 using System.Configuration;
-using System.Data.Entity.Core.Mapping;
-using System.Linq;
-using System.Net.Mail;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Mvc;
 
 namespace PersonalWebsite.Controllers
@@ -31,7 +26,7 @@ namespace PersonalWebsite.Controllers
             model.searchByAuthorId = 0;
             model.numPages = (blog.CountBlogEntries() / 6) + 1;
             model.newBlogEntry = new blogEntryVM();
-
+            model.comments = new blogEntryCommentListVM();
             return View(model);
         }
 
@@ -50,6 +45,7 @@ namespace PersonalWebsite.Controllers
             model.searchByAuthorId = 0;
             model.numPages = (blog.CountBlogEntriesByTag(tags) / 6) + 1;
             model.newBlogEntry = new blogEntryVM();
+            model.comments = new blogEntryCommentListVM();
 
             return View("Index", model);
         }
@@ -69,6 +65,7 @@ namespace PersonalWebsite.Controllers
             model.searchByTag = null;
             model.numPages = (blog.CountBlogEntriesByAuthor(authorId) / 6) + 1;
             model.newBlogEntry = new blogEntryVM();
+            model.comments = new blogEntryCommentListVM();
 
             return View("Index", model);
         }
@@ -132,7 +129,7 @@ namespace PersonalWebsite.Controllers
         [HttpPost]
         public async Task<ActionResult> Subscribe(string emailAddress)
         {
-            if (EmailHandler.EmailRegex.IsMatch(emailAddress))
+            if (EmailHandler.EmailRegex.IsMatch(emailAddress) && emailAddress.Length <= 100)
             {
                 string passCode = HelperFunctions.GeneratePasscode(20);
 
@@ -185,6 +182,72 @@ namespace PersonalWebsite.Controllers
 
             model.Message = message;
             return View(model);
+        }
+
+        [HttpGet]
+        public ActionResult GetComments(int id)
+        {
+            if (Request.IsAjaxRequest())
+            {
+                
+
+                DALBlog dalBlog = new DALBlog();
+
+                blogEntryCommentListVM comments = dalBlog.ListComments(id);
+
+                return PartialView("_BlogComments", comments);
+            }
+            else
+            {
+                return RedirectToAction("Index");
+            }
+        }
+
+        [HttpPost]
+        public ActionResult AddComment(int id, string displayName, string comment)
+        {
+            if (displayName.Length > 100)
+            {
+                return this.Json(new { displayNameMessage = "Display Name cannot be greater than 100 characters.", commentMessage = "" });
+            }
+
+            if (displayName.Length == 0)
+            {
+                return this.Json(new { displayNameMessage = "Display Name is required.", commentMessage = "" });
+            }
+
+            if (comment.Length == 0)
+            {
+                return this.Json(new { commentMessage = "Comment is required.", displayNameMessage = "" });
+            }
+
+            DALBlog dalBlog = new DALBlog();
+
+            dalBlog.AddComment(id, displayName, comment, Request.UserHostAddress);
+            
+            return this.Json(new { commentMessage = "", displayNameMessage = "" });
+        }
+
+        [HttpPost]
+        public ActionResult DeleteComment(int id)
+        {
+            if (Session["UserId"] != null && (int)Session["UserId"] > 0)
+            {
+                DALBlog blog = new DALBlog();
+
+                if (blog.DeleteComment(id, (int)Session["UserId"], (bool)Session["IsAdmin"]))
+                {
+                    return this.Json(new { message = "Success" });
+                }
+                else
+                {
+                    return this.Json(new { message = "Failure" });
+                }
+            }
+            else
+            {
+                return RedirectToAction("Index");
+            }
         }
     }
 }

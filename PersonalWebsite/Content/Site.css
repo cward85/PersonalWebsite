@@ -48,7 +48,7 @@ main, .container-lg, .topNav, .sidebar, .sidebar-nav, .nav, ul {
     color: var(--tertiary-accent-color);
 }
 
-.dropdown-menu, .modal-body, .list-group-item {
+.dropdown-menu, .modal-body, .list-group-item, .modalTrashButton {
     background-color: var(--tertiary-accent-color);
 }
 
@@ -152,4 +152,9 @@ a, .accent, .nav-underline-border, .nav-link, .sidebar-nav .nav-link, .status {
     .row > * {
         padding-left: 0em;
     }
+}
+
+.nav-button.active
+{
+    border-bottom:1px solid var(--primary-accent-color);
 }

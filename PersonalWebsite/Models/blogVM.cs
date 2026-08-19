@@ -15,5 +15,6 @@ namespace PersonalWebsite.Models
         public int searchByAuthorId { get; set; }
         public int numPages { get; set; }
         public blogEntryVM newBlogEntry { get; set; }
+        public blogEntryCommentListVM comments { get; set; }
     }
 }

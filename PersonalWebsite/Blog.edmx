@@ -27,6 +27,19 @@
           <Property Name="creationDate" Type="datetime" Nullable="false" />
           <Property Name="activeFlag" Type="bit" Nullable="false" />
         </EntityType>
+        <EntityType Name="blogEntryComments">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="blogId" Type="int" />
+          <Property Name="ipAddress" Type="varchar" MaxLength="20" />
+          <Property Name="comment" Type="varchar(max)" />
+          <Property Name="displayName" Type="varchar" MaxLength="100" />
+          <Property Name="emailAddress" Type="varchar" MaxLength="100" />
+          <Property Name="commentDate" Type="datetime" />
+          <Property Name="activeFlag" Type="bit" />
+        </EntityType>
         <EntityType Name="blogTags">
           <Key>
             <PropertyRef Name="id" />
@@ -44,6 +57,14 @@
           <Property Name="ipAddress" Type="varchar" MaxLength="20" />
           <Property Name="loginDate" Type="datetime" />
           <Property Name="loginSuccess" Type="bit" />
+        </EntityType>
+        <EntityType Name="resumeDownloads">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ipAddress" Type="varchar" MaxLength="20" />
+          <Property Name="downloadDate" Type="datetime" />
         </EntityType>
         <EntityType Name="subscribers">
           <Key>
@@ -84,11 +105,27 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="fk_blogId">
+          <End Role="blogEntry" Type="Self.blogEntry" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="blogEntryComments" Type="Self.blogEntryComments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="blogEntry">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="blogEntryComments">
+              <PropertyRef Name="blogId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="CWARDModelStoreContainer">
           <EntitySet Name="author" EntityType="Self.author" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="blogEntry" EntityType="Self.blogEntry" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="blogEntryComments" EntityType="Self.blogEntryComments" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="blogTags" EntityType="Self.blogTags" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="loginLog" EntityType="Self.loginLog" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="resumeDownloads" EntityType="Self.resumeDownloads" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="subscribers" EntityType="Self.subscribers" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="fk_author" Association="Self.fk_author">
             <End Role="author" EntitySet="author" />
@@ -97,6 +134,10 @@
           <AssociationSet Name="fk_blogEntry" Association="Self.fk_blogEntry">
             <End Role="blogEntry" EntitySet="blogEntry" />
             <End Role="blogTags" EntitySet="blogTags" />
+          </AssociationSet>
+          <AssociationSet Name="fk_blogId" Association="Self.fk_blogId">
+            <End Role="blogEntry" EntitySet="blogEntry" />
+            <End Role="blogEntryComments" EntitySet="blogEntryComments" />
           </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
@@ -126,6 +167,12 @@
             <End Role="blogEntry" EntitySet="blogEntries" />
           </AssociationSet>
           <EntitySet Name="subscribers" EntityType="CWARDModel.subscriber" />
+          <EntitySet Name="resumeDownloads" EntityType="CWARDModel.resumeDownload" />
+          <EntitySet Name="blogEntryComments" EntityType="CWARDModel.blogEntryComment" />
+          <AssociationSet Name="fk_blogId" Association="CWARDModel.fk_blogId">
+            <End Role="blogEntry" EntitySet="blogEntries" />
+            <End Role="blogEntryComment" EntitySet="blogEntryComments" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="blogEntry">
           <Key>
@@ -139,6 +186,7 @@
           <NavigationProperty Name="blogTags" Relationship="CWARDModel.fk_physicalState" FromRole="blogEntry" ToRole="blogTag" />
           <Property Name="activeFlag" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="author" Relationship="CWARDModel.fk_author" FromRole="blogEntry" ToRole="author" />
+          <NavigationProperty Name="blogEntryComments" Relationship="CWARDModel.fk_blogId" FromRole="blogEntry" ToRole="blogEntryComment" />
         </EntityType>
         <Association Name="fk_physicalState">
           <End Type="CWARDModel.blogEntry" Role="blogEntry" Multiplicity="1">
@@ -201,6 +249,42 @@
           <Property Name="subscribeDate" Type="DateTime" Precision="3" />
           <Property Name="validated" Type="Boolean" />
         </EntityType>
+        <EntityType Name="resumeDownload">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ipAddress" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="downloadDate" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="blogEntryComment">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="blogId" Type="Int32" />
+          <Property Name="ipAddress" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="comment" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="displayName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="emailAddress" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="commentDate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="blogEntry" Relationship="CWARDModel.fk_blogId" FromRole="blogEntryComment" ToRole="blogEntry" />
+          <Property Name="activeFlag" Type="Boolean" />
+        </EntityType>
+        <Association Name="fk_blogId">
+          <End Type="CWARDModel.blogEntry" Role="blogEntry" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="CWARDModel.blogEntryComment" Role="blogEntryComment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="blogEntry">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="blogEntryComment">
+              <PropertyRef Name="blogId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -259,6 +343,29 @@
                 <ScalarProperty Name="ipAddress" ColumnName="ipAddress" />
                 <ScalarProperty Name="validationCode" ColumnName="validationCode" />
                 <ScalarProperty Name="emailAddress" ColumnName="emailAddress" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="resumeDownloads">
+            <EntityTypeMapping TypeName="CWARDModel.resumeDownload">
+              <MappingFragment StoreEntitySet="resumeDownloads">
+                <ScalarProperty Name="downloadDate" ColumnName="downloadDate" />
+                <ScalarProperty Name="ipAddress" ColumnName="ipAddress" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="blogEntryComments">
+            <EntityTypeMapping TypeName="CWARDModel.blogEntryComment">
+              <MappingFragment StoreEntitySet="blogEntryComments">
+                <ScalarProperty Name="activeFlag" ColumnName="activeFlag" />
+                <ScalarProperty Name="commentDate" ColumnName="commentDate" />
+                <ScalarProperty Name="emailAddress" ColumnName="emailAddress" />
+                <ScalarProperty Name="displayName" ColumnName="displayName" />
+                <ScalarProperty Name="comment" ColumnName="comment" />
+                <ScalarProperty Name="ipAddress" ColumnName="ipAddress" />
+                <ScalarProperty Name="blogId" ColumnName="blogId" />
                 <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>
