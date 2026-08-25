@@ -15,6 +15,18 @@
         <EntityTypeShape EntityType="CWARDModel.resumeDownload" Width="1.5" PointX="5.375" PointY="3.75" />
         <EntityTypeShape EntityType="CWARDModel.blogEntryComment" Width="1.5" PointX="3" PointY="7" />
         <AssociationConnector Association="CWARDModel.fk_blogId" />
+        <EntityTypeShape EntityType="CWARDModel.address" Width="1.5" PointX="7.625" PointY="7" />
+        <EntityTypeShape EntityType="CWARDModel.client" Width="1.5" PointX="9.875" PointY="7.375" />
+        <EntityTypeShape EntityType="CWARDModel.country" Width="1.5" PointX="5.375" PointY="10.5" />
+        <EntityTypeShape EntityType="CWARDModel.state" Width="1.5" PointX="5.375" PointY="7.5" />
+        <AssociationConnector Association="CWARDModel.fk_address" />
+        <AssociationConnector Association="CWARDModel.fk_addressCountry" />
+        <AssociationConnector Association="CWARDModel.fk_addressState" />
+        <EntityTypeShape EntityType="CWARDModel.invoiceEntry" Width="1.5" PointX="14.375" PointY="7.25" />
+        <AssociationConnector Association="CWARDModel.fk_userId" />
+        <EntityTypeShape EntityType="CWARDModel.invoice" Width="1.5" PointX="12.125" PointY="7.5" />
+        <AssociationConnector Association="CWARDModel.fk_client" />
+        <AssociationConnector Association="CWARDModel.fk_invoices" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

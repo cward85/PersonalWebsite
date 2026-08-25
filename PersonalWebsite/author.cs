@@ -18,6 +18,7 @@ namespace PersonalWebsite
         public author()
         {
             this.blogEntries = new HashSet<blogEntry>();
+            this.clients = new HashSet<client>();
         }
     
         public int id { get; set; }
@@ -29,5 +30,7 @@ namespace PersonalWebsite
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<blogEntry> blogEntries { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<client> clients { get; set; }
     }
 }

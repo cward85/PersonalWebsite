@@ -142,6 +142,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="address.cs">
+      <DependentUpon>Blog.tt</DependentUpon>
+    </Compile>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
@@ -172,21 +175,35 @@
     <Compile Include="blogTag.cs">
       <DependentUpon>Blog.tt</DependentUpon>
     </Compile>
+    <Compile Include="client.cs">
+      <DependentUpon>Blog.tt</DependentUpon>
+    </Compile>
     <Compile Include="Controllers\BlogController.cs" />
     <Compile Include="Controllers\ChangelogController.cs" />
     <Compile Include="Controllers\FreelanceController.cs" />
     <Compile Include="Controllers\AboutController.cs" />
+    <Compile Include="Controllers\InvoiceController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\PortfolioController.cs" />
     <Compile Include="Controllers\ResumeController.cs" />
+    <Compile Include="country.cs">
+      <DependentUpon>Blog.tt</DependentUpon>
+    </Compile>
     <Compile Include="DAL\DALAbout.cs" />
     <Compile Include="DAL\DALBlog.cs" />
+    <Compile Include="DAL\DALInvoices.cs" />
     <Compile Include="DAL\DALLogin.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helpers\EmailHandler.cs" />
     <Compile Include="Helpers\HelperFunctions.cs" />
+    <Compile Include="invoice.cs">
+      <DependentUpon>Blog.tt</DependentUpon>
+    </Compile>
+    <Compile Include="invoiceEntry.cs">
+      <DependentUpon>Blog.tt</DependentUpon>
+    </Compile>
     <Compile Include="loginLog.cs">
       <DependentUpon>Blog.tt</DependentUpon>
     </Compile>
@@ -195,11 +212,20 @@
     <Compile Include="Models\blogEntryVM.cs" />
     <Compile Include="Models\blogVM.cs" />
     <Compile Include="Models\EmailSubscribers.cs" />
+    <Compile Include="Models\clientListVM.cs" />
+    <Compile Include="Models\clientVM.cs" />
+    <Compile Include="Models\invoiceEntryListVM.cs" />
+    <Compile Include="Models\invoiceEntryVM.cs" />
+    <Compile Include="Models\invoiceListVM.cs" />
+    <Compile Include="Models\invoiceVM.cs" />
     <Compile Include="Models\loginVM.cs" />
     <Compile Include="Models\SubscriptionMessage.cs" />
     <Compile Include="Models\tagsVM.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="resumeDownload.cs">
+      <DependentUpon>Blog.tt</DependentUpon>
+    </Compile>
+    <Compile Include="state.cs">
       <DependentUpon>Blog.tt</DependentUpon>
     </Compile>
     <Compile Include="subscriber.cs">
@@ -2339,7 +2365,6 @@
     <Content Include="Scripts\bootstrap.esm.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
-    <Content Include="Content\Resume\Camilo Ward - Resume 5_2026.pdf" />
     <EntityDeploy Include="Blog.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>Blog.Designer.cs</LastGenOutput>
@@ -2383,6 +2408,7 @@
     <Content Include="Content\bootstrap-icons-1.13.1\bootstrap-icons.scss" />
     <Content Include="Content\bootstrap-icons-1.13.1\fonts\bootstrap-icons.woff" />
     <Content Include="Content\bootstrap-icons-1.13.1\fonts\bootstrap-icons.woff2" />
+    <Content Include="Content\Resume\Camilo Ward - Current Resume.pdf" />
     <None Include="Scripts\jquery-3.7.0.intellisense.js" />
     <Content Include="Scripts\dist\css\coreui-grid.css" />
     <Content Include="Scripts\dist\css\coreui-grid.min.css" />
@@ -2446,6 +2472,10 @@
     <Content Include="Views\Blog\EmailValidated.cshtml" />
     <Content Include="Views\Changelog\Index.cshtml" />
     <Content Include="Views\Blog\_BlogComments.cshtml" />
+    <Content Include="Views\Invoice\Index.cshtml" />
+    <Content Include="Views\Invoice\_Invoices.cshtml" />
+    <Content Include="Views\Invoice\_InvoiceEntries.cshtml" />
+    <Content Include="Views\Invoice\_Client.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

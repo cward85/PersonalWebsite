@@ -1,0 +1,127 @@
+﻿@model PersonalWebsite.Models.clientListVM
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Invoice Manager";
+
+    var grid = new WebGrid
+    (
+        source: Model.clients,
+        canPage: true,
+        canSort: true,
+        rowsPerPage: 10
+    );
+}
+
+<script type="text/javascript">
+
+
+    function checkCountry(id) {
+
+        var selectedCountry = $("#" + id).val();
+
+        if (selectedCountry == "239") {
+            $('label[for="' + id.replace("countryId", "stateId") + '"]').addClass("required");
+        }
+        else {
+            $('label[for=' + id.replace("countryId", "stateId") + ']').removeClass("required");
+        }
+    }
+
+    function getInvoice(id) {
+        var url = '@Url.Action("ListInvoices", "Invoice")' + "/" + id;
+        $.ajax({
+            type: "get",
+            url: url,
+            async: false,
+            success: function (data) {
+                var divId = '#ajaxInvoices';
+
+                $(divId).html(data);
+            },
+            failure: function () {
+                alert("fail");
+            }
+        });
+    }
+
+    function editClient(id) {
+        var url = '@Url.Action("GetClient", "Invoice")' + "/" + id;
+        $.ajax({
+            type: "get",
+            url: url,
+            async: false,
+            success: function (data) {
+                var divId = '#ajaxClientForm';
+
+                $(divId).html(data);
+            },
+            failure: function () {
+                alert("fail");
+            }
+        });
+    }
+
+
+
+</script>
+
+<main aria-labelledby="title">
+    <h2 class="text-center" id="title">@ViewBag.Title</h2>
+    <div class="row">
+        <h3>Clients for @Model.author</h3>
+    </div>
+    <div class="row">
+        @grid.GetHtml(
+            tableStyle: "table table-bordered table-striped table-hover",
+            headerStyle: "thead-dark grid-action",
+            htmlAttributes: new { id = "clientTable" },
+            columns: grid.Columns(
+                grid.Column("ClientName", header: "Client", format: (item) => item.ClientName),
+                grid.Column("TotalInvoices", header: "Total Invoices", format: (item) => item.TotalInvoices),
+                grid.Column("TotalDollarAmount", header: "Total Amount", format: (item) => (item.TotalDollarAmount == null ? "$0" : "$" + item.TotalDollarAmount)),
+                grid.Column("DateLastInvoiceSent", header: "Last Invoice Sent Date", format: (item) => item.DateLastInvoiceSent == null ? "" : item.DateLastInvoiceSent.ToString("MM/dd/yyyy")),
+                grid.Column(header: "Actions", format: (item) =>
+                {
+                    return Html.Raw(
+                             $"<div class='d-flex gap-1'><button onclick='getInvoice({item.id});return false;' title='View Invoices' class='btn btn-sm btn-primary bi bi-arrow-down'></a>" + " " +
+                             $"<button onclick='editClient({item.id});return false;' title='Edit Client' class='btn btn-sm btn-primary bi bi-pencil' data-coreui-toggle='modal' data-coreui-target='#addClientModal'></a></div>"
+                          );
+                })
+            )
+        )
+    </div>
+    <div class="row">
+        @using (Html.BeginForm("AddClient", "Invoice", FormMethod.Post, new { enctype = "multipart/form-data", id = "clientListForm" }))
+        {
+            @Html.AntiForgeryToken()
+            <div class="p-1 float-end">
+                <!-- Button trigger modal -->
+                <button type="button" class="btn btn-primary" data-coreui-toggle="modal" data-coreui-target="#addClientModal" onclick="editClient(0)" title="Add New Client">
+                    Add New Client
+                </button>
+                <!-- Modal -->
+                <div class="modal fade" id="addClientModal" tabindex="-1" aria-labelledby="addClientLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="addClientLabel">Client Info</h5>
+                                <button type="button" class="btn-close" data-coreui-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body" id="ajaxClientForm">
+                                
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-coreui-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary">Save</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+    <div id="ajaxInvoices">
+
+    </div>
+</main>

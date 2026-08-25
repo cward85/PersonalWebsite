@@ -5,6 +5,18 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="CWARDModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="addresses">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="street1" Type="varchar" MaxLength="120" Nullable="false" />
+          <Property Name="street2" Type="varchar" MaxLength="120" />
+          <Property Name="city" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="stateId" Type="int" />
+          <Property Name="countryId" Type="int" Nullable="false" />
+          <Property Name="postCode" Type="varchar" MaxLength="16" Nullable="false" />
+        </EntityType>
         <EntityType Name="author">
           <Key>
             <PropertyRef Name="id" />
@@ -48,6 +60,47 @@
           <Property Name="blogEntryId" Type="int" Nullable="false" />
           <Property Name="tag" Type="varchar" MaxLength="50" Nullable="false" />
         </EntityType>
+        <EntityType Name="clients">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="userId" Type="int" />
+          <Property Name="name" Type="varchar" MaxLength="200" />
+          <Property Name="addressId" Type="int" />
+          <Property Name="creationDate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="countries">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="code" Type="varchar" MaxLength="2" Nullable="false" />
+        </EntityType>
+        <EntityType Name="invoiceEntries">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="invoiceId" Type="int" Nullable="false" />
+          <Property Name="description" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="rate" Type="real" Nullable="false" />
+          <Property Name="rateUnit" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="unitAmount" Type="real" Nullable="false" />
+          <Property Name="totalAmount" Type="real" StoreGeneratedPattern="Computed" Nullable="false" />
+        </EntityType>
+        <EntityType Name="invoices">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="clientId" Type="int" Nullable="false" />
+          <Property Name="invoiceDate" Type="datetime" Nullable="false" />
+          <Property Name="invoiceDueDate" Type="datetime" Nullable="false" />
+          <Property Name="sentDate" Type="datetime" />
+          <Property Name="invoiceNumber" Type="varchar" MaxLength="11" Nullable="false" />
+        </EntityType>
         <EntityType Name="loginLog">
           <Key>
             <PropertyRef Name="id" />
@@ -66,6 +119,14 @@
           <Property Name="ipAddress" Type="varchar" MaxLength="20" />
           <Property Name="downloadDate" Type="datetime" />
         </EntityType>
+        <EntityType Name="states">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="code" Type="varchar" MaxLength="2" Nullable="false" />
+        </EntityType>
         <EntityType Name="subscribers">
           <Key>
             <PropertyRef Name="id" />
@@ -77,6 +138,44 @@
           <Property Name="subscribeDate" Type="datetime" />
           <Property Name="validated" Type="bit" />
         </EntityType>
+        <Association Name="fk_address">
+          <End Role="addresses" Type="Self.addresses" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="clients" Type="Self.clients" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="addresses">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="clients">
+              <PropertyRef Name="addressId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_addressCountry">
+          <End Role="countries" Type="Self.countries" Multiplicity="1" />
+          <End Role="addresses" Type="Self.addresses" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="countries">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="addresses">
+              <PropertyRef Name="countryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_addressState">
+          <End Role="states" Type="Self.states" Multiplicity="0..1" />
+          <End Role="addresses" Type="Self.addresses" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="states">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="addresses">
+              <PropertyRef Name="stateId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="fk_author">
           <End Role="author" Type="Self.author" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -119,14 +218,74 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="fk_client">
+          <End Role="clients" Type="Self.clients" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="invoices" Type="Self.invoices" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="clients">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="invoices">
+              <PropertyRef Name="clientId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_invoices">
+          <End Role="invoices" Type="Self.invoices" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="invoiceEntries" Type="Self.invoiceEntries" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="invoices">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="invoiceEntries">
+              <PropertyRef Name="invoiceId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_userId">
+          <End Role="author" Type="Self.author" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="clients" Type="Self.clients" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="author">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="clients">
+              <PropertyRef Name="userId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="CWARDModelStoreContainer">
+          <EntitySet Name="addresses" EntityType="Self.addresses" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="author" EntityType="Self.author" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="blogEntry" EntityType="Self.blogEntry" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="blogEntryComments" EntityType="Self.blogEntryComments" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="blogTags" EntityType="Self.blogTags" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="clients" EntityType="Self.clients" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="countries" EntityType="Self.countries" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="invoiceEntries" EntityType="Self.invoiceEntries" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="invoices" EntityType="Self.invoices" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="loginLog" EntityType="Self.loginLog" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="resumeDownloads" EntityType="Self.resumeDownloads" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="states" EntityType="Self.states" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="subscribers" EntityType="Self.subscribers" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="fk_address" Association="Self.fk_address">
+            <End Role="addresses" EntitySet="addresses" />
+            <End Role="clients" EntitySet="clients" />
+          </AssociationSet>
+          <AssociationSet Name="fk_addressCountry" Association="Self.fk_addressCountry">
+            <End Role="countries" EntitySet="countries" />
+            <End Role="addresses" EntitySet="addresses" />
+          </AssociationSet>
+          <AssociationSet Name="fk_addressState" Association="Self.fk_addressState">
+            <End Role="states" EntitySet="states" />
+            <End Role="addresses" EntitySet="addresses" />
+          </AssociationSet>
           <AssociationSet Name="fk_author" Association="Self.fk_author">
             <End Role="author" EntitySet="author" />
             <End Role="blogEntry" EntitySet="blogEntry" />
@@ -138,6 +297,18 @@
           <AssociationSet Name="fk_blogId" Association="Self.fk_blogId">
             <End Role="blogEntry" EntitySet="blogEntry" />
             <End Role="blogEntryComments" EntitySet="blogEntryComments" />
+          </AssociationSet>
+          <AssociationSet Name="fk_client" Association="Self.fk_client">
+            <End Role="clients" EntitySet="clients" />
+            <End Role="invoices" EntitySet="invoices" />
+          </AssociationSet>
+          <AssociationSet Name="fk_invoices" Association="Self.fk_invoices">
+            <End Role="invoices" EntitySet="invoices" />
+            <End Role="invoiceEntries" EntitySet="invoiceEntries" />
+          </AssociationSet>
+          <AssociationSet Name="fk_userId" Association="Self.fk_userId">
+            <End Role="author" EntitySet="author" />
+            <End Role="clients" EntitySet="clients" />
           </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
@@ -172,6 +343,36 @@
           <AssociationSet Name="fk_blogId" Association="CWARDModel.fk_blogId">
             <End Role="blogEntry" EntitySet="blogEntries" />
             <End Role="blogEntryComment" EntitySet="blogEntryComments" />
+          </AssociationSet>
+          <EntitySet Name="addresses" EntityType="CWARDModel.address" />
+          <EntitySet Name="clients" EntityType="CWARDModel.client" />
+          <EntitySet Name="countries" EntityType="CWARDModel.country" />
+          <EntitySet Name="states" EntityType="CWARDModel.state" />
+          <AssociationSet Name="fk_address" Association="CWARDModel.fk_address">
+            <End Role="address" EntitySet="addresses" />
+            <End Role="client" EntitySet="clients" />
+          </AssociationSet>
+          <AssociationSet Name="fk_addressCountry" Association="CWARDModel.fk_addressCountry">
+            <End Role="country" EntitySet="countries" />
+            <End Role="address" EntitySet="addresses" />
+          </AssociationSet>
+          <AssociationSet Name="fk_addressState" Association="CWARDModel.fk_addressState">
+            <End Role="state" EntitySet="states" />
+            <End Role="address" EntitySet="addresses" />
+          </AssociationSet>
+          <EntitySet Name="invoiceEntries" EntityType="CWARDModel.invoiceEntry" />
+          <AssociationSet Name="fk_userId" Association="CWARDModel.fk_userId">
+            <End Role="author" EntitySet="authors" />
+            <End Role="client" EntitySet="clients" />
+          </AssociationSet>
+          <EntitySet Name="invoices" EntityType="CWARDModel.invoice" />
+          <AssociationSet Name="fk_client" Association="CWARDModel.fk_client">
+            <End Role="client" EntitySet="clients" />
+            <End Role="invoice" EntitySet="invoices" />
+          </AssociationSet>
+          <AssociationSet Name="fk_invoices" Association="CWARDModel.fk_invoices">
+            <End Role="invoice" EntitySet="invoices" />
+            <End Role="invoiceEntry" EntitySet="invoiceEntries" />
           </AssociationSet>
         </EntityContainer>
         <EntityType Name="blogEntry">
@@ -223,6 +424,7 @@
           <Property Name="isAdmin" Type="Boolean" Nullable="false" />
           <Property Name="lastLoginDateTime" Type="DateTime" Precision="3" />
           <NavigationProperty Name="blogEntries" Relationship="CWARDModel.fk_author" FromRole="author" ToRole="blogEntry" />
+          <NavigationProperty Name="clients" Relationship="CWARDModel.fk_userId" FromRole="author" ToRole="client" />
         </EntityType>
         <Association Name="fk_author">
           <End Type="CWARDModel.author" Role="author" Multiplicity="1">
@@ -282,6 +484,158 @@
             </Principal>
             <Dependent Role="blogEntryComment">
               <PropertyRef Name="blogId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="address">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="street1" Type="String" Nullable="false" MaxLength="120" FixedLength="false" Unicode="false" />
+          <Property Name="street2" Type="String" MaxLength="120" FixedLength="false" Unicode="false" />
+          <Property Name="city" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="stateId" Type="Int32" />
+          <Property Name="countryId" Type="Int32" Nullable="false" />
+          <Property Name="postCode" Type="String" Nullable="false" MaxLength="16" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="clients" Relationship="CWARDModel.fk_address" FromRole="address" ToRole="client" />
+          <NavigationProperty Name="country" Relationship="CWARDModel.fk_addressCountry" FromRole="address" ToRole="country" />
+          <NavigationProperty Name="state" Relationship="CWARDModel.fk_addressState" FromRole="address" ToRole="state" />
+        </EntityType>
+        <EntityType Name="client">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="addressId" Type="Int32" />
+          <Property Name="creationDate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="address" Relationship="CWARDModel.fk_address" FromRole="client" ToRole="address" />
+          <Property Name="userId" Type="Int32" />
+          <NavigationProperty Name="author" Relationship="CWARDModel.fk_userId" FromRole="client" ToRole="author" />
+          <NavigationProperty Name="invoices" Relationship="CWARDModel.fk_client" FromRole="client" ToRole="invoice" />
+        </EntityType>
+        <EntityType Name="country">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="code" Type="String" Nullable="false" MaxLength="2" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="addresses" Relationship="CWARDModel.fk_addressCountry" FromRole="country" ToRole="address" />
+        </EntityType>
+        <EntityType Name="state">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="code" Type="String" Nullable="false" MaxLength="2" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="addresses" Relationship="CWARDModel.fk_addressState" FromRole="state" ToRole="address" />
+        </EntityType>
+        <Association Name="fk_address">
+          <End Type="CWARDModel.address" Role="address" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="CWARDModel.client" Role="client" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="address">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="client">
+              <PropertyRef Name="addressId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_addressCountry">
+          <End Type="CWARDModel.country" Role="country" Multiplicity="1" />
+          <End Type="CWARDModel.address" Role="address" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="country">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="address">
+              <PropertyRef Name="countryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_addressState">
+          <End Type="CWARDModel.state" Role="state" Multiplicity="0..1" />
+          <End Type="CWARDModel.address" Role="address" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="state">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="address">
+              <PropertyRef Name="stateId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="invoiceEntry">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="invoiceId" Type="Int32" Nullable="false" />
+          <Property Name="description" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="rate" Type="Single" Nullable="false" />
+          <Property Name="rateUnit" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="unitAmount" Type="Single" Nullable="false" />
+          <Property Name="totalAmount" Type="Single" Nullable="false" annotation:StoreGeneratedPattern="Computed" />
+          <NavigationProperty Name="invoice" Relationship="CWARDModel.fk_invoices" FromRole="invoiceEntry" ToRole="invoice" />
+        </EntityType>
+        <Association Name="fk_userId">
+          <End Type="CWARDModel.author" Role="author" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="CWARDModel.client" Role="client" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="author">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="client">
+              <PropertyRef Name="userId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="invoice">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="clientId" Type="Int32" Nullable="false" />
+          <Property Name="invoiceDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="invoiceDueDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="sentDate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="client" Relationship="CWARDModel.fk_client" FromRole="invoice" ToRole="client" />
+          <NavigationProperty Name="invoiceEntries" Relationship="CWARDModel.fk_invoices" FromRole="invoice" ToRole="invoiceEntry" />
+          <Property Name="invoiceNumber" Type="String" Nullable="false" MaxLength="11" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <Association Name="fk_client">
+          <End Type="CWARDModel.client" Role="client" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="CWARDModel.invoice" Role="invoice" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="client">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="invoice">
+              <PropertyRef Name="clientId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_invoices">
+          <End Type="CWARDModel.invoice" Role="invoice" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="CWARDModel.invoiceEntry" Role="invoiceEntry" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="invoice">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="invoiceEntry">
+              <PropertyRef Name="invoiceId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -366,6 +720,73 @@
                 <ScalarProperty Name="comment" ColumnName="comment" />
                 <ScalarProperty Name="ipAddress" ColumnName="ipAddress" />
                 <ScalarProperty Name="blogId" ColumnName="blogId" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="addresses">
+            <EntityTypeMapping TypeName="CWARDModel.address">
+              <MappingFragment StoreEntitySet="addresses">
+                <ScalarProperty Name="postCode" ColumnName="postCode" />
+                <ScalarProperty Name="countryId" ColumnName="countryId" />
+                <ScalarProperty Name="stateId" ColumnName="stateId" />
+                <ScalarProperty Name="city" ColumnName="city" />
+                <ScalarProperty Name="street2" ColumnName="street2" />
+                <ScalarProperty Name="street1" ColumnName="street1" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="clients">
+            <EntityTypeMapping TypeName="CWARDModel.client">
+              <MappingFragment StoreEntitySet="clients">
+                <ScalarProperty Name="userId" ColumnName="userId" />
+                <ScalarProperty Name="creationDate" ColumnName="creationDate" />
+                <ScalarProperty Name="addressId" ColumnName="addressId" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="countries">
+            <EntityTypeMapping TypeName="CWARDModel.country">
+              <MappingFragment StoreEntitySet="countries">
+                <ScalarProperty Name="code" ColumnName="code" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="states">
+            <EntityTypeMapping TypeName="CWARDModel.state">
+              <MappingFragment StoreEntitySet="states">
+                <ScalarProperty Name="code" ColumnName="code" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="invoiceEntries">
+            <EntityTypeMapping TypeName="CWARDModel.invoiceEntry">
+              <MappingFragment StoreEntitySet="invoiceEntries">
+                <ScalarProperty Name="totalAmount" ColumnName="totalAmount" />
+                <ScalarProperty Name="unitAmount" ColumnName="unitAmount" />
+                <ScalarProperty Name="rateUnit" ColumnName="rateUnit" />
+                <ScalarProperty Name="rate" ColumnName="rate" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="invoiceId" ColumnName="invoiceId" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="invoices">
+            <EntityTypeMapping TypeName="CWARDModel.invoice">
+              <MappingFragment StoreEntitySet="invoices">
+                <ScalarProperty Name="invoiceNumber" ColumnName="invoiceNumber" />
+                <ScalarProperty Name="sentDate" ColumnName="sentDate" />
+                <ScalarProperty Name="invoiceDueDate" ColumnName="invoiceDueDate" />
+                <ScalarProperty Name="invoiceDate" ColumnName="invoiceDate" />
+                <ScalarProperty Name="clientId" ColumnName="clientId" />
                 <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>

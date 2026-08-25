@@ -1,0 +1,100 @@
+﻿
+@model PersonalWebsite.Models.invoiceListVM
+@{
+    var invoiceGrid = new WebGrid
+    (
+        source: Model.invoiceEntries,
+        canPage: true,
+        canSort: true,
+        rowsPerPage: 10
+    );
+}
+
+<script type="text/javascript">
+    function getInvoiceEntry(id) {
+    var url = '@Url.Action("ListInvoiceEntries", "Invoice")' + "/" + id;
+    $.ajax({
+        type: "get",
+        url: url,
+        async: false,
+        success: function (data) {
+            var divId = '#ajaxInvoiceEntries';
+
+            $(divId).html(data);
+        },
+        failure: function () {
+            alert("fail");
+        }
+    });
+}
+</script>
+
+<div class="row">
+    <h3>Invoices for @Model.ClientName</h3>
+</div>
+<div class="row">
+    @invoiceGrid.GetHtml(
+        tableStyle: "table table-bordered table-striped table-hover",
+        headerStyle: "thead-dark grid-action",
+        htmlAttributes: new { id = "invoiceTable" },
+        columns: invoiceGrid.Columns(
+            invoiceGrid.Column("invoiceNumber", header: "Invoice Number", format: (item) => item.invoiceNumber),
+            invoiceGrid.Column("invoiceDate", header: "Invoice Date", format: (item) => item.invoiceDate.ToString("MM/dd/yyyy")),
+            invoiceGrid.Column("invoiceDueDate", header: "Invoice Due Date", format: (item) => item.invoiceDueDate.ToString("MM/dd/yyyy")),
+            invoiceGrid.Column("totalAmount", header: "Total Amount", format: (item) => (item.totalAmount == null ? "$0" : "$" + item.totalAmount)),
+            invoiceGrid.Column("sentDate", header: "Invoice Sent Date", format: (item) => item.sentDate == null ? "" : item.sentDate.ToString("MM/dd/yyyy")),
+            invoiceGrid.Column(header: "Actions", format: (item) =>
+            {
+                return Html.Raw(
+                         $"<div class='d-flex gap-1'><button onclick='getInvoiceEntry({item.id});return false;' title='View Invoice Entries' class='btn btn-sm btn-primary bi bi-arrow-down'></a></div>"
+                      );
+            })
+        )
+    )
+</div>
+<div class="row">
+    @using (Html.BeginForm("AddInvoice", "Invoice", FormMethod.Post, new { enctype = "multipart/form-data", id = "invoiceListForm" }))
+    {
+        @Html.AntiForgeryToken()
+        <div class="p-1 float-end">
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-primary" data-coreui-toggle="modal" data-coreui-target="#addInvoiceModal" title="Add New Invoice">
+                Add New Invoice
+            </button>
+            <!-- Modal -->
+            <div class="modal fade" id="addInvoiceModal" tabindex="-1" aria-labelledby="addInvoiceLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="addInvoiceLabel">Add Invoice</h5>
+                            <button type="button" class="btn-close" data-coreui-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            @Html.HiddenFor(x => x.clientId)
+                           
+                            <div class="row">
+                                <div class="col-12 col-sm-6 col-md-4 mb-1">
+                                    @Html.LabelFor(model => model.invoiceDate, htmlAttributes: new { @class = "form-label required" })
+                                    @Html.EditorFor(model => model.invoiceDate, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.invoiceDate, "", new { @class = "text-danger" })
+                                </div>
+                                <div class="col-12 col-sm-6 col-md-4 mb-1">
+                                    @Html.LabelFor(model => model.invoiceDueDate, htmlAttributes: new { @class = "form-label required" })
+                                    @Html.EditorFor(model => model.invoiceDueDate, new { htmlAttributes = new { @class = "form-control " } })
+                                    @Html.ValidationMessageFor(model => model.invoiceDueDate, "", new { @class = "text-danger" })
+                                </div>                               
+                            </div>                          
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-coreui-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+<div id="ajaxInvoiceEntries">
+
+</div>

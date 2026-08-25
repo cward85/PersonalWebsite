@@ -31,6 +31,10 @@ body{
     background-color: var(--primary-color);
 }
 
+.table th {
+    --cui-table-bg: var(--primary-color);
+}
+
 main, .container-lg, .topNav, .sidebar, .sidebar-nav, .nav, ul {
     background-color: var(--secondary-color);
 }
@@ -61,7 +65,7 @@ label, title, td, p, th, .sidebar-nav .nav-title {
     color: var(--primary-accent-color);
 }
 
-.nav-link:focus, .nav-link:hover, .nav-item .active{
+.nav-link:focus, .nav-link:hover, .nav-item .active {
     color: var(--secondary-accent-color);
 }
 
@@ -157,4 +161,10 @@ a, .accent, .nav-underline-border, .nav-link, .sidebar-nav .nav-link, .status {
 .nav-button.active
 {
     border-bottom:1px solid var(--primary-accent-color);
+}
+
+.table td
+{
+    background-color: var(--tertiary-accent-color);
+    color: var(--secondary-color);
 }

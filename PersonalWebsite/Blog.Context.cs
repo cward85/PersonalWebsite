@@ -32,5 +32,11 @@ namespace PersonalWebsite
         public virtual DbSet<subscriber> subscribers { get; set; }
         public virtual DbSet<resumeDownload> resumeDownloads { get; set; }
         public virtual DbSet<blogEntryComment> blogEntryComments { get; set; }
+        public virtual DbSet<address> addresses { get; set; }
+        public virtual DbSet<client> clients { get; set; }
+        public virtual DbSet<country> countries { get; set; }
+        public virtual DbSet<state> states { get; set; }
+        public virtual DbSet<invoiceEntry> invoiceEntries { get; set; }
+        public virtual DbSet<invoice> invoices { get; set; }
     }
 }
