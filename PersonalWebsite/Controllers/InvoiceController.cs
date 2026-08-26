@@ -40,10 +40,9 @@ namespace PersonalWebsite.Controllers
         {
             if (Session["UserId"] != null && (int)Session["UserId"] > 0)
             {
+                DALInvoices dalInvoice = new DALInvoices();
                 if (ModelState.IsValid)
                 {
-                    DALInvoices dalInvoice = new DALInvoices();
-
                     if (model.id == 0)
                     {
                         dalInvoice.CreateClient(model, (int)Session["UserId"]);
@@ -53,8 +52,16 @@ namespace PersonalWebsite.Controllers
                         dalInvoice.EditClient(model);
                     }
                 }
+                else
+                {                   
+                    model.state = dalInvoice.GetStateDDL();
 
-                return RedirectToAction("Index");
+                    model.country = dalInvoice.GetCountryDDL();
+                    model.author = dalInvoice.GetAuthor((int)Session["UserId"]);
+                    return PartialView("_Client", model);
+                }
+
+                return Json(new { success = true, redirectUrl = Url.Action("Index") });
             }
 
             return RedirectToAction("Index", "About");
@@ -72,7 +79,7 @@ namespace PersonalWebsite.Controllers
 
                 if (id > 0)
                 {
-                    invoices = dalInvoice.GetClient(id);
+                    invoices = dalInvoice.GetClient(id);                    
                 }
 
                 invoices.state = dalInvoice.GetStateDDL();
@@ -99,6 +106,7 @@ namespace PersonalWebsite.Controllers
                 invoices.invoiceEntries = dalInvoice.ListInvoicesByClientId(id);
                 invoices.ClientName = dalInvoice.GetClientName(id);
                 invoices.clientId = id;
+                Session["ClientId"] = id;
 
                 return PartialView("_Invoices", invoices);
             }
@@ -116,9 +124,10 @@ namespace PersonalWebsite.Controllers
                 DALInvoices dalInvoice = new DALInvoices();
 
                 invoiceEntryListVM invoices = new invoiceEntryListVM();
-                invoices.invoiceEntries = dalInvoice.ListInvoiceEntriesByInvoiceId(id);
-                invoices.invoiceDate = dalInvoice.GetInvoiceDate(id);
-                invoices.invoiceId = id;
+                invoices.invoiceEntries = dalInvoice.ListInvoiceEntriesByInvoiceId(id);              
+                invoices.invoiceNumber = dalInvoice.GetInvoiceNumber(id);
+                invoices.id = id;
+                Session["InvoiceId"] = id;
 
                 return PartialView("_InvoiceEntries", invoices);
             }
@@ -133,6 +142,64 @@ namespace PersonalWebsite.Controllers
         public ActionResult AddInvoice(invoiceListVM model)
         {
             return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult AddInvoiceEntry(invoiceEntryListVM model)
+        {
+
+            if (Session["UserId"] != null && (int)Session["UserId"] > 0)
+            {
+                DALInvoices dalInvoice = new DALInvoices();
+                if (ModelState.IsValid)
+                {
+                    if (model.id == 0)
+                    {
+                        model.invoiceId = (int)Session["InvoiceId"];
+                        dalInvoice.CreateInvoiceEntry(model, (int)Session["UserId"]);
+                    }
+                    else
+                    {
+                        dalInvoice.EditInvoiceEntry(model);
+                    }
+                }
+                else
+                {                   
+                    return PartialView("_InvoiceEntriesModal", model);
+                }
+                int clientId = 0;
+                if (Session["ClientId"] != null)
+                {
+                    clientId = (int)Session["ClientId"];
+                }
+                return Json(new { success = true, redirectUrl = Url.Action("Index"), invoiceId = model.invoiceId, clientId = clientId });
+            }
+
+            return RedirectToAction("Index", "About");
+        }
+
+        [HttpGet]
+        public ActionResult GetInvoiceEntry(int id)
+        {
+            if (Request.IsAjaxRequest())
+            {
+                DALInvoices dalInvoice = new DALInvoices();
+
+                invoiceEntryListVM invoices = new invoiceEntryListVM();
+
+                if (id > 0)
+                {
+                    invoices = dalInvoice.GetInvoiceEntry(id);
+                    Session["InvoiceEntryId"] = id;
+                }               
+
+                return PartialView("_InvoiceEntriesModal", invoices);
+            }
+            else
+            {
+                return RedirectToAction("Index");
+            }
         }
     }
 }

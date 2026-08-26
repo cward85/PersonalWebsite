@@ -15,6 +15,36 @@
 
 <script type="text/javascript">
 
+    $(document).ready(function () {
+        $('#submitButton').click(function (e) {
+            e.preventDefault();
+            var form = $('#clientListForm');
+
+            $.ajax({
+                url: form.attr('action'),
+                type: 'POST',
+                data: form.serialize(),
+                success: function (response) {
+                    if (response.success) {
+                        // Close modal and redirect or reload
+                        $('#addClientModal').modal('hide');
+                        window.location.href = response.redirectUrl;
+                    } else {                     
+                        // Replace the old form container inside the modal with the new one containing validation errors
+                        $('#ajaxClientForm').html(response);
+
+                        // Optional: Re-bind client side validation if using jquery.validate
+                        $.validator.unobtrusive.parse('#addClientModal');
+                    }
+                }
+            });
+        });
+
+        if (localStorage.getItem('clientId') !== null) {           
+            getInvoice(localStorage.getItem("clientId"));    
+            localStorage.removeItem('clientId');
+        }
+    });
 
     function checkCountry(id) {
 
@@ -31,7 +61,7 @@
     function getInvoice(id) {
         var url = '@Url.Action("ListInvoices", "Invoice")' + "/" + id;
         $.ajax({
-            type: "get",
+        type: "get",
             url: url,
             async: false,
             success: function (data) {
@@ -48,7 +78,7 @@
     function editClient(id) {
         var url = '@Url.Action("GetClient", "Invoice")' + "/" + id;
         $.ajax({
-            type: "get",
+        type: "get",
             url: url,
             async: false,
             success: function (data) {
@@ -61,9 +91,6 @@
             }
         });
     }
-
-
-
 </script>
 
 <main aria-labelledby="title">
@@ -84,8 +111,8 @@
                 grid.Column(header: "Actions", format: (item) =>
                 {
                     return Html.Raw(
-                             $"<div class='d-flex gap-1'><button onclick='getInvoice({item.id});return false;' title='View Invoices' class='btn btn-sm btn-primary bi bi-arrow-down'></a>" + " " +
-                             $"<button onclick='editClient({item.id});return false;' title='Edit Client' class='btn btn-sm btn-primary bi bi-pencil' data-coreui-toggle='modal' data-coreui-target='#addClientModal'></a></div>"
+                             $"<div class='d-flex gap-1'><button onclick='getInvoice({item.id});return false;' title='View Invoices' class='btn btn-sm btn-primary bi bi-arrow-down'></button>" + " " +
+                             $"<button onclick='editClient({item.id});return false;' title='Edit Client' class='btn btn-sm btn-primary bi bi-pencil' data-coreui-toggle='modal' data-coreui-target='#addClientModal'></button></div>"
                           );
                 })
             )
@@ -109,11 +136,11 @@
                                 <button type="button" class="btn-close" data-coreui-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div class="modal-body" id="ajaxClientForm">
-                                
+
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-coreui-dismiss="modal">Close</button>
-                                <button type="submit" class="btn btn-primary">Save</button>
+                                <button type="submit" class="btn btn-primary" id="submitButton">Save</button>
                             </div>
                         </div>
                     </div>

@@ -103,10 +103,10 @@ namespace PersonalWebsite.DAL
                 UnitAmount = y.unitAmount
             }).ToList();
         }
-
-        public DateTime GetInvoiceDate(int id)
+        
+        public string GetInvoiceNumber(int id)
         {
-            return _dbContext.invoices.Find(id).invoiceDate;
+            return _dbContext.invoices.Find(id).invoiceNumber;
         }
 
         public void CreateClient(clientListVM model, int authorId)
@@ -180,6 +180,42 @@ namespace PersonalWebsite.DAL
             };
 
             return clientVM;
+        }
+
+        public invoiceEntryListVM GetInvoiceEntry(int id)
+        {
+            var invoiceEntry = _dbContext.invoiceEntries.Find(id);
+
+            invoiceEntryListVM invoiceEntryListVM = new invoiceEntryListVM()
+            {
+                description = invoiceEntry.description,
+                rate = invoiceEntry.rate,
+                rateUnit = invoiceEntry.rateUnit,
+                unitAmount = invoiceEntry.unitAmount,
+                invoiceId = invoiceEntry.invoiceId,
+                id = invoiceEntry.id
+            };
+
+            return invoiceEntryListVM;
+        }
+
+        public void CreateInvoiceEntry(invoiceEntryListVM model, int authorId)
+        {
+            _dbContext.invoiceEntries.Add(new invoiceEntry()
+            {
+                description = model.description,
+                invoiceId = model.invoiceId,
+                rate = model.rate.Value,
+                rateUnit = model.rateUnit,
+                unitAmount = model.unitAmount.Value,                
+            });
+
+            _dbContext.SaveChanges();
+        }
+
+        public void EditInvoiceEntry(invoiceEntryListVM model)
+        {
+
         }
     }
 }

@@ -2476,6 +2476,7 @@
     <Content Include="Views\Invoice\_Invoices.cshtml" />
     <Content Include="Views\Invoice\_InvoiceEntries.cshtml" />
     <Content Include="Views\Invoice\_Client.cshtml" />
+    <Content Include="Views\Invoice\_InvoiceEntriesModal.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

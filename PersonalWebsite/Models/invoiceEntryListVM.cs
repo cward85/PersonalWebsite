@@ -9,8 +9,9 @@ namespace PersonalWebsite.Models
 {
     public class invoiceEntryListVM
     {
-        public List<invoiceEntryVM> invoiceEntries { get; set; }
-        public DateTime invoiceDate { get; set; }
+        public List<invoiceEntryVM> invoiceEntries { get; set; }     
+        public string invoiceNumber { get; set; }
+        public int id { get; set; }
         public int invoiceId { get; set; }
 
         [DisplayName("Description")]
@@ -20,11 +21,11 @@ namespace PersonalWebsite.Models
         [DisplayName("$ Rate")]
         [Required]
         public float? rate { get; set; }
-        [DisplayName("Rate Unit")]
+        [DisplayName("Unit")]
         [Required]
-        [StringLength(50, ErrorMessage = "Rate Unit cannot be more than 50 characters")]
+        [StringLength(50, ErrorMessage = "Unit cannot be more than 50 characters")]
         public string rateUnit { get; set; }
-        [DisplayName("Unit Amount")]
+        [DisplayName("Amount")]
         [Required]
         public float? unitAmount { get; set; }
         

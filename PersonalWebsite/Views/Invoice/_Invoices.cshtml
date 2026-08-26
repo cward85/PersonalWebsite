@@ -12,21 +12,28 @@
 
 <script type="text/javascript">
     function getInvoiceEntry(id) {
-    var url = '@Url.Action("ListInvoiceEntries", "Invoice")' + "/" + id;
-    $.ajax({
-        type: "get",
-        url: url,
-        async: false,
-        success: function (data) {
-            var divId = '#ajaxInvoiceEntries';
+        var url = '@Url.Action("ListInvoiceEntries", "Invoice")' + "/" + id;
+        $.ajax({
+            type: "get",
+            url: url,
+            async: false,
+            success: function (data) {
+                var divId = '#ajaxInvoiceEntries';
 
-            $(divId).html(data);
-        },
-        failure: function () {
-            alert("fail");
+                $(divId).html(data);
+            },
+            failure: function () {
+                alert("fail");
+            }
+        });       
+    }
+
+    $(document).ready(function () {
+        if (localStorage.getItem("invoiceId") !== null) {           
+            getInvoiceEntry(localStorage.getItem("invoiceId"));
+            localStorage.removeItem('invoiceId');
         }
     });
-}
 </script>
 
 <div class="row">
@@ -71,7 +78,7 @@
                         </div>
                         <div class="modal-body">
                             @Html.HiddenFor(x => x.clientId)
-                           
+                            @Html.HiddenFor(x => x.id)
                             <div class="row">
                                 <div class="col-12 col-sm-6 col-md-4 mb-1">
                                     @Html.LabelFor(model => model.invoiceDate, htmlAttributes: new { @class = "form-label required" })

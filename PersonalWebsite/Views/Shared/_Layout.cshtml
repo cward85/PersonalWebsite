@@ -11,10 +11,11 @@
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
     @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryval")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
 
-<script type="text/javascript">
+    <script type="text/javascript">
         $(document).ready(function () {
             if (localStorage.getItem("colorId") !== null) {
                 changeColor(localStorage.getItem("colorId"));
@@ -105,7 +106,7 @@
 
             localStorage.setItem("colorId", String(id));
         }
-</script>
+    </script>
 </head>
 
 
@@ -166,7 +167,10 @@
                         <div class="nav-item">@Html.ActionLink("Freelance Opportunities", "", "Freelance", new { area = "" }, new { @class = "nav-link nav-button" })</div>
                         <div class="nav-item">@Html.ActionLink("Portfolio", "", "Portfolio", new { area = "" }, new { @class = "nav-link nav-button" })</div>
                         <div class="nav-item">@Html.ActionLink("Resume (WIP)", "", "Resume", new { area = "" }, new { @class = "nav-link disabled nav-button" })</div>
-                        <div class="nav-item">@Html.ActionLink("Invoices", "", "Invoice", new { area = "" }, new { @class = "nav-link nav-button" })</div>
+                        @if (Session["UserId"] != null && (int)Session["UserId"] > 0)
+                        {
+                            <div class="nav-item">@Html.ActionLink("Invoices", "", "Invoice", new { area = "" }, new { @class = "nav-link nav-button" })</div>
+                        }
                         <div class="nav-item">@Html.ActionLink("Blog", "", "Blog", new { area = "" }, new { @class = "nav-link nav-button" })</div>
                         <div class="nav-item">@Html.ActionLink("Changelog", "", "Changelog", new { area = "" }, new { @class = "nav-link nav-button" })</div>
                         <div class="nav-item">
