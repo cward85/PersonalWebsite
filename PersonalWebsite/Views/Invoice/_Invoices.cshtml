@@ -9,7 +9,7 @@
         rowsPerPage: 10
     );
 }
-
+@Scripts.Render("~/bundles/bootstrap")
 <script type="text/javascript">
     function getInvoiceEntry(id) {
         var url = '@Url.Action("ListInvoiceEntries", "Invoice")' + "/" + id;
@@ -25,15 +25,64 @@
             failure: function () {
                 alert("fail");
             }
-        });       
+        });
     }
 
     $(document).ready(function () {
-        if (localStorage.getItem("invoiceId") !== null) {           
+        if (localStorage.getItem("invoiceId") !== null) {
             getInvoiceEntry(localStorage.getItem("invoiceId"));
             localStorage.removeItem('invoiceId');
         }
+        $('#invoiceSubmitButton').click(function (e) {
+            e.preventDefault();
+            var form = $('#invoiceListForm');
+
+            $.ajax({
+                url: form.attr('action'),
+                type: 'POST',
+                data: form.serialize(),
+                success: function (response) {
+                    if (response.success) {
+                        // Close modal and redirect or reload
+                        $('#addInvoiceModal').modal('hide');
+                        if (response.invoiceId !== undefined) {
+                            localStorage.setItem("invoiceId", response.invoiceId);
+                        }
+                        if (response.clientId !== undefined) {
+                            localStorage.setItem("clientId", response.clientId);
+                        }
+                        window.location.href = response.redirectUrl;
+                    } else {
+                        // Replace the old form container inside the modal with the new one containing validation errors
+                        $('#ajaxInvoiceEntries').html(response);
+
+                        // Optional: Re-bind client side validation if using jquery.validate
+                        $.validator.unobtrusive.parse('#ajaxInvoiceEntries');
+                    }
+                }
+            });
+        });
+        
+            $("#addInvoiceModal").on("shown.coreui.modal", function () {
+                var element = $('#invoiceDatePicker');
+                coreui.DatePicker.getOrCreateInstance(element);
+                var element2 = $('#invoiceDueDatePicker');
+                coreui.DatePicker.getOrCreateInstance(element2);
+                // const calendarElementList = Array.prototype.slice.call(document.querySelectorAll('#invoiceDatePicker'))
+                // const calendarList = calendarElementList.map(calendarEl => {
+                //     alert("bye");
+                //     return new coreui.DatePicker(calendarEl)
+                // })
+            });
+        
     });
+
+    function doPreprocessing() {
+        $('#invoiceDate').val($('#invoiceDatePicker').find('.date-picker-input').val());
+        $('#invoiceDueDate').val($('#invoiceDueDatePicker').find('.date-picker-input').val());
+    }
+
+    
 </script>
 
 <div class="row">
@@ -78,23 +127,30 @@
                         </div>
                         <div class="modal-body">
                             @Html.HiddenFor(x => x.clientId)
-                            @Html.HiddenFor(x => x.id)
+                            @Html.HiddenFor(x => x.invoiceId)
                             <div class="row">
                                 <div class="col-12 col-sm-6 col-md-4 mb-1">
                                     @Html.LabelFor(model => model.invoiceDate, htmlAttributes: new { @class = "form-label required" })
-                                    @Html.EditorFor(model => model.invoiceDate, new { htmlAttributes = new { @class = "form-control" } })
+
+                                    <div class="d-flex justify-content-center">
+                                        <div class="border rounded date-picker" data-coreui-locale="en-US" data-coreui-toggle="date-picker" id="invoiceDatePicker"></div>
+                                    </div>
+                                    @Html.HiddenFor(x => x.invoiceDate)
                                     @Html.ValidationMessageFor(model => model.invoiceDate, "", new { @class = "text-danger" })
                                 </div>
                                 <div class="col-12 col-sm-6 col-md-4 mb-1">
                                     @Html.LabelFor(model => model.invoiceDueDate, htmlAttributes: new { @class = "form-label required" })
-                                    @Html.EditorFor(model => model.invoiceDueDate, new { htmlAttributes = new { @class = "form-control " } })
+                                    <div class="d-flex justify-content-center">
+                                        <div class="border rounded date-picker" data-coreui-locale="en-US" data-coreui-toggle="date-picker" id="invoiceDueDatePicker"></div>
+                                    </div>
+                                    @Html.HiddenFor(x => x.invoiceDueDate)
                                     @Html.ValidationMessageFor(model => model.invoiceDueDate, "", new { @class = "text-danger" })
-                                </div>                               
-                            </div>                          
+                                </div>
+                            </div>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-coreui-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Save</button>
+                            <button type="submit" class="btn btn-primary" id="invoiceSubmitButton" onclick="doPreprocessing();">Save</button>
                         </div>
                     </div>
                 </div>

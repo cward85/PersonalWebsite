@@ -78,7 +78,7 @@ function editInvoiceEntry(id) {
             invoiceGrid.Column(header: "Actions", format: (item) =>
             {
                 return Html.Raw(
-                         $"<div class='d-flex gap-1'><button onclick='editInvoiceEntry({item.id});return false;' title='Edit Invoice Entry' class='btn btn-sm btn-primary bi bi-pencil' data-coreui-toggle='modal' data-coreui-target='#addInvoiceEntryModal'></button></div>"
+                         $"<div class='d-flex gap-1'><button onclick='editInvoiceEntry({item.invoiceEntryId});return false;' title='Edit Invoice Entry' class='btn btn-sm btn-primary bi bi-pencil' data-coreui-toggle='modal' data-coreui-target='#addInvoiceEntryModal'></button></div>"
                       );
             })
         )

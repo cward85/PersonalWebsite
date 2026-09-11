@@ -17,7 +17,7 @@ namespace PersonalWebsite.Models
         public DateTime invoiceDueDate { get; set; }
        
         public int clientId { get; set; }
-        public int id { get; set; }
+        public int invoiceId { get; set; }
         public invoiceListVM() 
         {
             invoiceEntries = new List<invoiceVM>();

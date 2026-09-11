@@ -396,10 +396,11 @@ CREATE TABLE clients
 CREATE TABLE invoices
 (
 	id int NOT NULL PRIMARY KEY IDENTITY(1,1),	
-	clientId int,
-	invoiceDate datetime,
-	invoiceDueDate datetime,
+	clientId int NOT NULL,
+	invoiceDate datetime NOT NULL,
+	invoiceDueDate datetime NOT NULL,
 	sentDate datetime,
+	invoiceNumber varchar(11) NOT NULL,
 
 	CONSTRAINT fk_client
 		FOREIGN KEY (clientId)
@@ -432,10 +433,18 @@ VALUES ('1920 Lawrence St NE', '', 'Washington', 22, 106, '15230')
 INSERT INTO clients(userId, name, addressId, creationDate)
 VALUES (1, 'TGIF Enterprise', 1, '2026-08-24 11:42:54')
 
-INSERT INTO invoices(clientId, invoiceDate, invoiceDueDate)
-VALUES (1, '2026-08-01', '2026-08-31')
+INSERT INTO invoices(clientId, invoiceDate, invoiceDueDate, sentDate, invoiceNumber)
+VALUES (1, '2026-08-01', '2026-08-31', '2026-08-01', '000-000-001')
 
 INSERT INTO invoiceEntries(invoiceId, description, rate, rateUnit, unitAmount)
 VALUES (1, 'Hourly Rate', '100', 'Hour', '5')
 INSERT INTO invoiceEntries(invoiceId, description, rate, rateUnit, unitAmount)
 VALUES (1, 'Maintenance Fee', '200', 'Month', '1')
+
+INSERT INTO invoices(clientId, invoiceDate, invoiceDueDate, invoiceNumber)
+VALUES (1, '2026-09-01', '2026-09-30', '000-000-002')
+
+INSERT INTO invoiceEntries(invoiceId, description, rate, rateUnit, unitAmount)
+VALUES (2, 'Hourly Rate', '200', 'Hour', '8')
+INSERT INTO invoiceEntries(invoiceId, description, rate, rateUnit, unitAmount)
+VALUES (2, 'Website Fee', '400', 'Month', '1')

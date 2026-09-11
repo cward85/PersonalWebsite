@@ -52,7 +52,7 @@ main, .container-lg, .topNav, .sidebar, .sidebar-nav, .nav, ul {
     color: var(--tertiary-accent-color);
 }
 
-.dropdown-menu, .modal-body, .list-group-item, .modalTrashButton {
+.dropdown-menu, .modal-body, .list-group-item, .modalTrashButton, .calendar {
     background-color: var(--tertiary-accent-color);
 }
 
@@ -167,4 +167,9 @@ a, .accent, .nav-underline-border, .nav-link, .sidebar-nav .nav-link, .status {
 {
     background-color: var(--tertiary-accent-color);
     color: var(--secondary-color);
+}
+
+.date-picker
+{
+    z-index: 9999 !important;
 }

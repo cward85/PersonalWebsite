@@ -7,7 +7,7 @@ namespace PersonalWebsite.Models
 {
     public class invoiceEntryVM
     {
-        public int id { get; set; }
+        public int invoiceEntryId { get; set; }
         public string Description { get; set; }
         public float Rate { get; set; }
         public string RateUnit { get; set; }

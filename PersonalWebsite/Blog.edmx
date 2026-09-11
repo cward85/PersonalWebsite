@@ -100,6 +100,7 @@
           <Property Name="invoiceDueDate" Type="datetime" Nullable="false" />
           <Property Name="sentDate" Type="datetime" />
           <Property Name="invoiceNumber" Type="varchar" MaxLength="11" Nullable="false" />
+          <Property Name="invoiceNumberId" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="loginLog">
           <Key>
@@ -610,6 +611,7 @@
           <NavigationProperty Name="client" Relationship="CWARDModel.fk_client" FromRole="invoice" ToRole="client" />
           <NavigationProperty Name="invoiceEntries" Relationship="CWARDModel.fk_invoices" FromRole="invoice" ToRole="invoiceEntry" />
           <Property Name="invoiceNumber" Type="String" Nullable="false" MaxLength="11" FixedLength="false" Unicode="false" />
+          <Property Name="invoiceNumberId" Type="Int32" Nullable="false" />
         </EntityType>
         <Association Name="fk_client">
           <End Type="CWARDModel.client" Role="client" Multiplicity="1">
@@ -782,6 +784,7 @@
           <EntitySetMapping Name="invoices">
             <EntityTypeMapping TypeName="CWARDModel.invoice">
               <MappingFragment StoreEntitySet="invoices">
+                <ScalarProperty Name="invoiceNumberId" ColumnName="invoiceNumberId" />
                 <ScalarProperty Name="invoiceNumber" ColumnName="invoiceNumber" />
                 <ScalarProperty Name="sentDate" ColumnName="sentDate" />
                 <ScalarProperty Name="invoiceDueDate" ColumnName="invoiceDueDate" />

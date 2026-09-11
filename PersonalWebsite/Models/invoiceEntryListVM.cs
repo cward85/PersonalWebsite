@@ -11,7 +11,7 @@ namespace PersonalWebsite.Models
     {
         public List<invoiceEntryVM> invoiceEntries { get; set; }     
         public string invoiceNumber { get; set; }
-        public int id { get; set; }
+        public int invoiceEntryId { get; set; }
         public int invoiceId { get; set; }
 
         [DisplayName("Description")]

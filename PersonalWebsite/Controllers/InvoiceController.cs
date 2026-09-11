@@ -126,7 +126,7 @@ namespace PersonalWebsite.Controllers
                 invoiceEntryListVM invoices = new invoiceEntryListVM();
                 invoices.invoiceEntries = dalInvoice.ListInvoiceEntriesByInvoiceId(id);              
                 invoices.invoiceNumber = dalInvoice.GetInvoiceNumber(id);
-                invoices.id = id;
+                invoices.invoiceEntryId = id;
                 Session["InvoiceId"] = id;
 
                 return PartialView("_InvoiceEntries", invoices);
@@ -141,7 +141,30 @@ namespace PersonalWebsite.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult AddInvoice(invoiceListVM model)
         {
-            return RedirectToAction("Index");
+            if (Session["UserId"] != null && (int)Session["UserId"] > 0)
+            {
+                DALInvoices dalInvoice = new DALInvoices();
+                if (ModelState.IsValid)
+                {
+                    if (model.invoiceId == 0)
+                    {
+                        model.clientId = (int)Session["ClientId"];                       
+                        dalInvoice.CreateInvoice(model, (int)Session["UserId"]);
+                    }
+                    else
+                    {
+                        dalInvoice.EditInvoice(model);
+                    }
+                }
+                else
+                {
+                    return PartialView("_Invoices", model);
+                }
+                              
+                return Json(new { success = true, redirectUrl = Url.Action("Index"), clientId = model.clientId });
+            }
+
+            return RedirectToAction("Index", "About");
         }
 
         [HttpPost]
@@ -154,7 +177,7 @@ namespace PersonalWebsite.Controllers
                 DALInvoices dalInvoice = new DALInvoices();
                 if (ModelState.IsValid)
                 {
-                    if (model.id == 0)
+                    if (model.invoiceEntryId == 0)
                     {
                         model.invoiceId = (int)Session["InvoiceId"];
                         dalInvoice.CreateInvoiceEntry(model, (int)Session["UserId"]);

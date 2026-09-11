@@ -26,6 +26,7 @@ namespace PersonalWebsite
         public System.DateTime invoiceDueDate { get; set; }
         public Nullable<System.DateTime> sentDate { get; set; }
         public string invoiceNumber { get; set; }
+        public int invoiceNumberId { get; set; }
     
         public virtual client client { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

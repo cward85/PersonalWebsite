@@ -29,7 +29,7 @@
                         // Close modal and redirect or reload
                         $('#addClientModal').modal('hide');
                         window.location.href = response.redirectUrl;
-                    } else {                     
+                    } else {
                         // Replace the old form container inside the modal with the new one containing validation errors
                         $('#ajaxClientForm').html(response);
 
@@ -40,8 +40,8 @@
             });
         });
 
-        if (localStorage.getItem('clientId') !== null) {           
-            getInvoice(localStorage.getItem("clientId"));    
+        if (localStorage.getItem('clientId') !== null) {
+            getInvoice(localStorage.getItem("clientId"));
             localStorage.removeItem('clientId');
         }
     });
@@ -122,6 +122,7 @@
         @using (Html.BeginForm("AddClient", "Invoice", FormMethod.Post, new { enctype = "multipart/form-data", id = "clientListForm" }))
         {
             @Html.AntiForgeryToken()
+            
             <div class="p-1 float-end">
                 <!-- Button trigger modal -->
                 <button type="button" class="btn btn-primary" data-coreui-toggle="modal" data-coreui-target="#addClientModal" onclick="editClient(0)" title="Add New Client">

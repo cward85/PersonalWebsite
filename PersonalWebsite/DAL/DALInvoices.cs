@@ -66,7 +66,7 @@ namespace PersonalWebsite.DAL
                 invoiceDate = y.invoiceDate,
                 invoiceDueDate = y.invoiceDueDate,
                 sentDate = y.sentDate,
-                totalAmount = y.invoiceEntries.Where(z => z.invoiceId == y.id).Sum(z => z.totalAmount)
+                totalAmount = y.invoiceEntries.Where(z => z.invoiceId == y.id).Count() > 0 ? y.invoiceEntries.Where(z => z.invoiceId == y.id).Sum(z => z.totalAmount) : 0
             }).ToList();
             
         }
@@ -95,7 +95,7 @@ namespace PersonalWebsite.DAL
         {
             return _dbContext.invoiceEntries.Where(x => x.invoiceId == invoiceId).Select(y => new invoiceEntryVM()
             {
-                id = y.id,
+                invoiceEntryId = y.id,
                 Description = y.description,
                 Rate = y.rate,
                 RateUnit = y.rateUnit,
@@ -193,7 +193,7 @@ namespace PersonalWebsite.DAL
                 rateUnit = invoiceEntry.rateUnit,
                 unitAmount = invoiceEntry.unitAmount,
                 invoiceId = invoiceEntry.invoiceId,
-                id = invoiceEntry.id
+                invoiceEntryId = invoiceEntry.id
             };
 
             return invoiceEntryListVM;
@@ -215,7 +215,61 @@ namespace PersonalWebsite.DAL
 
         public void EditInvoiceEntry(invoiceEntryListVM model)
         {
+            invoiceEntry entry = _dbContext.invoiceEntries.Find(model.invoiceEntryId);
 
+            entry.description = model.description;
+            entry.rate = model.rate.Value;
+            entry.rateUnit = model.rateUnit;
+            entry.unitAmount = model.unitAmount.Value;
+
+            _dbContext.SaveChanges();
+        }
+
+        public void CreateInvoice(invoiceListVM model, int authorId)
+        {
+            _dbContext.invoices.Add(new invoice()
+            {
+                invoiceDate = model.invoiceDate,
+                invoiceDueDate = model.invoiceDueDate,
+                clientId = model.clientId,
+                invoiceNumber = CreateInvoiceNumber(_dbContext.invoices.Max(x => x.invoiceNumberId)),
+                invoiceNumberId = CreateInvoiceNumberId(_dbContext.invoices.Max(x => x.invoiceNumberId))
+            });
+
+            _dbContext.SaveChanges();
+        }
+
+        public void EditInvoice(invoiceListVM model)
+        {
+            invoice entry = _dbContext.invoices.Find(model.invoiceId);
+
+            entry.invoiceDate = model.invoiceDate;
+            entry.invoiceDueDate = model.invoiceDueDate;
+
+            _dbContext.SaveChanges();
+        }
+
+        private string CreateInvoiceNumber(int id)
+        {            
+            id += 1;
+            string invoiceNumber = id.ToString();
+
+            while (invoiceNumber.Length < 9)
+            {
+                invoiceNumber = "0" + invoiceNumber;                
+            }
+
+            invoiceNumber = invoiceNumber.Insert(6, "-");
+            invoiceNumber = invoiceNumber.Insert(3, "-");
+
+            return invoiceNumber;
+        }
+
+        private int CreateInvoiceNumberId(int id)
+        {            
+            id += 1;
+            
+            return id;
         }
     }
 }
