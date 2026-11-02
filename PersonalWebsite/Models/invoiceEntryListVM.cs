@@ -13,6 +13,7 @@ namespace PersonalWebsite.Models
         public string invoiceNumber { get; set; }
         public int invoiceEntryId { get; set; }
         public int invoiceId { get; set; }
+        public int id { get; set; }
 
         [DisplayName("Description")]
         [Required]

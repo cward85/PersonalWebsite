@@ -249,6 +249,46 @@ namespace PersonalWebsite.DAL
             _dbContext.SaveChanges();
         }
 
+        public invoicePDFVM GetInvoicePDF(int id)
+        {
+            invoicePDFVM model = new invoicePDFVM()
+            {
+                customerAddress = "PO BOX 667 Clarion, PA 16214",
+                customerName = "Alfred H. and Janet L. Lander Family Charitable Foundation",
+                invoiceDate = "September 1, 2026",
+                invoiceDueDate = "September 30, 2026",
+                invoiceNumber = "000-005",
+                invoiceTotal = "$499.99",
+                invoiceEntries = new List<invoiceEntry>()
+                {
+                    new invoiceEntry()
+                    {
+                        description = "Website Labor",
+                        rate = 100,
+                        rateUnit = "Hour",
+                        unitAmount = 5
+                    },
+                    new invoiceEntry()
+                    {
+                        description = "Server Cost and Maintenance",
+                        rate = 50,
+                        rateUnit = "Month",
+                        unitAmount = 1
+                    },
+                    new invoiceEntry()
+                    {
+                        description = "Yearly Domain Name Renewal",
+                        rate = 23.99f,
+                        rateUnit = "Year",
+                        unitAmount = 1
+                    }
+                }
+            };
+                        
+
+            return model;
+        }
+
         private string CreateInvoiceNumber(int id)
         {            
             id += 1;

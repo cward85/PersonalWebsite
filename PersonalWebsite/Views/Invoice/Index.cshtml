@@ -15,82 +15,109 @@
 
 <script type="text/javascript">
 
-    $(document).ready(function () {
-        $('#submitButton').click(function (e) {
-            e.preventDefault();
-            var form = $('#clientListForm');
+$(document).ready(function () {
+    $('#submitButton').click(function (e) {
+        e.preventDefault();
+        var form = $('#clientListForm');
 
-            $.ajax({
-                url: form.attr('action'),
-                type: 'POST',
-                data: form.serialize(),
-                success: function (response) {
-                    if (response.success) {
-                        // Close modal and redirect or reload
-                        $('#addClientModal').modal('hide');
-                        window.location.href = response.redirectUrl;
-                    } else {
-                        // Replace the old form container inside the modal with the new one containing validation errors
-                        $('#ajaxClientForm').html(response);
+        $.ajax({
+            url: form.attr('action'),
+            type: 'POST',
+            data: form.serialize(),
+            success: function (response) {
+                if (response.success) {
+                    // Close modal and redirect or reload
+                    $('#addClientModal').modal('hide');
+                    window.location.href = response.redirectUrl;
+                } else {
+                    // Replace the old form container inside the modal with the new one containing validation errors
+                    $('#ajaxClientForm').html(response);
 
-                        // Optional: Re-bind client side validation if using jquery.validate
-                        $.validator.unobtrusive.parse('#addClientModal');
-                    }
+                    // Optional: Re-bind client side validation if using jquery.validate
+                    $.validator.unobtrusive.parse('#addClientModal');
                 }
-            });
+            }
         });
-
-        if (localStorage.getItem('clientId') !== null) {
-            getInvoice(localStorage.getItem("clientId"));
-            localStorage.removeItem('clientId');
-        }
     });
 
-    function checkCountry(id) {
+    if (localStorage.getItem('clientId') !== null) {
+        getInvoice(localStorage.getItem("clientId"));
+        localStorage.removeItem('clientId');
+    }
+});
 
-        var selectedCountry = $("#" + id).val();
+function checkCountry(id) {
 
-        if (selectedCountry == "239") {
-            $('label[for="' + id.replace("countryId", "stateId") + '"]').addClass("required");
+    var selectedCountry = $("#" + id).val();
+
+    if (selectedCountry == "239") {
+        $('label[for="' + id.replace("countryId", "stateId") + '"]').addClass("required");
+    }
+    else {
+        $('label[for=' + id.replace("countryId", "stateId") + ']').removeClass("required");
+    }
+}
+
+function getInvoice(id) {
+    var url = '@Url.Action("ListInvoices", "Invoice")' + "/" + id;
+    $.ajax({
+    type: "get",
+        url: url,
+        async: false,
+        success: function (data) {
+            var divId = '#ajaxInvoices';
+
+            $(divId).html(data);
+        },
+        failure: function () {
+            alert("fail");
         }
-        else {
-            $('label[for=' + id.replace("countryId", "stateId") + ']').removeClass("required");
+    });
+}
+
+function editClient(id) {
+    var url = '@Url.Action("GetClient", "Invoice")' + "/" + id;
+    $.ajax({
+    type: "get",
+        url: url,
+        async: false,
+        success: function (data) {
+            var divId = '#ajaxClientForm';
+
+            $(divId).html(data);
+        },
+        failure: function () {
+            alert("fail");
         }
-    }
+    });
+}
 
-    function getInvoice(id) {
-        var url = '@Url.Action("ListInvoices", "Invoice")' + "/" + id;
-        $.ajax({
-        type: "get",
-            url: url,
-            async: false,
-            success: function (data) {
-                var divId = '#ajaxInvoices';
-
-                $(divId).html(data);
-            },
-            failure: function () {
-                alert("fail");
-            }
-        });
-    }
-
-    function editClient(id) {
-        var url = '@Url.Action("GetClient", "Invoice")' + "/" + id;
-        $.ajax({
-        type: "get",
-            url: url,
-            async: false,
-            success: function (data) {
-                var divId = '#ajaxClientForm';
-
-                $(divId).html(data);
-            },
-            failure: function () {
-                alert("fail");
-            }
-        });
-    }
+function viewPDF(id) {
+    var url = '@Url.Action("ViewPDF", "Invoice")' + "/" + id;    
+  
+    fetch(url, {
+        method: "GET",
+        headers: { 'Content-Type': 'application/json; charset=utf-8' }        
+    })
+    .then(response => {
+        if (!response.ok)
+            throw new Error("Error");
+        return response.blob();
+    })
+    .then(blob => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = "Invoice.pdf"; // Must match server filename or custom
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        window.URL.revokeObjectURL(url);
+    })
+    .catch(error => {
+        alert("error:" + error.messagez);
+    });
+}
 </script>
 
 <main aria-labelledby="title">
@@ -112,8 +139,8 @@
                 {
                     return Html.Raw(
                              $"<div class='d-flex gap-1'><button onclick='getInvoice({item.id});return false;' title='View Invoices' class='btn btn-sm btn-primary bi bi-arrow-down'></button>" + " " +
-                             $"<button onclick='editClient({item.id});return false;' title='Edit Client' class='btn btn-sm btn-primary bi bi-pencil' data-coreui-toggle='modal' data-coreui-target='#addClientModal'></button></div>"
-                          );
+                             $"<button onclick='editClient({item.id});return false;' title='Edit Client' class='btn btn-sm btn-primary bi bi-pencil' data-coreui-toggle='modal' data-coreui-target='#addClientModal'></button>" + " " +
+                             $"<button onclick='viewPDF({item.id});return false;' title='View PDF' class='btn btn-sm btn-primary bi bi-file-pdf'></button></div>");
                 })
             )
         )

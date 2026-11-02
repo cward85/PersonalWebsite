@@ -41,12 +41,12 @@
                 }
             });
         });
-    });   
+    });
 
 function editInvoiceEntry(id) {
     var url = '@Url.Action("GetInvoiceEntry", "Invoice")' + "/" + id;
     $.ajax({
-    type: "get",
+        type: "get",
         url: url,
         async: false,
         success: function (data) {
@@ -58,6 +58,23 @@ function editInvoiceEntry(id) {
             alert("fail");
         }
     });
+}
+
+function addInvoiceEntry() {
+    var url = '@Url.Action("AddInvoiceEntry", "Invoice")';
+    $.ajax({
+        type: "get",
+        url: url,
+        async: false,
+        success: function (data) {
+            var divId = '#ajaxInvoiceEntriesModal';
+
+            $(divId).html(data);
+        },
+        failure: function () {
+            alert("fail");
+        }
+   });
 }
 </script>
 
@@ -102,7 +119,7 @@ function editInvoiceEntry(id) {
                             <button type="button" class="btn-close" data-coreui-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body" id="ajaxInvoiceEntriesModal">
-                            
+
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-coreui-dismiss="modal">Close</button>
