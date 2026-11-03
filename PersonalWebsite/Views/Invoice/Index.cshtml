@@ -40,11 +40,15 @@ $(document).ready(function () {
         });
     });
 
+    
+
     if (localStorage.getItem('clientId') !== null) {
         getInvoice(localStorage.getItem("clientId"));
         localStorage.removeItem('clientId');
     }
 });
+
+
 
 function checkCountry(id) {
 
@@ -92,32 +96,6 @@ function editClient(id) {
     });
 }
 
-function viewPDF(id) {
-    var url = '@Url.Action("ViewPDF", "Invoice")' + "/" + id;    
-  
-    fetch(url, {
-        method: "GET",
-        headers: { 'Content-Type': 'application/json; charset=utf-8' }        
-    })
-    .then(response => {
-        if (!response.ok)
-            throw new Error("Error");
-        return response.blob();
-    })
-    .then(blob => {
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = "Invoice.pdf"; // Must match server filename or custom
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
-        window.URL.revokeObjectURL(url);
-    })
-    .catch(error => {
-        alert("error:" + error.messagez);
-    });
-}
 </script>
 
 <main aria-labelledby="title">
@@ -139,8 +117,8 @@ function viewPDF(id) {
                 {
                     return Html.Raw(
                              $"<div class='d-flex gap-1'><button onclick='getInvoice({item.id});return false;' title='View Invoices' class='btn btn-sm btn-primary bi bi-arrow-down'></button>" + " " +
-                             $"<button onclick='editClient({item.id});return false;' title='Edit Client' class='btn btn-sm btn-primary bi bi-pencil' data-coreui-toggle='modal' data-coreui-target='#addClientModal'></button>" + " " +
-                             $"<button onclick='viewPDF({item.id});return false;' title='View PDF' class='btn btn-sm btn-primary bi bi-file-pdf'></button></div>");
+                             $"<button onclick='editClient({item.id});return false;' title='Edit Client' class='btn btn-sm btn-primary bi bi-pencil' data-coreui-toggle='modal' data-coreui-target='#addClientModal'></button></div>"
+                        );
                 })
             )
         )

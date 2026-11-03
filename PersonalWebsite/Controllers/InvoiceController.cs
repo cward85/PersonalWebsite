@@ -1,4 +1,5 @@
-﻿using iText.IO.Image;
+﻿using iText.Forms.Xfdf;
+using iText.IO.Image;
 using iText.Kernel.Colors;
 using iText.Kernel.Font;
 using iText.Kernel.Pdf.Action;
@@ -247,145 +248,167 @@ namespace PersonalWebsite.Controllers
         [HttpGet]
         public ActionResult ViewPDF(int id)
         {
-
-            if (id > 0)
+            if (Session["UserId"] != null && (int)Session["UserId"] > 0)
             {
-                using (var memoryStream = new MemoryStream())
+                if (id > 0)
                 {
-                    using (var writer = new iText.Kernel.Pdf.PdfWriter(memoryStream))
+                    using (var memoryStream = new MemoryStream())
                     {
-                        using (var pdf = new iText.Kernel.Pdf.PdfDocument(writer))
+                        using (var writer = new iText.Kernel.Pdf.PdfWriter(memoryStream))
                         {
-                            var document = new iText.Layout.Document(pdf);
-                            const float PADDING_AMOUNT = 10;
-                            DALInvoices dalInvoice = new DALInvoices();
-
-                            var model = dalInvoice.GetInvoicePDF(id);
-
-                            document.SetFont(PdfFontFactory.CreateFont(iText.IO.Font.Constants.StandardFonts.COURIER));
-                            document.Add(new Paragraph("Invoice")
-                                .SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER)
-                                .SetFontSize(48)
-                                .SetBackgroundColor(ColorConstants.LIGHT_GRAY)
-                                .SetBorderBottom(new SolidBorder(1)));
-
-                            ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-                            float[] invoiceContactInfoTableColumnWidths = { 50f, 200f, 200f, 200f, 200f };
-
-                            Table invoiceInfoTable = new Table(invoiceContactInfoTableColumnWidths).SetBorder(Border.NO_BORDER);
-
-                            Link link = new Link("www.camiloward.com", PdfAction.CreateURI("https://camiloward.com"));
-                            link.SetFontSize(10);
-
-                            invoiceInfoTable.AddCell(new Cell().SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER).SetVerticalAlignment(iText.Layout.Properties.VerticalAlignment.MIDDLE).SetBorderLeft(Border.NO_BORDER).SetBorderRight(new SolidBorder(1)).SetBorderTop(Border.NO_BORDER).SetBorderBottom(Border.NO_BORDER).Add(new Paragraph("Logo").SetFontSize(10)));
-                            invoiceInfoTable.AddCell(new Cell().SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER).SetVerticalAlignment(iText.Layout.Properties.VerticalAlignment.MIDDLE).SetBorderLeft(new SolidBorder(1)).SetBorderRight(new SolidBorder(1)).SetBorderTop(Border.NO_BORDER).SetBorderBottom(Border.NO_BORDER).Add(new Paragraph("Camilo Ward").SetFontSize(14)).Add(new Paragraph(".NET Web Developer").SetFontSize(10)));
-                            invoiceInfoTable.AddCell(new Cell().SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER).SetVerticalAlignment(iText.Layout.Properties.VerticalAlignment.MIDDLE).SetBorderLeft(new SolidBorder(1)).SetBorderRight(new SolidBorder(1)).SetBorderTop(Border.NO_BORDER).SetBorderBottom(Border.NO_BORDER).Add(new Paragraph("1920 Lawrence St NE,").SetFontSize(10)).Add(new Paragraph("Washington, DC 20018").SetFontSize(10)));
-                            invoiceInfoTable.AddCell(new Cell().SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER).SetVerticalAlignment(iText.Layout.Properties.VerticalAlignment.MIDDLE).SetVerticalAlignment(iText.Layout.Properties.VerticalAlignment.MIDDLE).SetBorderLeft(new SolidBorder(1)).SetBorderRight(new SolidBorder(1)).SetBorderTop(Border.NO_BORDER).SetBorderBottom(Border.NO_BORDER).Add(new Paragraph("202-329-1294").SetFontSize(10)));
-                            invoiceInfoTable.AddCell(new Cell().SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER).SetVerticalAlignment(iText.Layout.Properties.VerticalAlignment.MIDDLE).SetBorderLeft(new SolidBorder(1)).SetBorderRight(Border.NO_BORDER).SetBorderTop(Border.NO_BORDER).SetBorderBottom(Border.NO_BORDER).Add(new Paragraph("me@camiloward.com").SetFontSize(10)).Add(new Paragraph("").Add(link)));
-                           
-                            document.Add(invoiceInfoTable);
-                            document.Add(new Paragraph());
-
-                            ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-                            float[] invoiceInfoTableColumnWidths = { 500f, 10f, 500f };
-
-                            invoiceInfoTable = new Table(invoiceInfoTableColumnWidths).SetBorder(Border.NO_BORDER);
-
-                            invoiceInfoTable.AddCell(new Cell().SetPaddingTop(PADDING_AMOUNT).SetPaddingBottom(PADDING_AMOUNT).SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER).SetBorder(Border.NO_BORDER).SetBackgroundColor(ColorConstants.LIGHT_GRAY).Add(new Paragraph().Add(new Text("Invoice #: ").SimulateBold().SetFontSize(12)).Add(new Text(model.invoiceNumber))));
-                            invoiceInfoTable.AddCell(new Cell().SetBorder(Border.NO_BORDER));
-                            invoiceInfoTable.AddCell(new Cell().SetPaddingTop(PADDING_AMOUNT).SetPaddingBottom(PADDING_AMOUNT).SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER).SetBorder(Border.NO_BORDER).SetBackgroundColor(ColorConstants.LIGHT_GRAY).Add(new Paragraph().Add(new Text("Invoice Date: ").SimulateBold().SetFontSize(12)).Add(new Text(model.invoiceDate))));
-
-                            document.Add(invoiceInfoTable);
-
-                            ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-                            document.Add(new Paragraph("Billed to")
-                                .SetTextAlignment(iText.Layout.Properties.TextAlignment.LEFT)
-                                .SetFontSize(24));
-
-                            ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-                            float[] invoiceBillingInfoTableColumnWidths = { 200f, 800f };
-
-                            invoiceInfoTable = new Table(invoiceBillingInfoTableColumnWidths).SetBorder(Border.NO_BORDER);
-
-                            invoiceInfoTable.AddCell(new Cell().SetPaddingTop(PADDING_AMOUNT).SetPaddingBottom(PADDING_AMOUNT).SetBorderTop(new SolidBorder(1)).SetBorderRight(new SolidBorder(1)).SetBorderLeft(Border.NO_BORDER).Add(new Paragraph("Customer's Name").SimulateBold().SetFontSize(12)));
-                            invoiceInfoTable.AddCell(new Cell().SetPaddingTop(PADDING_AMOUNT).SetPaddingBottom(PADDING_AMOUNT).SetBorderTop(new SolidBorder(1)).SetBorderRight(Border.NO_BORDER).Add(new Paragraph(model.customerName).SetFontSize(12)));
-
-                            invoiceInfoTable.AddCell(new Cell().SetPaddingTop(PADDING_AMOUNT).SetPaddingBottom(PADDING_AMOUNT).SetBorderTop(new SolidBorder(1)).SetBorderRight(new SolidBorder(1)).SetBorderBottom(new SolidBorder(1)).SetBorderLeft(Border.NO_BORDER).Add(new Paragraph("Address").SimulateBold().SetFontSize(12)));
-                            invoiceInfoTable.AddCell(new Cell().SetPaddingTop(PADDING_AMOUNT).SetPaddingBottom(PADDING_AMOUNT).SetBorderTop(new SolidBorder(1)).SetBorderBottom(new SolidBorder(1)).SetBorderRight(Border.NO_BORDER).Add(new Paragraph(model.customerAddress).SetFontSize(12)));
-
-                            document.Add(invoiceInfoTable);
-                            document.Add(new Paragraph());
-                            ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-                            float[] invoiceEntriesTableColumnWidths = { 350f, 175f, 150f, 225f };
-
-                            invoiceInfoTable = new Table(invoiceEntriesTableColumnWidths).SetBorder(Border.NO_BORDER);
-
-                            invoiceInfoTable.AddCell(new Cell().SetBackgroundColor(ColorConstants.LIGHT_GRAY).SetBorderLeft(Border.NO_BORDER).SetBorderTop(Border.NO_BORDER).SetBorderRight(new SolidBorder(1)).SetBorderBottom(new SolidBorder(1)).Add(new Paragraph("Description").SimulateBold().SetFontSize(18).SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER)));
-                            invoiceInfoTable.AddCell(new Cell().SetBackgroundColor(ColorConstants.LIGHT_GRAY).SetBorderLeft(Border.NO_BORDER).SetBorderTop(Border.NO_BORDER).SetBorderRight(new SolidBorder(1)).SetBorderBottom(new SolidBorder(1)).Add(new Paragraph("Rate (USD)").SimulateBold().SetFontSize(18).SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER)));
-                            invoiceInfoTable.AddCell(new Cell().SetBackgroundColor(ColorConstants.LIGHT_GRAY).SetBorderLeft(Border.NO_BORDER).SetBorderTop(Border.NO_BORDER).SetBorderRight(new SolidBorder(1)).SetBorderBottom(new SolidBorder(1)).Add(new Paragraph("Units").SimulateBold().SetFontSize(18).SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER)));
-                            invoiceInfoTable.AddCell(new Cell().SetBackgroundColor(ColorConstants.LIGHT_GRAY).SetBorderLeft(Border.NO_BORDER).SetBorderTop(Border.NO_BORDER).SetBorderRight(Border.NO_BORDER).SetBorderBottom(new SolidBorder(1)).Add(new Paragraph("Amount (USD)").SimulateBold().SetFontSize(18).SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER)));
-
-                            foreach (invoiceEntry entry in model.invoiceEntries)
+                            using (var pdf = new iText.Kernel.Pdf.PdfDocument(writer))
                             {
-                                invoiceInfoTable.AddCell(new Cell().SetPaddingTop(PADDING_AMOUNT).SetPaddingBottom(PADDING_AMOUNT).SetBorderLeft(Border.NO_BORDER).SetBorderTop(Border.NO_BORDER).SetBorderRight(new SolidBorder(1)).SetBorderBottom(new SolidBorder(1)).Add(new Paragraph(entry.description).SetFontSize(12).SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER)));
-                                invoiceInfoTable.AddCell(new Cell().SetPaddingTop(PADDING_AMOUNT).SetPaddingBottom(PADDING_AMOUNT).SetBorderLeft(Border.NO_BORDER).SetBorderTop(Border.NO_BORDER).SetBorderRight(new SolidBorder(1)).SetBorderBottom(new SolidBorder(1)).Add(new Paragraph("$" + entry.rate + "/" + entry.rateUnit).SetFontSize(12).SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER)));
-                                invoiceInfoTable.AddCell(new Cell().SetPaddingTop(PADDING_AMOUNT).SetPaddingBottom(PADDING_AMOUNT).SetBorderLeft(Border.NO_BORDER).SetBorderTop(Border.NO_BORDER).SetBorderRight(new SolidBorder(1)).SetBorderBottom(new SolidBorder(1)).Add(new Paragraph(entry.unitAmount.ToString()).SetFontSize(12).SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER)));
-                                invoiceInfoTable.AddCell(new Cell().SetPaddingTop(PADDING_AMOUNT).SetPaddingBottom(PADDING_AMOUNT).SetBorderLeft(Border.NO_BORDER).SetBorderTop(Border.NO_BORDER).SetBorderRight(Border.NO_BORDER).SetBorderBottom(new SolidBorder(1)).Add(new Paragraph("$" + (entry.unitAmount * entry.rate).ToString()).SetFontSize(12).SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER)));
+                                var document = new iText.Layout.Document(pdf);
+                                const float PADDING_AMOUNT = 10;
+                                DALInvoices dalInvoice = new DALInvoices();
+
+                                var model = dalInvoice.GetInvoicePDF(id);
+
+                                document.SetFont(PdfFontFactory.CreateFont(iText.IO.Font.Constants.StandardFonts.COURIER));
+                                document.Add(new Paragraph("Invoice")
+                                    .SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER)
+                                    .SetFontSize(48)
+                                    .SetBackgroundColor(ColorConstants.LIGHT_GRAY)
+                                    .SetBorderBottom(new SolidBorder(1)));
+
+                                ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+                                float[] invoiceContactInfoTableColumnWidths = { 250f, 250f, 250f, 250f };
+
+                                Table invoiceInfoTable = new Table(invoiceContactInfoTableColumnWidths).SetBorder(Border.NO_BORDER);
+
+                                Link link = new Link("www.camiloward.com", PdfAction.CreateURI("https://camiloward.com"));
+                                link.SetFontSize(10);
+
+                                invoiceInfoTable.AddCell(new Cell().SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER).SetVerticalAlignment(iText.Layout.Properties.VerticalAlignment.MIDDLE).SetBorderLeft(Border.NO_BORDER).SetBorderRight(new SolidBorder(1)).SetBorderTop(Border.NO_BORDER).SetBorderBottom(Border.NO_BORDER).Add(new Paragraph("Camilo Ward").SetFontSize(14)).Add(new Paragraph(".NET Web Developer").SetFontSize(10)));
+                                invoiceInfoTable.AddCell(new Cell().SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER).SetVerticalAlignment(iText.Layout.Properties.VerticalAlignment.MIDDLE).SetBorderLeft(new SolidBorder(1)).SetBorderRight(new SolidBorder(1)).SetBorderTop(Border.NO_BORDER).SetBorderBottom(Border.NO_BORDER).Add(new Paragraph("1920 Lawrence St NE,").SetFontSize(10)).Add(new Paragraph("Washington, DC 20018").SetFontSize(10)));
+                                invoiceInfoTable.AddCell(new Cell().SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER).SetVerticalAlignment(iText.Layout.Properties.VerticalAlignment.MIDDLE).SetVerticalAlignment(iText.Layout.Properties.VerticalAlignment.MIDDLE).SetBorderLeft(new SolidBorder(1)).SetBorderRight(new SolidBorder(1)).SetBorderTop(Border.NO_BORDER).SetBorderBottom(Border.NO_BORDER).Add(new Paragraph("202-329-1294").SetFontSize(10)));
+                                invoiceInfoTable.AddCell(new Cell().SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER).SetVerticalAlignment(iText.Layout.Properties.VerticalAlignment.MIDDLE).SetBorderLeft(new SolidBorder(1)).SetBorderRight(Border.NO_BORDER).SetBorderTop(Border.NO_BORDER).SetBorderBottom(Border.NO_BORDER).Add(new Paragraph("me@camiloward.com").SetFontSize(10)).Add(new Paragraph("").Add(link)));
+
+                                document.Add(invoiceInfoTable);
+                                document.Add(new Paragraph());
+
+                                ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+                                float[] invoiceInfoTableColumnWidths = { 500f, 10f, 500f };
+
+                                invoiceInfoTable = new Table(invoiceInfoTableColumnWidths).SetBorder(Border.NO_BORDER);
+
+                                invoiceInfoTable.AddCell(new Cell().SetPaddingTop(PADDING_AMOUNT).SetPaddingBottom(PADDING_AMOUNT).SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER).SetBorder(Border.NO_BORDER).SetBackgroundColor(ColorConstants.LIGHT_GRAY).Add(new Paragraph().Add(new Text("Invoice #: ").SimulateBold().SetFontSize(12)).Add(new Text(model.invoiceNumber))));
+                                invoiceInfoTable.AddCell(new Cell().SetBorder(Border.NO_BORDER));
+                                invoiceInfoTable.AddCell(new Cell().SetPaddingTop(PADDING_AMOUNT).SetPaddingBottom(PADDING_AMOUNT).SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER).SetBorder(Border.NO_BORDER).SetBackgroundColor(ColorConstants.LIGHT_GRAY).Add(new Paragraph().Add(new Text("Invoice Date: ").SimulateBold().SetFontSize(12)).Add(new Text(model.invoiceDate))));
+
+                                document.Add(invoiceInfoTable);
+
+                                ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+                                document.Add(new Paragraph("Billed to")
+                                    .SetTextAlignment(iText.Layout.Properties.TextAlignment.LEFT)
+                                    .SetFontSize(24));
+
+                                ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+                                float[] invoiceBillingInfoTableColumnWidths = { 200f, 800f };
+
+                                invoiceInfoTable = new Table(invoiceBillingInfoTableColumnWidths).SetBorder(Border.NO_BORDER);
+
+                                invoiceInfoTable.AddCell(new Cell().SetPaddingTop(PADDING_AMOUNT).SetPaddingBottom(PADDING_AMOUNT).SetBorderTop(new SolidBorder(1)).SetBorderRight(new SolidBorder(1)).SetBorderLeft(Border.NO_BORDER).Add(new Paragraph("Customer's Name").SimulateBold().SetFontSize(12)));
+                                invoiceInfoTable.AddCell(new Cell().SetPaddingTop(PADDING_AMOUNT).SetPaddingBottom(PADDING_AMOUNT).SetBorderTop(new SolidBorder(1)).SetBorderRight(Border.NO_BORDER).Add(new Paragraph(model.customerName).SetFontSize(12)));
+
+                                invoiceInfoTable.AddCell(new Cell().SetPaddingTop(PADDING_AMOUNT).SetPaddingBottom(PADDING_AMOUNT).SetBorderTop(new SolidBorder(1)).SetBorderRight(new SolidBorder(1)).SetBorderBottom(new SolidBorder(1)).SetBorderLeft(Border.NO_BORDER).Add(new Paragraph("Address").SimulateBold().SetFontSize(12)));
+                                invoiceInfoTable.AddCell(new Cell().SetPaddingTop(PADDING_AMOUNT).SetPaddingBottom(PADDING_AMOUNT).SetBorderTop(new SolidBorder(1)).SetBorderBottom(new SolidBorder(1)).SetBorderRight(Border.NO_BORDER).Add(new Paragraph(model.customerAddress).SetFontSize(12)));
+
+                                document.Add(invoiceInfoTable);
+                                document.Add(new Paragraph());
+                                document.Add(new Paragraph());
+                                ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+                                float[] invoiceEntriesTableColumnWidths = { 350f, 175f, 150f, 225f };
+
+                                invoiceInfoTable = new Table(invoiceEntriesTableColumnWidths).SetBorder(Border.NO_BORDER);
+
+                                invoiceInfoTable.AddCell(new Cell().SetPaddingTop(PADDING_AMOUNT).SetPaddingBottom(PADDING_AMOUNT).SetBackgroundColor(ColorConstants.LIGHT_GRAY).SetBorderLeft(Border.NO_BORDER).SetBorderTop(Border.NO_BORDER).SetBorderRight(new SolidBorder(1)).SetBorderBottom(new SolidBorder(1)).Add(new Paragraph("Description").SimulateBold().SetFontSize(16).SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER)));
+                                invoiceInfoTable.AddCell(new Cell().SetPaddingTop(PADDING_AMOUNT).SetPaddingBottom(PADDING_AMOUNT).SetBackgroundColor(ColorConstants.LIGHT_GRAY).SetBorderLeft(Border.NO_BORDER).SetBorderTop(Border.NO_BORDER).SetBorderRight(new SolidBorder(1)).SetBorderBottom(new SolidBorder(1)).Add(new Paragraph("Rate (USD)").SimulateBold().SetFontSize(16).SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER)));
+                                invoiceInfoTable.AddCell(new Cell().SetPaddingTop(PADDING_AMOUNT).SetPaddingBottom(PADDING_AMOUNT).SetBackgroundColor(ColorConstants.LIGHT_GRAY).SetBorderLeft(Border.NO_BORDER).SetBorderTop(Border.NO_BORDER).SetBorderRight(new SolidBorder(1)).SetBorderBottom(new SolidBorder(1)).Add(new Paragraph("Units").SimulateBold().SetFontSize(16).SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER)));
+                                invoiceInfoTable.AddCell(new Cell().SetPaddingTop(PADDING_AMOUNT).SetPaddingBottom(PADDING_AMOUNT).SetBackgroundColor(ColorConstants.LIGHT_GRAY).SetBorderLeft(Border.NO_BORDER).SetBorderTop(Border.NO_BORDER).SetBorderRight(Border.NO_BORDER).SetBorderBottom(new SolidBorder(1)).Add(new Paragraph("Total (USD)").SimulateBold().SetFontSize(16).SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER)));
+
+                                foreach (invoiceEntry entry in model.invoiceEntries)
+                                {
+                                    invoiceInfoTable.AddCell(new Cell().SetPaddingTop(PADDING_AMOUNT).SetPaddingBottom(PADDING_AMOUNT).SetBorderLeft(Border.NO_BORDER).SetBorderTop(Border.NO_BORDER).SetBorderRight(new SolidBorder(1)).SetBorderBottom(new SolidBorder(1)).Add(new Paragraph(entry.description).SetFontSize(12).SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER)));
+                                    invoiceInfoTable.AddCell(new Cell().SetPaddingTop(PADDING_AMOUNT).SetPaddingBottom(PADDING_AMOUNT).SetBorderLeft(Border.NO_BORDER).SetBorderTop(Border.NO_BORDER).SetBorderRight(new SolidBorder(1)).SetBorderBottom(new SolidBorder(1)).Add(new Paragraph("$" + entry.rate + "/" + entry.rateUnit).SetFontSize(12).SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER)));
+                                    invoiceInfoTable.AddCell(new Cell().SetPaddingTop(PADDING_AMOUNT).SetPaddingBottom(PADDING_AMOUNT).SetBorderLeft(Border.NO_BORDER).SetBorderTop(Border.NO_BORDER).SetBorderRight(new SolidBorder(1)).SetBorderBottom(new SolidBorder(1)).Add(new Paragraph(entry.unitAmount.ToString()).SetFontSize(12).SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER)));
+                                    invoiceInfoTable.AddCell(new Cell().SetPaddingTop(PADDING_AMOUNT).SetPaddingBottom(PADDING_AMOUNT).SetBorderLeft(Border.NO_BORDER).SetBorderTop(Border.NO_BORDER).SetBorderRight(Border.NO_BORDER).SetBorderBottom(new SolidBorder(1)).Add(new Paragraph("$" + (entry.unitAmount * entry.rate).ToString()).SetFontSize(12).SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER)));
+                                }
+
+                                invoiceInfoTable.AddCell(new Cell().SetPaddingTop(PADDING_AMOUNT).SetPaddingBottom(PADDING_AMOUNT).SetBackgroundColor(ColorConstants.LIGHT_GRAY).SetBorder(Border.NO_BORDER).Add(new Paragraph("").SimulateBold().SetFontSize(12)));
+                                invoiceInfoTable.AddCell(new Cell().SetPaddingTop(PADDING_AMOUNT).SetPaddingBottom(PADDING_AMOUNT).SetBackgroundColor(ColorConstants.LIGHT_GRAY).SetBorder(Border.NO_BORDER).Add(new Paragraph("").SimulateBold().SetFontSize(12)));
+                                invoiceInfoTable.AddCell(new Cell().SetPaddingTop(PADDING_AMOUNT).SetPaddingBottom(PADDING_AMOUNT).SetBackgroundColor(ColorConstants.LIGHT_GRAY).SetBorder(Border.NO_BORDER).SetBorderRight(new SolidBorder(1)).Add(new Paragraph("Grand Total").SimulateBold().SetFontSize(12).SetTextAlignment(iText.Layout.Properties.TextAlignment.RIGHT)));
+                                invoiceInfoTable.AddCell(new Cell().SetPaddingTop(PADDING_AMOUNT).SetPaddingBottom(PADDING_AMOUNT).SetBackgroundColor(ColorConstants.LIGHT_GRAY).SetBorder(Border.NO_BORDER).Add(new Paragraph(model.invoiceTotal).SimulateBold().SetFontSize(12).SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER)));
+
+                                document.Add(invoiceInfoTable);
+
+                                ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+                                document.Add(new Paragraph("Payment Information")
+                                    .SetTextAlignment(iText.Layout.Properties.TextAlignment.LEFT)
+                                    .SetFontSize(24));
+
+                                float[] invoicePaymentInfoTableColumnWidths = { 250f, 200f, 550f };
+                                float[] innerTable = { 600f };
+                                invoiceInfoTable = new Table(invoicePaymentInfoTableColumnWidths).SetBorder(new SolidBorder(1));
+
+                                string imagePath = HttpContext.Server.MapPath("~/Content/images/qrcode.png");
+                                var imageData = ImageDataFactory.Create(imagePath);
+                                Image img = new Image(imageData).SetAutoScale(true);
+                                var rowspanCell1 = new Cell(2, 1).Add(new Paragraph("Payment Information"));
+
+                                invoiceInfoTable.AddCell(new Cell(2, 1).SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER).SetVerticalAlignment(iText.Layout.Properties.VerticalAlignment.MIDDLE).SetBackgroundColor(ColorConstants.LIGHT_GRAY).Add(new Paragraph("Payment Due Date").SimulateBold().SetFontSize(12)).Add(new Paragraph(model.invoiceDueDate)));
+                                invoiceInfoTable.AddCell(new Cell(2, 1).Add(img));
+                                invoiceInfoTable.AddCell(new Cell().SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER).SetVerticalAlignment(iText.Layout.Properties.VerticalAlignment.MIDDLE).Add(new Paragraph("Make Checks Payable To").SimulateBold()));
+                                invoiceInfoTable.AddCell(new Cell().SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER).SetVerticalAlignment(iText.Layout.Properties.VerticalAlignment.MIDDLE).Add(new Paragraph("Camilo Ward")));
+
+
+                                document.Add(invoiceInfoTable);
+
+                                ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+                                document.Close();
+
+                                return File(memoryStream.ToArray(), "application/pdf",
+                                "Invoice.pdf");
                             }
-                           
-                            invoiceInfoTable.AddCell(new Cell().SetPaddingTop(PADDING_AMOUNT).SetPaddingBottom(PADDING_AMOUNT).SetBackgroundColor(ColorConstants.LIGHT_GRAY).SetBorder(Border.NO_BORDER).Add(new Paragraph("").SimulateBold().SetFontSize(12)));
-                            invoiceInfoTable.AddCell(new Cell().SetPaddingTop(PADDING_AMOUNT).SetPaddingBottom(PADDING_AMOUNT).SetBackgroundColor(ColorConstants.LIGHT_GRAY).SetBorder(Border.NO_BORDER).Add(new Paragraph("").SimulateBold().SetFontSize(12)));
-                            invoiceInfoTable.AddCell(new Cell().SetPaddingTop(PADDING_AMOUNT).SetPaddingBottom(PADDING_AMOUNT).SetBackgroundColor(ColorConstants.LIGHT_GRAY).SetBorder(Border.NO_BORDER).SetBorderRight(new SolidBorder(1)).Add(new Paragraph("Grand Total").SimulateBold().SetFontSize(12).SetTextAlignment(iText.Layout.Properties.TextAlignment.RIGHT)));
-                            invoiceInfoTable.AddCell(new Cell().SetPaddingTop(PADDING_AMOUNT).SetPaddingBottom(PADDING_AMOUNT).SetBackgroundColor(ColorConstants.LIGHT_GRAY).SetBorder(Border.NO_BORDER).Add(new Paragraph(model.invoiceTotal).SimulateBold().SetFontSize(12).SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER)));
-
-                            document.Add(invoiceInfoTable);
-
-                            ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-                            document.Add(new Paragraph("Payment Information")
-                                .SetTextAlignment(iText.Layout.Properties.TextAlignment.LEFT)
-                                .SetFontSize(24));
-
-                            float[] invoicePaymentInfoTableColumnWidths = { 200f, 200f, 600f };
-                            float[] innerTable = { 600f };
-                            invoiceInfoTable = new Table(invoicePaymentInfoTableColumnWidths).SetBorder(new SolidBorder(1));
-
-                            string imagePath = HttpContext.Server.MapPath("~/Content/images/qrcode.png");
-                            var imageData = ImageDataFactory.Create(imagePath);
-                            Image img = new Image(imageData).SetAutoScale(true);
-                            var rowspanCell1 = new Cell(2, 1).Add(new Paragraph("Payment Information")) ;
-                            
-                            invoiceInfoTable.AddCell(new Cell(2, 1).SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER).SetVerticalAlignment(iText.Layout.Properties.VerticalAlignment.MIDDLE).SetBackgroundColor(ColorConstants.LIGHT_GRAY).Add(new Paragraph("Payment Due Date").SimulateBold().SetFontSize(12)).Add(new Paragraph(model.invoiceDueDate)));
-                            invoiceInfoTable.AddCell(new Cell(2, 1).Add(img));
-                            invoiceInfoTable.AddCell(new Cell().SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER).SetVerticalAlignment(iText.Layout.Properties.VerticalAlignment.MIDDLE).Add(new Paragraph("Make Checks Payable To").SimulateBold()));
-                            invoiceInfoTable.AddCell(new Cell().SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER).SetVerticalAlignment(iText.Layout.Properties.VerticalAlignment.MIDDLE).Add(new Paragraph("Camilo Ward")));
-
-
-                            document.Add(invoiceInfoTable);
-                            
-                            ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
-                            document.Close();
-
-                            return File(memoryStream.ToArray(), "application/pdf",
-                            "Invoice.pdf");
                         }
                     }
+                }
+                else
+                {
+                    return File(new byte[0], "application/pdf",
+                                "Invoice.pdf");
                 }
             }
             else
             {
-                return File(new byte[0], "application/pdf",
-                            "Invoice.pdf");
+                return RedirectToAction("Index", "About");
             }
         }
 
-    }
+        [HttpPost]
+        public ActionResult SendInvoice(int id)
+        {
+            if (Session["UserId"] != null && (int)Session["UserId"] > 0)
+            {
+                DALInvoices dalInvoice = new DALInvoices();
+
+                int clientId = dalInvoice.SendInvoice(id);                
+
+                return Json(new { success = true, redirectUrl = Url.Action("Index"), clientId = clientId,  });
+            }
+            else
+            {
+                return RedirectToAction("Index", "About");
+            }
+        }
+    }        
 }

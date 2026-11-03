@@ -32,5 +32,11 @@ namespace PersonalWebsite
         public virtual ICollection<client> clients { get; set; }
         public virtual country country { get; set; }
         public virtual state state { get; set; }
+
+
+        public string ToString(string state, string country)
+        {
+            return (street1 + (string.IsNullOrEmpty(street2) ? "" : " " + street2) + " " + city + "," + (string.IsNullOrEmpty(state) ? "" : " " + state + ",") + " " + country + " " + postCode);
+        }
     }
 }

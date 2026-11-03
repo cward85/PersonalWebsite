@@ -62,7 +62,7 @@
                 }
             });
         });
-        
+
             $("#addInvoiceModal").on("shown.coreui.modal", function () {
                 var element = $('#invoiceDatePicker');
                 coreui.DatePicker.getOrCreateInstance(element);
@@ -74,15 +74,85 @@
                 //     return new coreui.DatePicker(calendarEl)
                 // })
             });
-        
+        // Bind events on page load
+        bindInvoicesWebGridSortEvents();
+
+        // If using AJAX partial updates, rebind after content reload
+        document.addEventListener("ajaxComplete", bindInvoicesWebGridSortEvents);
     });
 
     function doPreprocessing() {
         $('#invoiceDate').val($('#invoiceDatePicker').find('.date-picker-input').val());
         $('#invoiceDueDate').val($('#invoiceDueDatePicker').find('.date-picker-input').val());
-    }
+}
 
-    
+
+function bindInvoicesWebGridSortEvents() {
+
+    // Select all sort links inside the WebGrid
+    document.querySelectorAll("#invoiceTable th a").forEach(function (link) {
+        link.addEventListener("click", function (e) {
+            e.preventDefault();
+            // Custom action before sorting
+            var href = $(this).attr('href');
+            var queryString = href.indexOf('?') !== -1 ? href.substring(href.indexOf('?') - 1) : '';
+            getInvoice(queryString);
+
+            // Allow the sort to proceed (do not preventDefault unless you handle sorting manually)
+        });
+    });
+}
+
+
+function viewPDF(id) {
+    var url = '@Url.Action("ViewPDF", "Invoice")' + "/" + id;
+
+    fetch(url, {
+        method: "GET",
+        headers: { 'Content-Type': 'application/json; charset=utf-8' }
+    })
+    .then(response => {
+        if (!response.ok)
+            throw new Error("Error");
+        return response.blob();
+    })
+    .then(blob => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = "Invoice.pdf"; // Must match server filename or custom
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        window.URL.revokeObjectURL(url);
+    })
+    .catch(error => {
+        alert("error:" + error.messagez);
+    });
+}
+
+function sendInvoice(id) {
+    var url = '@Url.Action("SendInvoice", "Invoice")' + "/" + id;
+
+    $.ajax({
+        url: url,
+        type: 'POST',       
+        success: function (response) {
+            if (response.success) {
+                // Close modal and redirect or reload
+                if (response.clientId !== undefined) {
+                    localStorage.setItem("clientId", response.clientId);
+                }
+                window.location.href = response.redirectUrl;
+            } else {
+                // Replace the old form container inside the modal with the new one containing validation errors
+                
+
+            }
+        }
+    });
+}
+
 </script>
 
 <div class="row">
@@ -102,7 +172,9 @@
             invoiceGrid.Column(header: "Actions", format: (item) =>
             {
                 return Html.Raw(
-                         $"<div class='d-flex gap-1'><button onclick='getInvoiceEntry({item.id});return false;' title='View Invoice Entries' class='btn btn-sm btn-primary bi bi-arrow-down'></a></div>"
+                         $"<div class='d-flex gap-1'><button onclick='getInvoiceEntry({item.id});return false;' title='View Invoice Entries' class='btn btn-sm btn-primary bi bi-arrow-down'></a>" + " " +
+                         $"<button onclick='viewPDF({item.id});return false;' title='View PDF' class='btn btn-sm btn-primary bi bi-file-pdf'></button>" + " " + 
+                         $"<button onclick='sendInvoice({item.id});return false;' title='Send Invoice' class='btn btn-sm btn-primary bi bi-mailbox'></button></div>"
                       );
             })
         )

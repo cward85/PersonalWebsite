@@ -250,43 +250,42 @@ namespace PersonalWebsite.DAL
         }
 
         public invoicePDFVM GetInvoicePDF(int id)
-        {
+        {            
+            var invoiceModel = _dbContext.invoices.Where(x => x.id == id).FirstOrDefault();
+            var clientModel = _dbContext.clients.Where(x => x.id == invoiceModel.clientId).FirstOrDefault();
+            var invoiceEntries = _dbContext.invoiceEntries.Where(x => x.invoiceId == id).ToList();
+
+            string state = string.Empty;
+
+            if (clientModel.address.stateId != null)
+            {
+                state = _dbContext.states.Where(x => x.id == clientModel.address.stateId).FirstOrDefault().name;
+            }
+
+            var country = _dbContext.countries.Where(x => x.id == clientModel.address.countryId).FirstOrDefault().name;
+
             invoicePDFVM model = new invoicePDFVM()
             {
-                customerAddress = "PO BOX 667 Clarion, PA 16214",
-                customerName = "Alfred H. and Janet L. Lander Family Charitable Foundation",
-                invoiceDate = "September 1, 2026",
-                invoiceDueDate = "September 30, 2026",
-                invoiceNumber = "000-005",
-                invoiceTotal = "$499.99",
-                invoiceEntries = new List<invoiceEntry>()
-                {
-                    new invoiceEntry()
-                    {
-                        description = "Website Labor",
-                        rate = 100,
-                        rateUnit = "Hour",
-                        unitAmount = 5
-                    },
-                    new invoiceEntry()
-                    {
-                        description = "Server Cost and Maintenance",
-                        rate = 50,
-                        rateUnit = "Month",
-                        unitAmount = 1
-                    },
-                    new invoiceEntry()
-                    {
-                        description = "Yearly Domain Name Renewal",
-                        rate = 23.99f,
-                        rateUnit = "Year",
-                        unitAmount = 1
-                    }
-                }
+                customerAddress = clientModel.address.ToString(state, country),
+                customerName = clientModel.name,
+                invoiceDate = invoiceModel.invoiceDate.ToString("MMMM dd, yyyy"),
+                invoiceDueDate = invoiceModel.invoiceDueDate.ToString("MMMM dd, yyyy"),
+                invoiceNumber = invoiceModel.invoiceNumber,
+                invoiceTotal = "$" + invoiceEntries.Sum(x => x.totalAmount).ToString(),
+                invoiceEntries = invoiceEntries
             };
-                        
 
             return model;
+        }
+
+        public int SendInvoice(int id)
+        {
+            var invoice = _dbContext.invoices.Find(id);
+            invoice.sentDate = DateTime.Now;
+
+            _dbContext.SaveChanges();
+
+            return invoice.clientId;
         }
 
         private string CreateInvoiceNumber(int id)

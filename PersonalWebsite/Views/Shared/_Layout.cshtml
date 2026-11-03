@@ -15,7 +15,7 @@
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
 
-    <script type="text/javascript">
+<script type="text/javascript">
         $(document).ready(function () {
             if (localStorage.getItem("colorId") !== null) {
                 changeColor(localStorage.getItem("colorId"));
@@ -30,6 +30,26 @@
             const currentPath = window.location.pathname;
             $('.nav-button[href="' + currentPath + '"]').addClass('active');
 
+           
+                const userName = document.getElementById("userName");
+                const password = document.getElementById("password");
+                const loginButton = document.getElementById("loginButton");
+
+            if (userName !== null) {
+                userName.addEventListener("keydown", function (event) {
+                    if (event.key == "Enter") {
+                        loginButton.click();
+                    }
+                });
+            }
+
+            if (password !== null) {
+                password.addEventListener("keydown", function (event) {
+                    if (event.key == "Enter") {
+                        loginButton.click();
+                    }
+                });
+            }
         });
 
         function attemptLogin(userNameTB, passwordTB, loginError) {
@@ -106,7 +126,7 @@
 
             localStorage.setItem("colorId", String(id));
         }
-    </script>
+</script>
 </head>
 
 
@@ -137,7 +157,7 @@
                                         <span id="loginError" class="text-danger"></span>
                                     </div>
                                     <div style="padding-top:4px">
-                                        <button type="button" class="btn btn-primary float-end login-button" style="padding-top:4px" value="Login" onclick="attemptLogin('#userName', '#password', '#loginError');">                                           
+                                        <button type="button" id="loginButton" class="btn btn-primary float-end login-button" style="padding-top:4px" value="Login" onclick="attemptLogin('#userName', '#password', '#loginError');">                                           
                                             <span id="loginButtonSidebar">Login</span>
                                         </button>
                                     </div>

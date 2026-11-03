@@ -41,6 +41,12 @@
                 }
             });
         });
+
+        // Bind events on page load
+        bindInvoiceEntriesWebGridSortEvents();
+
+        // If using AJAX partial updates, rebind after content reload
+        document.addEventListener("ajaxComplete", bindInvoiceEntriesWebGridSortEvents);
     });
 
 function editInvoiceEntry(id) {
@@ -75,6 +81,23 @@ function addInvoiceEntry() {
             alert("fail");
         }
    });
+}
+
+
+function bindInvoiceEntriesWebGridSortEvents() {
+
+    // Select all sort links inside the WebGrid
+    document.querySelectorAll("#invoiceEntryTable th a").forEach(function (link) {
+        link.addEventListener("click", function (e) {
+            e.preventDefault();
+            // Custom action before sorting          
+            var href = $(this).attr('href');
+            var queryString = href.indexOf('?') !== -1 ? href.substring(href.indexOf('?') - 1) : '';
+            getInvoiceEntry(queryString);
+
+            // Allow the sort to proceed (do not preventDefault unless you handle sorting manually)
+        });
+    });
 }
 </script>
 
